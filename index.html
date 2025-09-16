@@ -785,7 +785,12 @@
             unsubscribes.push(onSnapshot(query(monthlyDataCol), s => { const m = s.docs.map(d => d.id); if(!m.includes(currentMonthId)) m.push(currentMonthId); m.sort().reverse(); renderMonthSelector(m); }));
             unsubscribes.push(onSnapshot(collection(db, `users/${userId}/categories`), s => renderCategoryDatalist(s.docs)));
             unsubscribes.push(onSnapshot(query(dailyTasksCol), s => { dailyTasks = s.docs.map(d => ({id: d.id, ...d.data()})); renderDailyTasks(dailyTasks); }));
-            unsubscribes.push(onSnapshot(query(monthlyTasksCol, where("month", "==", currentMonthId)), s => { monthlyTasks = s.docs.map(d=> ({id: d.id, ...d.data()})); renderMonthlyTasks(monthlyTasks); updateDashboard(); }));
+            // Listen to monthly tasks for the selected month instead of always the current month
+            unsubscribes.push(onSnapshot(query(monthlyTasksCol, where("month", "==", selectedMonthId)), s => {
+                monthlyTasks = s.docs.map(d => ({ id: d.id, ...d.data() }));
+                renderMonthlyTasks(monthlyTasks);
+                updateDashboard();
+            }));
             unsubscribes.push(onSnapshot(query(yearlyTasksCol, where("year", "==", new Date().getFullYear())), s => { yearlyTasks = s.docs.map(d=> ({id: d.id, ...d.data()})); renderYearlyTasks(yearlyTasks); updateDashboard(); }));
             unsubscribes.push(onSnapshot(query(calendarEventsCol), s => { calendarEvents = s.docs.map(d => ({id: d.id, ...d.data()})); renderCalendar(); }));
         }
@@ -1411,6 +1416,161 @@
                 await signOut(auth);
             });
         }
+
+        // --- General click handler for edit/delete buttons ---
+        // Many action buttons rendered in tables did not previously have event handlers attached.
+        // Use event delegation on the main app container to handle clicks on these buttons.
+        document.getElementById('app').addEventListener('click', async (event) => {
+            const t = translations[currentLang];
+            // Recurring expenses: edit
+            const editRecBtn = event.target.closest('.edit-recurring-expense-btn');
+            if (editRecBtn) {
+                const id = editRecBtn.dataset.id;
+                const template = allRecurringTemplates.find(tpl => tpl.id === id);
+                if (template) {
+                    document.getElementById('recurring-expense-id').value = id;
+                    document.getElementById('recurring-expense-name').value = template.name || '';
+                    document.getElementById('recurring-expense-amount').value = template.amount || 0;
+                    document.getElementById('recurring-expense-due-day').value = template.dueDay || '';
+                    document.getElementById('recurring-expense-details').value = template.details || '';
+                    document.getElementById('recurring-expense-modal-title').textContent = t.editTemplate;
+                    document.getElementById('recurring-expense-modal').showModal();
+                }
+                return;
+            }
+            // Recurring expenses: delete
+            const delRecBtn = event.target.closest('.delete-recurring-expense-btn');
+            if (delRecBtn) {
+                const id = delRecBtn.dataset.id;
+                if (confirm(t.deleteConfirm)) {
+                    try {
+                        await deleteDoc(doc(recurringExpensesCol, id));
+                    } catch (err) {
+                        console.error('Error deleting recurring template:', err);
+                        alert('Ошибка удаления шаблона: ' + err.message);
+                    }
+                }
+                return;
+            }
+            // Expenses: edit
+            const editExpBtn = event.target.closest('.edit-expense-btn');
+            if (editExpBtn) {
+                const id = editExpBtn.dataset.id;
+                try {
+                    const expRef = doc(expensesCol, id);
+                    const expSnap = await getDoc(expRef);
+                    if (expSnap.exists()) {
+                        const expense = expSnap.data();
+                        document.getElementById('expense-id').value = id;
+                        document.getElementById('expense-name').value = expense.name || '';
+                        document.getElementById('expense-category').value = expense.category || '';
+                        document.getElementById('expense-amount').value = expense.amount || 0;
+                        // expense.date is a Timestamp
+                        const dateVal = expense.date && expense.date.toDate ? expense.date.toDate() : new Date();
+                        document.getElementById('expense-date').valueAsDate = dateVal;
+                        document.getElementById('expense-modal-title').textContent = t.editExpense;
+                        document.getElementById('expense-modal').showModal();
+                    }
+                } catch (err) {
+                    console.error('Error fetching expense:', err);
+                    alert('Ошибка получения расхода: ' + err.message);
+                }
+                return;
+            }
+            // Expenses: delete
+            const delExpBtn = event.target.closest('.delete-expense-btn');
+            if (delExpBtn) {
+                const id = delExpBtn.dataset.id;
+                if (confirm(t.deleteConfirm)) {
+                    try {
+                        await deleteDoc(doc(expensesCol, id));
+                    } catch (err) {
+                        console.error('Error deleting expense:', err);
+                        alert('Ошибка удаления расхода: ' + err.message);
+                    }
+                }
+                return;
+            }
+            // Debts: edit
+            const editDebtBtn = event.target.closest('.edit-debt-btn');
+            if (editDebtBtn) {
+                const id = editDebtBtn.dataset.id;
+                try {
+                    const debtRef = doc(debtsCol, id);
+                    const debtSnap = await getDoc(debtRef);
+                    if (debtSnap.exists()) {
+                        const debt = debtSnap.data();
+                        document.getElementById('debt-id').value = id;
+                        document.getElementById('debt-name').value = debt.name || '';
+                        document.getElementById('debt-total').value = debt.totalAmount || 0;
+                        document.getElementById('debt-paid').value = debt.paidAmount || 0;
+                        document.getElementById('debt-comment').value = debt.comment || '';
+                        document.getElementById('debt-modal-title').textContent = t.editDebt;
+                        document.getElementById('debt-modal').showModal();
+                    }
+                } catch (err) {
+                    console.error('Error fetching debt:', err);
+                    alert('Ошибка получения долга: ' + err.message);
+                }
+                return;
+            }
+            // Debts: delete
+            const delDebtBtn = event.target.closest('.delete-debt-btn');
+            if (delDebtBtn) {
+                const id = delDebtBtn.dataset.id;
+                if (confirm(t.deleteConfirm)) {
+                    try {
+                        await deleteDoc(doc(debtsCol, id));
+                    } catch (err) {
+                        console.error('Error deleting debt:', err);
+                        alert('Ошибка удаления долга: ' + err.message);
+                    }
+                }
+                return;
+            }
+            // Daily tasks: delete
+            const delDailyBtn = event.target.closest('.delete-daily-task-btn');
+            if (delDailyBtn) {
+                const id = delDailyBtn.dataset.id;
+                if (confirm(t.deleteConfirm)) {
+                    try {
+                        await deleteDoc(doc(dailyTasksCol, id));
+                    } catch (err) {
+                        console.error('Error deleting daily task:', err);
+                        alert('Ошибка удаления задачи: ' + err.message);
+                    }
+                }
+                return;
+            }
+            // Monthly tasks: delete (only tasks that are not from recurring expenses or calendar)
+            const delMonthlyBtn = event.target.closest('.delete-monthly-task-btn');
+            if (delMonthlyBtn) {
+                const id = delMonthlyBtn.dataset.id;
+                if (confirm(t.deleteConfirm)) {
+                    try {
+                        await deleteDoc(doc(monthlyTasksCol, id));
+                    } catch (err) {
+                        console.error('Error deleting monthly task:', err);
+                        alert('Ошибка удаления задачи: ' + err.message);
+                    }
+                }
+                return;
+            }
+            // Yearly tasks: delete
+            const delYearlyBtn = event.target.closest('.delete-yearly-task-btn');
+            if (delYearlyBtn) {
+                const id = delYearlyBtn.dataset.id;
+                if (confirm(t.deleteConfirm)) {
+                    try {
+                        await deleteDoc(doc(yearlyTasksCol, id));
+                    } catch (err) {
+                        console.error('Error deleting yearly task:', err);
+                        alert('Ошибка удаления задачи: ' + err.message);
+                    }
+                }
+                return;
+            }
+        });
 
     </script>
 </body>
