@@ -65,27 +65,43 @@
             <div>
                 <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900" data-i18n="authTitle">Войдите в свой аккаунт</h2>
             </div>
-            <form id="auth-form" class="mt-8 space-y-6">
-                <div class="rounded-md shadow-sm -space-y-px">
-                    <div>
-                        <label for="email-address" class="sr-only">Email address</label>
-                        <input id="email-address" name="email" type="email" autocomplete="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Email address">
+            <div class="mt-8 space-y-6">
+                 <button type="button" id="google-signin-btn" class="group relative w-full flex justify-center items-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px" height="48px"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.521-3.108-11.28-7.481l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C39.99,36.566,44,30.84,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg>
+                    <span data-i18n="loginWithGoogle">Войти через Google</span>
+                </button>
+
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
                     </div>
-                    <div>
-                        <label for="password" class="sr-only">Password</label>
-                        <input id="password" name="password" type="password" autocomplete="current-password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Password">
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-gray-50 text-gray-500">OR</span>
                     </div>
                 </div>
-                <p id="auth-error" class="text-red-500 text-sm"></p>
-                <div class="flex flex-col space-y-4">
-                     <button type="submit" id="login-btn" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="login">
-                        Войти
-                    </button>
-                    <button type="button" id="register-btn" class="group relative w-full flex justify-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="register">
-                        Зарегистрироваться
-                    </button>
-                </div>
-            </form>
+
+                <form id="auth-form" class="mt-8 space-y-6">
+                    <div class="rounded-md shadow-sm -space-y-px">
+                        <div>
+                            <label for="email-address" class="sr-only">Email address</label>
+                            <input id="email-address" name="email" type="email" autocomplete="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Email address">
+                        </div>
+                        <div>
+                            <label for="password" class="sr-only">Password</label>
+                            <input id="password" name="password" type="password" autocomplete="current-password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Password">
+                        </div>
+                    </div>
+                    <p id="auth-error" class="text-red-500 text-sm"></p>
+                    <div class="flex flex-col space-y-4">
+                         <button type="submit" id="login-btn" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="login">
+                            Войти
+                        </button>
+                        <button type="button" id="register-btn" class="group relative w-full flex justify-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="register">
+                            Зарегистрироваться
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     
@@ -534,7 +550,7 @@
 
     <script type="module" defer>
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { 
             getFirestore, doc, setDoc, addDoc, getDoc, getDocs, updateDoc, deleteDoc, onSnapshot, 
             collection, query, where, Timestamp, writeBatch
@@ -611,7 +627,7 @@
                 categoryEvent: "Событие", categoryBirthday: "День рождения", categoryMeeting: "Встреча", categoryWedding: "Свадьба",
                 birthdayName: "Имя именинника", birthYear: "Год рождения (опционально)", meetingWith: "С кем", time: "Время (опц.)", place: "Место (опц.)", weddingNames: "Имена пары",
                 taskCongratulate: "Поздравить", taskTurning: "исполняется", taskYearsOld: "лет", taskMeetWith: "Встретиться с", taskWeddingOf: "Свадьба",
-                authTitle: "Войдите в свой аккаунт", login: "Войти", register: "Зарегистрироваться", logout: "Выйти",
+                authTitle: "Войдите в свой аккаунт", login: "Войти", register: "Зарегистрироваться", logout: "Выйти", loginWithGoogle: "Войти через Google",
                 authInvalidEmail: "Неверный формат email адреса.",
                 authEmailInUse: "Этот email уже зарегистрирован.",
                 authWeakPassword: "Пароль слишком слабый. Он должен содержать не менее 6 символов.",
@@ -644,7 +660,7 @@
                 categoryEvent: "Event", categoryBirthday: "Birthday", categoryMeeting: "Meeting", categoryWedding: "Wedding",
                 birthdayName: "Birthday person's name", birthYear: "Year of birth (optional)", meetingWith: "With whom", time: "Time (opt.)", place: "Place (opt.)", weddingNames: "Couple's names",
                 taskCongratulate: "Congratulate", taskTurning: "turning", taskYearsOld: "years old", taskMeetWith: "Meet with", taskWeddingOf: "Wedding of",
-                authTitle: "Sign in to your account", login: "Sign in", register: "Register", logout: "Log out",
+                authTitle: "Sign in to your account", login: "Sign in", register: "Register", logout: "Log out", loginWithGoogle: "Sign in with Google",
                 authInvalidEmail: "Invalid email format.",
                 authEmailInUse: "This email is already in use.",
                 authWeakPassword: "Password is too weak. It should be at least 6 characters.",
@@ -1313,6 +1329,7 @@
         const authForm = document.getElementById('auth-form');
         const loginBtn = document.getElementById('login-btn');
         const registerBtn = document.getElementById('register-btn');
+        const googleSignInBtn = document.getElementById('google-signin-btn');
         const logoutBtn = document.getElementById('logout-btn');
         const authError = document.getElementById('auth-error');
         
@@ -1353,7 +1370,7 @@
                     await createUserWithEmailAndPassword(auth, email, password);
                 } catch (error) {
                     console.error("Registration failed:", error);
-                    const t = translations[currentLang];
+                     const t = translations[currentLang];
                     let errorMessage = '';
                     switch (error.code) {
                         case 'auth/invalid-email':
@@ -1372,11 +1389,23 @@
                 }
             });
         }
+        if (googleSignInBtn) {
+            googleSignInBtn.addEventListener('click', async () => {
+                const provider = new GoogleAuthProvider();
+                try {
+                    await signInWithPopup(auth, provider);
+                } catch (error) {
+                    console.error("Google Sign-in failed:", error);
+                    authError.textContent = translations[currentLang].authGenericError;
+                }
+            });
+        }
         if(logoutBtn) {
             logoutBtn.addEventListener('click', async () => {
                 await signOut(auth);
             });
         }
+
     </script>
 </body>
 
