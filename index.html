@@ -1248,6 +1248,148 @@
             }
         );
         const handleYearlyTaskFormSubmit = (form) => handleTaskSubmit(yearlyTasksCol, form.querySelector('#yearly-task-id').value, { name: form.querySelector('#yearly-task-name').value, deadline: form.querySelector('#yearly-task-deadline').value, notes: form.querySelector('#yearly-task-notes').value, year: new Date().getFullYear()});
+
+        /**
+         * Additional UI handlers for edit and delete actions.
+         *
+         * Many table rows define buttons with classes like
+         * `edit-recurring-expense-btn`, `delete-recurring-expense-btn`,
+         * `edit-expense-btn`, `delete-expense-btn`, `edit-debt-btn`,
+         * `delete-debt-btn`, `edit-monthly-task-btn` and
+         * `delete-monthly-task-btn`.  Originally these buttons were
+         * rendered without any click handlers, so clicking them had no
+         * effect.  The following block attaches delegated click
+         * listeners to the relevant tables.  When a user clicks an edit
+         * button, the corresponding modal is opened and pre‑filled with
+         * the current record values; when a delete button is clicked,
+         * the record is removed from Firestore after confirmation.
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            // Helper to safely retrieve translation strings or fallback
+            const getTranslation = (key, fallback) => {
+                const lang = currentLang;
+                return (translations[lang] && translations[lang][key]) || fallback;
+            };
+
+            // Recurring expenses actions
+            const recurringTable = document.getElementById('recurring-expenses-table');
+            if (recurringTable) {
+                recurringTable.addEventListener('click', async (e) => {
+                    const btn = e.target.closest('button');
+                    if (!btn) return;
+                    const id = btn.dataset.id;
+                    if (!id) return;
+                    try {
+                        if (btn.classList.contains('edit-recurring-expense-btn')) {
+                            const docSnap = await getDoc(doc(recurringExpensesCol, id));
+                            const data = docSnap.data() || {};
+                            document.getElementById('recurring-expense-id').value = id;
+                            document.getElementById('recurring-expense-name').value = data.name || '';
+                            document.getElementById('recurring-expense-amount').value = data.amount || '';
+                            document.getElementById('recurring-expense-due-day').value = data.dueDay || '';
+                            document.getElementById('recurring-expense-details').value = data.details || '';
+                            document.getElementById('recurring-expense-modal-title').textContent = getTranslation('editTemplate', 'Edit template');
+                            document.getElementById('recurring-expense-modal').showModal();
+                        } else if (btn.classList.contains('delete-recurring-expense-btn')) {
+                            if (confirm(getTranslation('deleteConfirm', 'Are you sure you want to delete?'))) {
+                                await deleteDoc(doc(recurringExpensesCol, id));
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Recurring expense action error:', err);
+                    }
+                });
+            }
+
+            // Expenses actions
+            const expensesTable = document.getElementById('expenses-table');
+            if (expensesTable) {
+                expensesTable.addEventListener('click', async (e) => {
+                    const btn = e.target.closest('button');
+                    if (!btn) return;
+                    const id = btn.dataset.id;
+                    if (!id) return;
+                    try {
+                        if (btn.classList.contains('edit-expense-btn')) {
+                            const docSnap = await getDoc(doc(expensesCol, id));
+                            const data = docSnap.data() || {};
+                            document.getElementById('expense-id').value = id;
+                            document.getElementById('expense-name').value = data.name || '';
+                            document.getElementById('expense-category').value = data.category || '';
+                            document.getElementById('expense-amount').value = data.amount || '';
+                            const dateVal = data.date && data.date.toDate ? data.date.toDate() : null;
+                            document.getElementById('expense-date').value = dateVal ? dateVal.toISOString().split('T')[0] : '';
+                            document.getElementById('expense-modal-title').textContent = getTranslation('editExpense', 'Edit expense');
+                            document.getElementById('expense-modal').showModal();
+                        } else if (btn.classList.contains('delete-expense-btn')) {
+                            if (confirm(getTranslation('deleteConfirm', 'Are you sure you want to delete?'))) {
+                                await deleteDoc(doc(expensesCol, id));
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Expense action error:', err);
+                    }
+                });
+            }
+
+            // Debts actions
+            const debtsTable = document.getElementById('debts-table');
+            if (debtsTable) {
+                debtsTable.addEventListener('click', async (e) => {
+                    const btn = e.target.closest('button');
+                    if (!btn) return;
+                    const id = btn.dataset.id;
+                    if (!id) return;
+                    try {
+                        if (btn.classList.contains('edit-debt-btn')) {
+                            const docSnap = await getDoc(doc(debtsCol, id));
+                            const data = docSnap.data() || {};
+                            document.getElementById('debt-id').value = id;
+                            document.getElementById('debt-name').value = data.name || '';
+                            document.getElementById('debt-total').value = data.totalAmount || '';
+                            document.getElementById('debt-paid').value = data.paidAmount || '';
+                            document.getElementById('debt-comment').value = data.comment || '';
+                            document.getElementById('debt-modal-title').textContent = getTranslation('editDebt', 'Edit debt');
+                            document.getElementById('debt-modal').showModal();
+                        } else if (btn.classList.contains('delete-debt-btn')) {
+                            if (confirm(getTranslation('deleteConfirm', 'Are you sure you want to delete?'))) {
+                                await deleteDoc(doc(debtsCol, id));
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Debt action error:', err);
+                    }
+                });
+            }
+
+            // Monthly tasks actions
+            const monthlyTasksTable = document.getElementById('monthly-tasks-table');
+            if (monthlyTasksTable) {
+                monthlyTasksTable.addEventListener('click', async (e) => {
+                    const btn = e.target.closest('button');
+                    if (!btn) return;
+                    const id = btn.dataset.id;
+                    if (!id) return;
+                    try {
+                        if (btn.classList.contains('edit-monthly-task-btn')) {
+                            const docSnap = await getDoc(doc(monthlyTasksCol, id));
+                            const data = docSnap.data() || {};
+                            document.getElementById('monthly-task-id').value = id;
+                            document.getElementById('monthly-task-name').value = data.name || '';
+                            document.getElementById('monthly-task-deadline').value = data.deadline || '';
+                            document.getElementById('monthly-task-modal-title').textContent = getTranslation('editTask', 'Edit task');
+                            document.getElementById('monthly-task-modal').showModal();
+                        } else if (btn.classList.contains('delete-monthly-task-btn')) {
+                            if (confirm(getTranslation('deleteConfirm', 'Are you sure you want to delete?'))) {
+                                await deleteDoc(doc(monthlyTasksCol, id));
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Monthly task action error:', err);
+                    }
+                });
+            }
+        });
         async function handleEventFormSubmit(form) {
             try {
                 const id = form.querySelector('#event-id').value;
