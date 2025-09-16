@@ -1178,13 +1178,19 @@
                     await updateDoc(docRef, data);
                 }
                 
-                const taskQuery = query(monthlyTasksCol, where("recurringExpenseId", "==", docRef.id));
+                const taskQuery = query(monthlyTasksCol, where("recurringExpenseId", "==", docRef.id), where("month", "==", selectedMonthId));
                 const existingTasks = await getDocs(taskQuery);
-                const now = new Date();
-                const deadlineDate = new Date(now.getFullYear(), now.getMonth(), data.dueDay);
+                
+                const [year, month] = selectedMonthId.split('-').map(Number);
+                const deadlineDate = new Date(year, month - 1, data.dueDay);
+
                 const taskData = {
-                    name: `${data.name}`, deadline: deadlineDate.toISOString().split('T')[0],
-                    status: translations.ru.statusNotDone, recurringExpenseId: docRef.id, month: currentMonthId, year: now.getFullYear(),
+                    name: `${data.name}`, 
+                    deadline: deadlineDate.toISOString().split('T')[0],
+                    status: translations.ru.statusNotDone, 
+                    recurringExpenseId: docRef.id, 
+                    month: selectedMonthId, 
+                    year: year,
                 };
                 if(existingTasks.empty) {
                     await addDoc(monthlyTasksCol, taskData);
