@@ -598,7 +598,7 @@
         import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { 
             getFirestore, doc, setDoc, addDoc, getDoc, getDocs, updateDoc, deleteDoc, onSnapshot, 
-            collection, query, where, Timestamp, writeBatch
+            collection, query, where, Timestamp, writeBatch, limit
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -811,6 +811,26 @@
             appContainer.classList.remove('hidden');
         }
 
+        async function setupDefaultData(user) {
+            const categoriesRef = collection(db, `users/${user.uid}/categories`);
+            const q = query(categoriesRef, limit(1));
+            const snapshot = await getDocs(q);
+            if (snapshot.empty) {
+                const batch = writeBatch(db);
+                const defaultCategories = {
+                    ru: ["Продукты", "Транспорт", "Жилье", "Здоровье", "Развлечения", "Одежда", "Кафе и рестораны", "Подарки", "Связь и интернет", "Образование"],
+                    en: ["Groceries", "Transport", "Housing", "Health", "Entertainment", "Clothing", "Cafes & Restaurants", "Gifts", "Communication & Internet", "Education"],
+                    az: ["Ərzaq", "Nəqliyyat", "Mənzil", "Sağlamlıq", "Əyləncə", "Geyim", "Kafe və Restoranlar", "Hədiyyələr", "Rabitə və İnternet", "Təhsil"]
+                };
+                for (const [lang, names] of Object.entries(defaultCategories)) {
+                    names.forEach(name => {
+                        const newCatRef = doc(categoriesRef);
+                        batch.set(newCatRef, { name, lang });
+                    });
+                }
+                await batch.commit();
+            }
+        }
 
         if (auth) {
             document.getElementById('lang-ru').addEventListener('click', () => setLanguage('ru'));
@@ -825,6 +845,7 @@
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     userId = user.uid;
+                    await setupDefaultData(user);
                     showApp();
                     setupCollections();
                     await checkAndCarryOverDailyTasks();
@@ -1356,12 +1377,16 @@
         const handleDailyTaskFormSubmit = (form) => handleTaskSubmit(dailyTasksCol, form.querySelector('#daily-task-id').value, { name: form.querySelector('#daily-task-name').value, notes: form.querySelector('#daily-task-notes').value });
         const handleMonthlyTaskFormSubmit = (form) => handleTaskSubmit(monthlyTasksCol, form.querySelector('#monthly-task-id').value, { name: form.querySelector('#monthly-task-name').value, deadline: form.querySelector('#monthly-task-deadline').value, month: selectedMonthId, year: new Date(selectedMonthId).getFullYear()});
         const handleYearlyTaskFormSubmit = (form) => handleTaskSubmit(yearlyTasksCol, form.querySelector('#yearly-task-id').value, { name: form.querySelector('#yearly-task-name').value, deadline: form.querySelector('#yearly-task-deadline').value, notes: form.querySelector('#yearly-task-notes').value, year: new Date().getFullYear()});
+        
         async function handleEventFormSubmit(form) {
             try {
                 const id = form.querySelector('#event-id').value;
                 const category = form.querySelector('#event-category').value;
                 const t = translations[currentLang];
-                const data = { category, date: form.querySelector('#event-date').value, };
+                const data = {
+                    category,
+                    date: form.querySelector('#event-date').value,
+                };
                 let taskName = '';
 
                 switch (category) {
@@ -1389,24 +1414,45 @@
                         data.name = eventName; taskName = eventName;
                         break;
                 }
+
                 let eventId = id;
-                if (id) await updateDoc(doc(calendarEventsCol, id), data);
-                else { const newDoc = await addDoc(calendarEventsCol, data); eventId = newDoc.id; }
+
+                // First, delete any pre-existing tasks associated with this event if it's an edit
+                if (eventId) {
+                    const taskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventId));
+                    const existingTasksSnapshot = await getDocs(taskQuery);
+                    if (!existingTasksSnapshot.empty) {
+                        const batch = writeBatch(db);
+                        existingTasksSnapshot.forEach(doc => batch.delete(doc.ref));
+                        await batch.commit();
+                    }
+                }
+
+                // Now, save the event data (add or update)
+                if (id) {
+                    await updateDoc(doc(calendarEventsCol, id), data);
+                } else {
+                    const newDoc = await addDoc(calendarEventsCol, data);
+                    eventId = newDoc.id; // Get the new ID for the task link
+                }
 
                 const createTask = form.querySelector('#event-create-task').checked;
-                const taskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventId));
-                const existingTasks = await getDocs(taskQuery);
-
-                if (createTask) {
-                    const taskData = { name: taskName, deadline: data.date, status: translations.ru.statusNotDone, month: data.date.slice(0, 7), year: parseInt(data.date.slice(0, 4)), fromCalendar: eventId };
-                    const matchingTasks = existingTasks.docs.filter(d => d.data().month === taskData.month);
-                    if (matchingTasks.length === 0) await addDoc(monthlyTasksCol, taskData);
-                    else await updateDoc(matchingTasks[0].ref, taskData);
-                } else if (!existingTasks.empty) {
-                    const batch = writeBatch(db); existingTasks.docs.forEach(d => batch.delete(d.ref)); await batch.commit();
+                // If 'createTask' is checked, create a new task
+                if (createTask && eventId) {
+                    const taskData = {
+                        name: taskName,
+                        deadline: data.date,
+                        status: translations.ru.statusNotDone,
+                        month: data.date.slice(0, 7),
+                        year: parseInt(data.date.slice(0, 4)),
+                        fromCalendar: eventId
+                    };
+                    await addDoc(monthlyTasksCol, taskData);
                 }
+
             } catch (error) { console.error("Error saving event:", error); }
         };
+
         async function handleCategoryFormSubmit(form) {
             const nameInput = form.querySelector('#category-name');
             const name = nameInput.value.trim();
@@ -1508,5 +1554,4 @@
 </body>
 
 </html>
-
 
