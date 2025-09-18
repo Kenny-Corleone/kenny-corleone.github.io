@@ -44,6 +44,13 @@
             background-color: #3b82f6;
             color: white;
         }
+        
+        /* Логотип без заднего фона */
+        img[alt="ORDINA Logo"] {
+            background: transparent !important;
+            background-color: transparent !important;
+            mix-blend-mode: multiply;
+        }
     </style>
 </head>
 
@@ -60,43 +67,53 @@
     </div>
 
     <!-- AUTHENTICATION SCREEN -->
-    <div id="auth-container" class="hidden min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-8">
-            <div>
-                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900" data-i18n="authTitle">Войдите в свой аккаунт</h2>
+    <div id="auth-container" class="hidden min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 py-4 px-4">
+        <div class="max-w-sm w-full space-y-6">
+            <!-- Language Selector -->
+            <div class="flex justify-center space-x-2 mb-4">
+                <button id="lang-ru-login" title="Русский" class="px-3 py-1 text-xs font-medium rounded-lg bg-blue-600 text-white">RU</button>
+                <button id="lang-en-login" title="English" class="px-3 py-1 text-xs font-medium rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300">EN</button>
+                <button id="lang-az-login" title="Azərbaycan" class="px-3 py-1 text-xs font-medium rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300">AZ</button>
             </div>
-            <div class="mt-8 space-y-6">
-                 <button type="button" id="google-signin-btn" class="group relative w-full flex justify-center items-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px" height="48px"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.521-3.108-11.28-7.481l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C39.99,36.566,44,30.84,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg>
+            <div class="text-center">
+                <div class="mb-4">
+                    <img src="logo ORDINA.png" alt="ORDINA Logo" class="mx-auto h-48 sm:h-56 w-auto drop-shadow-lg">
+                </div>
+                <h2 class="text-base sm:text-lg font-bold text-gray-800 mb-1" data-i18n="authTitle">Войдите в свой аккаунт</h2>
+                <p class="text-xs text-gray-600">Добро пожаловать в ORDINA</p>
+            </div>
+            <div class="bg-white rounded-2xl shadow-xl p-3 sm:p-4 space-y-3">
+                 <button type="button" id="google-signin-btn" class="group relative w-full flex justify-center items-center py-2 px-3 border border-gray-300 text-xs font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <svg class="h-3 w-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px" height="48px"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.521-3.108-11.28-7.481l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C39.99,36.566,44,30.84,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg>
                     <span data-i18n="loginWithGoogle">Войти через Google</span>
                 </button>
 
                 <div class="relative">
                     <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-300"></div>
+                        <div class="w-full border-t border-gray-200"></div>
                     </div>
-                    <div class="relative flex justify-center text-sm">
-                        <span class="px-2 bg-gray-50 text-gray-500">OR</span>
+                    <div class="relative flex justify-center text-xs">
+                        <span class="px-2 bg-white text-gray-400 font-medium">или</span>
                     </div>
                 </div>
 
-                <form id="auth-form" class="mt-8 space-y-6">
-                    <div class="rounded-md shadow-sm -space-y-px">
+                <form id="auth-form" class="space-y-3">
+                    <div class="space-y-2">
                         <div>
-                            <label for="email-address" class="sr-only">Email address</label>
-                            <input id="email-address" name="email" type="email" autocomplete="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Email address">
+                            <label for="email-address" class="block text-xs font-medium text-gray-700 mb-1">Email</label>
+                            <input id="email-address" name="email" type="email" autocomplete="email" required class="w-full px-2.5 py-2 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm" placeholder="Введите ваш email">
                         </div>
                         <div>
-                            <label for="password" class="sr-only">Password</label>
-                            <input id="password" name="password" type="password" autocomplete="current-password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Password">
+                            <label for="password" class="block text-xs font-medium text-gray-700 mb-1">Пароль</label>
+                            <input id="password" name="password" type="password" autocomplete="current-password" required class="w-full px-2.5 py-2 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm" placeholder="Введите пароль">
                         </div>
                     </div>
-                    <p id="auth-error" class="text-red-500 text-sm"></p>
-                    <div class="flex flex-col space-y-4">
-                         <button type="submit" id="login-btn" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="login">
+                    <p id="auth-error" class="text-red-500 text-xs text-center"></p>
+                    <div class="space-y-2">
+                         <button type="submit" id="login-btn" class="w-full flex justify-center py-2 px-3 border border-transparent text-xs font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 shadow-lg hover:shadow-xl" data-i18n="login">
                             Войти
                         </button>
-                        <button type="button" id="register-btn" class="group relative w-full flex justify-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="register">
+                        <button type="button" id="register-btn" class="w-full flex justify-center py-2 px-3 border border-gray-300 text-xs font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200" data-i18n="register">
                             Зарегистрироваться
                         </button>
                     </div>
@@ -114,54 +131,61 @@
             <div class="flex items-center space-x-2">
                 <button id="lang-ru" title="Русский"><img src="https://placehold.co/32x24/d52b1e/ffffff?text=RU" alt="RU" class="rounded-sm cursor-pointer"></button>
                 <button id="lang-en" title="English"><img src="https://placehold.co/32x24/012169/ffffff?text=EN" alt="EN" class="rounded-sm cursor-pointer"></button>
+                <button id="lang-az" title="Azərbaycan"><img src="https://placehold.co/32x24/00a651/ffffff?text=AZ" alt="AZ" class="rounded-sm cursor-pointer"></button>
             </div>
              <button id="logout-btn" class="text-sm font-medium text-gray-600 hover:text-blue-600" data-i18n="logout">Выйти</button>
         </div>
 
-        <header class="mb-6">
-            <h1 class="text-3xl font-bold text-gray-900" data-i18n="appTitle">Финансовый помощник</h1>
-            <p class="text-gray-500 mt-1" data-i18n="appSubtitle">Управляйте своими финансами с легкостью.</p>
+        <header class="mb-8">
+            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
+                <img src="logo ORDINA.png" alt="ORDINA Logo" class="h-32 sm:h-36 md:h-40 w-auto drop-shadow-lg">
+                <div class="text-center sm:text-left">
+                    <p class="text-gray-600 text-base sm:text-lg font-medium" data-i18n="appSubtitle">Управляйте своими финансами с легкостью</p>
+                </div>
+            </div>
         </header>
 
         <!-- Навигация -->
-        <nav class="bg-white rounded-lg shadow-sm mb-6 sticky top-4 z-10">
-            <div class="flex border-b border-gray-200 overflow-x-auto">
-                <button data-tab="dashboard" class="tab-button p-4 border-b-2 border-transparent tab-active whitespace-nowrap" data-i18n="tabDashboard">Сводка</button>
-                <button data-tab="debts" class="tab-button p-4 border-b-2 border-transparent whitespace-nowrap" data-i18n="tabDebts">Долги</button>
-                <button data-tab="recurring-expenses" class="tab-button p-4 border-b-2 border-transparent whitespace-nowrap" data-i18n="tabRecurringExpenses">Ежемесячные расходы</button>
-                <button data-tab="expenses" class="tab-button p-4 border-b-2 border-transparent whitespace-nowrap" data-i18n="tabMonthlyExpenses">Расходы месяца</button>
-                <button data-tab="tasks" class="tab-button p-4 border-b-2 border-transparent whitespace-nowrap" data-i18n="tabTasks">Список задач</button>
-                <button data-tab="calendar" class="tab-button p-4 border-b-2 border-transparent whitespace-nowrap" data-i18n="tabCalendar">Календарь</button>
+        <nav class="bg-white rounded-2xl shadow-lg mb-8 sticky top-4 z-10">
+            <div class="flex border-b border-gray-100 overflow-x-auto">
+                <button data-tab="dashboard" class="tab-button px-4 sm:px-6 py-4 border-b-2 border-transparent tab-active whitespace-nowrap text-sm sm:text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200" data-i18n="tabDashboard">Сводка</button>
+                <button data-tab="debts" class="tab-button px-4 sm:px-6 py-4 border-b-2 border-transparent whitespace-nowrap text-sm sm:text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200" data-i18n="tabDebts">Долги</button>
+                <button data-tab="recurring-expenses" class="tab-button px-4 sm:px-6 py-4 border-b-2 border-transparent whitespace-nowrap text-sm sm:text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200" data-i18n="tabRecurringExpenses">Ежемесячные расходы</button>
+                <button data-tab="expenses" class="tab-button px-4 sm:px-6 py-4 border-b-2 border-transparent whitespace-nowrap text-sm sm:text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200" data-i18n="tabMonthlyExpenses">Расходы месяца</button>
+                <button data-tab="tasks" class="tab-button px-4 sm:px-6 py-4 border-b-2 border-transparent whitespace-nowrap text-sm sm:text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200" data-i18n="tabTasks">Список задач</button>
+                <button data-tab="calendar" class="tab-button px-4 sm:px-6 py-4 border-b-2 border-transparent whitespace-nowrap text-sm sm:text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200" data-i18n="tabCalendar">Календарь</button>
             </div>
         </nav>
 
         <main>
             <!-- Раздел: Сводка (Dashboard) -->
             <div id="dashboard-page" class="page-content">
-                 <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
-                    <h2 class="text-2xl font-semibold" data-i18n="dashboardTitle">Сводка за месяц</h2>
-                     <div class="text-right">
-                        <p id="current-datetime" class="font-semibold text-lg text-gray-700"></p>
-                        <select id="month-selector" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"></select>
+                 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6">
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800" data-i18n="dashboardTitle">Сводка за месяц</h2>
+                    </div>
+                     <div class="w-full lg:w-auto">
+                        <p id="current-datetime" class="font-semibold text-lg text-gray-700 mb-2 text-center lg:text-right"></p>
+                        <select id="month-selector" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent block w-full lg:w-48 p-3 shadow-sm hover:shadow-md transition-all duration-200"></select>
                     </div>
                 </div>
                 <div id="dashboard-loading" class="text-center p-8" data-i18n="loading">Загрузка данных...</div>
                 <div id="dashboard-content" class="hidden">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                        <div class="bg-white p-6 rounded-lg shadow-sm">
-                            <h3 class="text-lg font-medium text-gray-500" data-i18n="dashRecurringPaid">Ежемесячные (оплачено)</h3>
-                            <p id="total-recurring-paid" class="text-3xl font-bold mt-2 text-green-600">0 AZN</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-green-200">
+                            <h3 class="text-lg font-semibold text-green-700 mb-3" data-i18n="dashRecurringPaid">Ежемесячные (оплачено)</h3>
+                            <p id="total-recurring-paid" class="text-3xl sm:text-4xl font-bold text-green-600">0 AZN</p>
                         </div>
-                        <div class="bg-white p-6 rounded-lg shadow-sm">
-                            <h3 class="text-lg font-medium text-gray-500" data-i18n="dashRecurringRemaining">Ежемесячные (осталось)</h3>
-                            <p id="total-recurring-remaining" class="text-3xl font-bold mt-2 text-yellow-600">0 AZN</p>
+                        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-yellow-200">
+                            <h3 class="text-lg font-semibold text-yellow-700 mb-3" data-i18n="dashRecurringRemaining">Ежемесячные (осталось)</h3>
+                            <p id="total-recurring-remaining" class="text-3xl sm:text-4xl font-bold text-yellow-600">0 AZN</p>
                         </div>
-                        <div class="bg-white p-6 rounded-lg shadow-sm">
-                            <h3 class="text-lg font-medium text-gray-500" data-i18n="dashMonthlyExpenses">Расходы за месяц</h3>
-                            <p id="total-monthly-outflow" class="text-3xl font-bold mt-2 text-red-600">0 AZN</p>
+                        <div class="bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-red-200">
+                            <h3 class="text-lg font-semibold text-red-700 mb-3" data-i18n="dashMonthlyExpenses">Расходы за месяц</h3>
+                            <p id="total-monthly-outflow" class="text-3xl sm:text-4xl font-bold text-red-600">0 AZN</p>
                         </div>
-                         <div class="bg-white p-6 rounded-lg shadow-sm">
-                            <h3 class="text-lg font-medium text-gray-500" data-i18n="dashTotalDebt">Остаток общего долга</h3>
+                         <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-purple-200">
+                            <h3 class="text-lg font-semibold text-purple-700 mb-3" data-i18n="dashTotalDebt">Остаток общего долга</h3>
                             <p id="total-debt-remaining" class="text-3xl font-bold mt-2 text-orange-600">0 AZN</p>
                         </div>
                         <div class="bg-white p-6 rounded-lg shadow-sm">
@@ -602,7 +626,7 @@
         
         const translations = {
             ru: {
-                appTitle: "Финансовый помощник", appSubtitle: "Управляйте своими финансами с легкостью.",
+                appTitle: "ORDINA", appSubtitle: "Управляйте своими финансами с легкостью.",
                 tabDashboard: "Сводка", tabDebts: "Долги", tabRecurringExpenses: "Ежемесячные расходы", tabMonthlyExpenses: "Расходы месяца", tabTasks: "Список задач", tabCalendar: "Календарь",
                 dashboardTitle: "Сводка за месяц", loading: "Загрузка данных...",
                 dashRecurringPaid: "Ежемесячные (оплачено)", dashRecurringRemaining: "Ежемесячные (осталось)", dashMonthlyExpenses: "Расходы за месяц", dashTotalDebt: "Остаток общего долга", dashTopCategories: "Топ категорий расходов",
@@ -635,7 +659,7 @@
                 authGenericError: "Произошла ошибка. Попробуйте снова.",
             },
             en: {
-                appTitle: "Financial Helper", appSubtitle: "Manage your finances with ease.",
+                appTitle: "ORDINA", appSubtitle: "Manage your finances with ease.",
                 tabDashboard: "Dashboard", tabDebts: "Debts", tabRecurringExpenses: "Recurring Expenses", tabMonthlyExpenses: "Monthly Expenses", tabTasks: "Task List", tabCalendar: "Calendar",
                 dashboardTitle: "Monthly Dashboard", loading: "Loading data...",
                 dashRecurringPaid: "Recurring (Paid)", dashRecurringRemaining: "Recurring (Remaining)", dashMonthlyExpenses: "Monthly Expenses", dashTotalDebt: "Total Debt Remaining", dashTopCategories: "Top Expense Categories",
@@ -666,6 +690,39 @@
                 authWeakPassword: "Password is too weak. It should be at least 6 characters.",
                 authInvalidCredentials: "Invalid email or password.",
                 authGenericError: "An error occurred. Please try again.",
+            },
+            az: {
+                appTitle: "ORDINA", appSubtitle: "Maliyyələrinizi asanlıqla idarə edin.",
+                tabDashboard: "Ümumi", tabDebts: "Borclar", tabRecurringExpenses: "Aylıq xərclər", tabMonthlyExpenses: "Aylıq xərclər", tabTasks: "Tapşırıqlar", tabCalendar: "Təqvim",
+                dashboardTitle: "Aylıq ümumi", loading: "Məlumatlar yüklənir...",
+                dashRecurringPaid: "Aylıq (ödənilmiş)", dashRecurringRemaining: "Aylıq (qalan)", dashMonthlyExpenses: "Aylıq xərclər", dashTotalDebt: "Ümumi borc qalığı", dashTopCategories: "Əsas xərc kateqoriyaları",
+                debtsTitle: "Bütün borclar", addDebt: "Borç əlavə et", debtName: "Borç (Ad)", amount: "Məbləğ", paid: "Ödənilmiş", remaining: "Qalan", lastPaymentDate: "Son ödəniş tarixi", comments: "Şərhlər", actions: "Əməliyyatlar", emptyDebts: "Borclar siyahısı boşdur.",
+                recurringTitle: "Aylıq xərclər", addTemplate: "Şablon əlavə et", paymentDay: "Ödəniş günü", status: "Status", details: "Təfərrüatlar", templateActions: "Şablon əməliyyatları", emptyRecurring: "Aylıq xərclər siyahısı boşdur. Şablon yaradın.",
+                expensesTitle: "Bütün xərclər", addExpense: "Xərc əlavə et", category: "Kateqoriya", date: "Tarix", emptyExpenses: "Xərclər siyahısı boşdur.",
+                taskToday: "Bu gün", taskMonth: "Ay", taskYear: "İl", taskTodayTitle: "Bu günkü tapşırıqlar", taskMonthTitle: "Aylıq tapşırıqlar", taskYearTitle: "İllik tapşırıqlar", addTask: "Tapşırıq əlavə et", name: "Ad", notes: "Qeydlər", deadline: "Müddət", emptyTasks: "Tapşırıqlar siyahısı boşdur.",
+                cancel: "Ləğv et", save: "Saxla", add: "Əlavə et", delete: "Sil",
+                debtorName: "Borclu adı/Başlıq", totalAmount: "Ümumi məbləğ", paidAmount: "Ödənilmiş məbləğ", comment: "Şərh",
+                addDebtPayment: "Borç ödənişi əlavə et", paymentAmount: "Ödəniş məbləği", paymentDayNum: "Ödəniş günü (1-31)",
+                deleteConfirm: "Bunu silmək istədiyinizə əminsiniz?",
+                paidStatus: "Ödənilmiş", unpaidStatus: "Ödənilməmiş",
+                statusDone: "Tamamlanmış", statusNotDone: "Tamamlanmamış", statusSkipped: "Keçilmiş",
+                editDebt: "Borcu redaktə et", editTemplate: "Şablonu redaktə et", editExpense: "Xərci redaktə et", editTask: "Tapşırığı redaktə et",
+                addTaskForToday: "Bu gün üçün tapşırıq əlavə et", addTaskForMonth: "Ay üçün tapşırıq əlavə et", addTaskForYear: "İl üçün tapşırıq əlavə et",
+                chartLabel: "Xərclər",
+                dashTasksMonth: "Qalan tapşırıqlar (ay)", dashTasksYear: "Qalan tapşırıqlar (il)",
+                debtRepayments: "Borç ödənişləri", recurringPayments: "Aylıq ödənişlər",
+                placeholderComment: "Şərh əlavə edin...",
+                addEvent: "Tədbir əlavə et", editEvent: "Tədbiri redaktə et", eventName: "Tədbir adı", createTaskForEvent: "Bu tədbir üçün tapşırıq yaradın",
+                weekdays: ["B.E", "Ç.A", "Ç", "C.A", "C", "Ş", "B"],
+                categoryEvent: "Tədbir", categoryBirthday: "Ad günü", categoryMeeting: "Görüş", categoryWedding: "Toy",
+                birthdayName: "Ad günü olan şəxsin adı", birthYear: "Doğum ili (istəyə bağlı)", meetingWith: "Kiminlə", time: "Vaxt (istəyə bağlı)", place: "Yer (istəyə bağlı)", weddingNames: "Cütlüyün adları",
+                taskCongratulate: "Təbrik et", taskTurning: "yaşını tamamlayır", taskYearsOld: "yaşında", taskMeetWith: "ilə görüş", taskWeddingOf: "Toyu",
+                authTitle: "Hesabınıza daxil olun", login: "Daxil ol", register: "Qeydiyyat", logout: "Çıxış", loginWithGoogle: "Google ilə daxil ol",
+                authInvalidEmail: "Yanlış email formatı.",
+                authEmailInUse: "Bu email artıq istifadə olunur.",
+                authWeakPassword: "Parol çox zəifdir. Ən azı 6 simvol olmalıdır.",
+                authInvalidCredentials: "Yanlış email və ya parol.",
+                authGenericError: "Xəta baş verdi. Yenidən cəhd edin.",
             }
         };
 
@@ -680,9 +737,39 @@
                 const key = el.dataset.i18n;
                 if (translations[lang][key]) el.textContent = translations[lang][key];
             });
+            
+            // Update active language buttons
+            updateLanguageButtons();
+            
             updateMonthDisplay();
             renderCalendar();
             attachListeners(); 
+        }
+        
+        function updateLanguageButtons() {
+            // Update main app language buttons
+            ['ru', 'en', 'az'].forEach(lang => {
+                const btn = document.getElementById(`lang-${lang}`);
+                if (btn) {
+                    if (lang === currentLang) {
+                        btn.classList.add('ring-2', 'ring-blue-500');
+                    } else {
+                        btn.classList.remove('ring-2', 'ring-blue-500');
+                    }
+                }
+            });
+            
+            // Update login page language buttons
+            ['ru-login', 'en-login', 'az-login'].forEach(lang => {
+                const btn = document.getElementById(`lang-${lang}`);
+                if (btn) {
+                    if (lang.replace('-login', '') === currentLang) {
+                        btn.className = 'px-3 py-1 text-xs font-medium rounded-lg bg-blue-600 text-white';
+                    } else {
+                        btn.className = 'px-3 py-1 text-xs font-medium rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300';
+                    }
+                }
+            });
         }
         
         const loadingOverlay = document.getElementById('loading-overlay');
@@ -704,6 +791,12 @@
         if (auth) {
             document.getElementById('lang-ru').addEventListener('click', () => setLanguage('ru'));
             document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+            document.getElementById('lang-az').addEventListener('click', () => setLanguage('az'));
+            
+            // Language selectors for login page
+            document.getElementById('lang-ru-login').addEventListener('click', () => setLanguage('ru'));
+            document.getElementById('lang-en-login').addEventListener('click', () => setLanguage('en'));
+            document.getElementById('lang-az-login').addEventListener('click', () => setLanguage('az'));
             
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
