@@ -1395,27 +1395,41 @@
                         data.name = form.querySelector('#event-name-generic').value; taskName = data.name;
                         break;
                 }
-
+                
                 let eventId = id;
-                if (eventId) {
-                    const taskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventId));
-                    const existingTasksSnapshot = await getDocs(taskQuery);
-                    if (!existingTasksSnapshot.empty) {
-                        const batch = writeBatch(db);
-                        existingTasksSnapshot.forEach(doc => batch.delete(doc.ref));
-                        await batch.commit();
+                // Сначала сохраняем событие, чтобы получить ID для новых событий
+                if (id) {
+                    await updateDoc(doc(calendarEventsCol, id), data);
+                } else {
+                    const newDoc = await addDoc(calendarEventsCol, data);
+                    eventId = newDoc.id;
+                }
+                
+                if (!eventId) return; // На всякий случай
+
+                const shouldCreateTask = form.querySelector('#event-create-task').checked;
+                const taskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventId));
+                const existingTasksSnapshot = await getDocs(taskQuery);
+                const existingTaskDoc = existingTasksSnapshot.docs[0];
+
+                const taskData = { name: taskName, deadline: data.date, status: translations.ru.statusNotDone, month: data.date.slice(0, 7), year: parseInt(data.date.slice(0, 4)), fromCalendar: eventId };
+
+                if (shouldCreateTask) {
+                    if (existingTaskDoc) {
+                        // Обновляем существующую задачу
+                        await updateDoc(existingTaskDoc.ref, taskData);
+                    } else {
+                        // Создаем новую задачу
+                        await addDoc(monthlyTasksCol, taskData);
+                    }
+                } else {
+                    if (existingTaskDoc) {
+                        // Удаляем задачу, если флажок снят
+                        await deleteDoc(existingTaskDoc.ref);
                     }
                 }
 
-                if (id) await updateDoc(doc(calendarEventsCol, id), data);
-                else { const newDoc = await addDoc(calendarEventsCol, data); eventId = newDoc.id; }
-
-                if (form.querySelector('#event-create-task').checked && eventId) {
-                    const taskData = { name: taskName, deadline: data.date, status: translations.ru.statusNotDone, month: data.date.slice(0, 7), year: parseInt(data.date.slice(0, 4)), fromCalendar: eventId };
-                    await addDoc(monthlyTasksCol, taskData);
-                }
-
-            } catch (error) { console.error("Error saving event:", error); }
+            } catch (error) { console.error("Error saving event and associated task:", error); }
         };
 
         async function handleCategoryFormSubmit(form) {
@@ -1519,4 +1533,3 @@
 </body>
 
 </html>
-
