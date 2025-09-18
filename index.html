@@ -339,11 +339,11 @@
                     <input type="text" id="debt-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
                 </div>
                 <div class="mb-4">
-                    <label for="debt-total" class="block mb-2 text-sm font-medium"><span data-i18n="totalAmount"></span> (AZN)</label>
+                    <label for="debt-total" class="block mb-2 text-sm font-medium"><span data-i18n="totalAmount"></span> (<span class="currency-symbol">AZN</span>)</label>
                     <input type="number" id="debt-total" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
                 </div>
                 <div class="mb-4">
-                    <label for="debt-paid" class="block mb-2 text-sm font-medium"><span data-i18n="paidAmount"></span> (AZN)</label>
+                    <label for="debt-paid" class="block mb-2 text-sm font-medium"><span data-i18n="paidAmount"></span> (<span class="currency-symbol">AZN</span>)</label>
                     <input type="number" id="debt-paid" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required value="0">
                 </div>
                 <div class="mb-4">
@@ -363,7 +363,7 @@
             <form id="debt-payment-form">
                 <input type="hidden" id="debt-payment-id">
                 <div class="mb-4">
-                    <label for="debt-payment-amount" class="block mb-2 text-sm font-medium"><span data-i18n="paymentAmount"></span> (AZN)</label>
+                    <label for="debt-payment-amount" class="block mb-2 text-sm font-medium"><span data-i18n="paymentAmount"></span> (<span class="currency-symbol">AZN</span>)</label>
                     <input type="number" id="debt-payment-amount" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
                 </div>
                 <div class="flex justify-end gap-4 mt-6">
@@ -383,7 +383,7 @@
                     <input type="text" id="recurring-expense-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
                 </div>
                 <div class="mb-4">
-                    <label for="recurring-expense-amount" class="block mb-2 text-sm font-medium"><span data-i18n="amount"></span> (AZN)</label>
+                    <label for="recurring-expense-amount" class="block mb-2 text-sm font-medium"><span data-i18n="amount"></span> (<span class="currency-symbol">AZN</span>)</label>
                     <input type="number" id="recurring-expense-amount" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
                 </div>
                 <div class="mb-4">
@@ -416,7 +416,7 @@
                     <datalist id="expense-categories-list"></datalist>
                 </div>
                 <div class="mb-4">
-                    <label for="expense-amount" class="block mb-2 text-sm font-medium"><span data-i18n="amount"></span> (AZN)</label>
+                    <label for="expense-amount" class="block mb-2 text-sm font-medium"><span data-i18n="amount"></span> (<span class="currency-symbol">AZN</span>)</label>
                     <input type="number" id="expense-amount" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
                 </div>
                 <div class="mb-4">
@@ -627,8 +627,8 @@
         }
 
         let userId = null;
-        let currentMonthId = getCurrentMonthId();
-        let selectedMonthId = currentMonthId;
+        let currentMonthId;
+        let selectedMonthId;
         
         let currentCurrency = localStorage.getItem('currency') || 'AZN';
         const exchangeRate = 1.70; // AZN per USD
@@ -636,7 +636,7 @@
         let allDebts = [], allExpenses = [], allRecurringTemplates = [], currentMonthStatuses = {};
         let dailyTasks = [], monthlyTasks = [], yearlyTasks = [];
         let calendarEvents = [];
-        let calendarDate = new Date();
+        let calendarDate = new Date(); // This will be set to Baku time on load
 
         let debtsCol, recurringExpensesCol, expensesCol, monthlyDataCol, recurringExpenseStatusesCol;
         let dailyTasksCol, monthlyTasksCol, yearlyTasksCol, calendarEventsCol, categoriesCol;
@@ -719,7 +719,7 @@
                 tabDashboard: "Ümumi", tabDebts: "Borclar", tabRecurringExpenses: "Aylıq xərclər", tabMonthlyExpenses: "Aylıq xərclər", tabTasks: "Tapşırıqlar", tabCalendar: "Təqvim",
                 dashboardTitle: "Aylıq ümumi", loading: "Məlumatlar yüklənir...",
                 dashRecurringPaid: "Aylıq (ödənilmiş)", dashRecurringRemaining: "Aylıq (qalan)", dashMonthlyExpenses: "Aylıq xərclər", dashTotalDebt: "Ümumi borc qalığı", dashTopCategories: "Əsas xərc kateqoriyaları",
-                debtsTitle: "Bütün borclar", addDebt: "Borç əlavə et", debtName: "Borç (Ad)", amount: "Məbləğ", paid: "Ödənilmiş", remaining: "Qalan", lastPaymentDate: "Son ödəniş tarixi", comments: "Şərhlər", actions: "Əməliyyatlar", emptyDebts: "Borclar siyahısı boşdur.",
+                debtsTitle: "Bütün borclar", addDebt: "Borç əlavə et", debtName: "Borç (Ad)", amount: "Məbləğ", paid: "Ödənilmiş", remaining: "Qalan", lastPaymentDate: "Son ödəniş tarixi", comments: "Şərhlər", actions: "Əməлијјатлар", emptyDebts: "Borclar siyahısı boşdur.",
                 recurringTitle: "Aylıq xərclər", addTemplate: "Şablon əlavə et", paymentDay: "Ödəniş günü", status: "Status", details: "Təfərrüatlar", templateActions: "Şablon əməliyyatları", emptyRecurring: "Aylıq xərclər siyahısı boşdur. Şablon yaradın.",
                 expensesTitle: "Bütün xərclər", addExpense: "Xərc əlavə et", category: "Kateqoriya", date: "Tarix", emptyExpenses: "Xərclər siyahısı boşdur.",
                 taskToday: "Bu gün", taskMonth: "Ay", taskYear: "İl", taskTodayTitle: "Bu günkü tapşırıqlar", taskMonthTitle: "Aylıq tapşırıqlar", taskYearTitle: "İllik tapşırıqlar", addTask: "Tapşırıq əlavə et", name: "Ad", notes: "Qeydlər", deadline: "Müddət", emptyTasks: "Tapşırıqlar siyahısı boşdur.",
@@ -752,6 +752,23 @@
 
         let currentLang = localStorage.getItem('appLanguage') || 'ru';
         
+        // --- Date Helpers (Baku Timezone) ---
+        function getTodayISOString() {
+            const today = new Date();
+            // Using en-CA locale gives the YYYY-MM-DD format directly
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Asia/Baku' };
+            return new Intl.DateTimeFormat('en-CA', options).format(today);
+        }
+
+        function formatISODateForDisplay(isoString, options = {}) {
+            if (!isoString || !isoString.includes('-')) return '—';
+            const [year, month, day] = isoString.split('-').map(Number);
+            const date = new Date(year, month - 1, day);
+            const defaultOptions = { day: 'numeric', month: 'long' };
+            if (options.year) defaultOptions.year = 'numeric';
+            return date.toLocaleDateString(currentLang === 'ru' ? 'ru-RU' : 'en-US', { ...defaultOptions, ...options });
+        }
+        
         function setLanguage(lang) {
             if (!translations[lang]) return;
             currentLang = lang;
@@ -761,29 +778,17 @@
                 const key = el.dataset.i18n;
                 if (translations[lang][key]) el.textContent = translations[lang][key];
             });
-            
-            // Update active language buttons
             updateLanguageButtons();
-            
             updateMonthDisplay();
             renderCalendar();
             attachListeners(); 
         }
         
         function updateLanguageButtons() {
-            // Update main app language buttons
             ['ru', 'en', 'az'].forEach(lang => {
                 const btn = document.getElementById(`lang-${lang}`);
-                if (btn) {
-                    if (lang === currentLang) {
-                        btn.classList.add('ring-2', 'ring-blue-500');
-                    } else {
-                        btn.classList.remove('ring-2', 'ring-blue-500');
-                    }
-                }
+                if (btn) btn.classList.toggle('ring-2', lang === currentLang);
             });
-            
-            // Update login page language buttons
             ['ru-login', 'en-login', 'az-login'].forEach(lang => {
                 const btn = document.getElementById(`lang-${lang}`);
                 if (btn) {
@@ -836,8 +841,6 @@
             document.getElementById('lang-ru').addEventListener('click', () => setLanguage('ru'));
             document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
             document.getElementById('lang-az').addEventListener('click', () => setLanguage('az'));
-            
-            // Language selectors for login page
             document.getElementById('lang-ru-login').addEventListener('click', () => setLanguage('ru'));
             document.getElementById('lang-en-login').addEventListener('click', () => setLanguage('en'));
             document.getElementById('lang-az-login').addEventListener('click', () => setLanguage('az'));
@@ -845,10 +848,15 @@
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     userId = user.uid;
+                    const todayISO = getTodayISOString();
+                    currentMonthId = todayISO.slice(0, 7);
+                    selectedMonthId = currentMonthId;
+                    calendarDate = new Date(todayISO + 'T00:00:00'); // Initialize calendar to today in Baku
+
                     await setupDefaultData(user);
                     showApp();
-                    setupCollections();
-                    await checkAndCarryOverDailyTasks();
+                    setupCollections(todayISO);
+                    await checkAndCarryOverDailyTasks(todayISO);
                     await checkAndCarryOverTasks();
                     await ensureRecurringTasksForMonth(selectedMonthId);
                     attachListeners();
@@ -862,13 +870,13 @@
             });
         }
         
-        function setupCollections() {
+        function setupCollections(todayId = getTodayISOString()) {
+            if (!userId) return;
             debtsCol = collection(db, `users/${userId}/debts`);
             recurringExpensesCol = collection(db, `users/${userId}/recurringExpenses`);
             monthlyDataCol = collection(db, `users/${userId}/monthlyData`);
             expensesCol = collection(db, `users/${userId}/monthlyData/${selectedMonthId}/expenses`);
             recurringExpenseStatusesCol = collection(db, `users/${userId}/monthlyData/${selectedMonthId}/recurringExpenseStatuses`);
-            const todayId = new Date().toISOString().split('T')[0];
             dailyTasksCol = collection(db, `users/${userId}/dailyTasks/${todayId}/tasks`);
             monthlyTasksCol = collection(db, `users/${userId}/monthlyTasks`);
             yearlyTasksCol = collection(db, `users/${userId}/yearlyTasks`);
@@ -876,21 +884,16 @@
             categoriesCol = collection(db, `users/${userId}/categories`);
         }
 
-        async function checkAndCarryOverDailyTasks() {
-            const today = new Date();
-            const todayId = today.toISOString().split('T')[0];
+        async function checkAndCarryOverDailyTasks(todayId) {
             const lastCheckKey = `lastDailyCheck_${userId}`;
             const lastCheck = localStorage.getItem(lastCheckKey);
+            if (lastCheck === todayId) return;
 
-            if (lastCheck === todayId) {
-                return; 
-            }
-
-            const yesterday = new Date(today);
-            yesterday.setDate(today.getDate() - 1);
+            const yesterday = new Date(todayId + 'T00:00:00');
+            yesterday.setDate(yesterday.getDate() - 1);
             const yesterdayId = yesterday.toISOString().split('T')[0];
 
-            if (lastCheck === yesterdayId || !lastCheck) { // Run on first login or if last login was yesterday
+            if (lastCheck && lastCheck < todayId) {
                 try {
                     const yesterdayTasksCol = collection(db, `users/${userId}/dailyTasks/${yesterdayId}/tasks`);
                     const q = query(yesterdayTasksCol, where("status", "==", translations.ru.statusNotDone));
@@ -899,43 +902,42 @@
                     if (!tasksToCarryOverSnapshot.empty) {
                         const batch = writeBatch(db);
                         const todayTasksColRef = collection(db, `users/${userId}/dailyTasks/${todayId}/tasks`);
-
                         tasksToCarryOverSnapshot.forEach(docSnap => {
                             const taskData = docSnap.data();
                             const newTaskRef = doc(todayTasksColRef);
-                            const yesterdayFormatted = new Date(yesterdayId).toLocaleDateString('ru-RU');
                             batch.set(newTaskRef, {
                                 ...taskData,
-                                notes: `(Перенесено с ${yesterdayFormatted}) ${taskData.notes || ''}`.trim(),
+                                notes: `(Перенесено с ${formatISODateForDisplay(yesterdayId)}) ${taskData.notes || ''}`.trim(),
                                 carriedOver: true
                             });
                         });
                         await batch.commit();
                     }
-                } catch (error) {
-                    console.error("Error carrying over daily tasks:", error);
-                }
+                } catch (error) { console.error("Error carrying over daily tasks:", error); }
             }
             localStorage.setItem(lastCheckKey, todayId);
         }
         
         async function checkAndCarryOverTasks() {
-            const lastCheck = localStorage.getItem(`taskCarryOverMonth_${userId}`);
+            const lastCheckKey = `taskCarryOverMonth_${userId}`;
+            const lastCheck = localStorage.getItem(lastCheckKey);
             if (lastCheck !== currentMonthId) {
-                const prevMonth = new Date(); prevMonth.setMonth(prevMonth.getMonth() - 1);
-                const prevMonthId = `${prevMonth.getFullYear()}-${(prevMonth.getMonth() + 1).toString().padStart(2, '0')}`;
-                const q = query(monthlyTasksCol, where("month", "==", prevMonthId), where("status", "==", translations['ru'].statusNotDone));
+                const prevMonthDate = new Date(currentMonthId + '-01T00:00:00');
+                prevMonthDate.setMonth(prevMonthDate.getMonth() - 1);
+                const prevMonthId = prevMonthDate.toISOString().slice(0, 7);
+
+                const q = query(monthlyTasksCol, where("month", "==", prevMonthId), where("status", "==", translations.ru.statusNotDone));
                 const tasksSnapshot = await getDocs(q);
                 
                 const batch = writeBatch(db);
                 tasksSnapshot.forEach(doc => {
                     const task = doc.data();
-                    if (task.fromCalendar !== true) {
-                        batch.set(doc.ref, { ...task, month: currentMonthId, carriedOver: true });
+                    if (!task.fromCalendar) {
+                        batch.update(doc.ref, { month: currentMonthId, carriedOver: true });
                     }
                 });
                 await batch.commit();
-                localStorage.setItem(`taskCarryOverMonth_${userId}`, currentMonthId);
+                localStorage.setItem(lastCheckKey, currentMonthId);
             }
         }
 
@@ -943,22 +945,14 @@
             if (!userId) return;
             const [year, month] = monthId.split('-');
             const t = translations[currentLang];
-
             const q = query(calendarEventsCol, where("category", "==", "birthday"));
             const birthdayEventsSnapshot = await getDocs(q);
             const batch = writeBatch(db);
-            let batchHasWrites = false;
 
             for (const eventDoc of birthdayEventsSnapshot.docs) {
                 const event = eventDoc.data();
-                const eventMonth = event.date.substring(5, 7);
-
-                if (eventMonth === month) {
-                    const taskQuery = query(
-                        monthlyTasksCol,
-                        where("fromCalendar", "==", eventDoc.id),
-                        where("month", "==", monthId)
-                    );
+                if (event.date.substring(5, 7) === month) {
+                    const taskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventDoc.id), where("month", "==", monthId));
                     const existingTasksSnapshot = await getDocs(taskQuery);
 
                     if (existingTasksSnapshot.empty) {
@@ -967,39 +961,32 @@
                             const age = parseInt(year) - parseInt(event.birthYear);
                             if (age >= 0) taskName += ` (${t.taskTurning} ${age} ${t.taskYearsOld})`;
                         }
-                        const taskData = {
-                            name: taskName,
-                            deadline: `${monthId}-${event.date.substring(8)}`,
-                            status: translations.ru.statusNotDone,
-                            month: monthId,
-                            year: parseInt(year),
-                            fromCalendar: eventDoc.id
-                        };
-                        const newTaskRef = doc(monthlyTasksCol);
-                        batch.set(newTaskRef, taskData);
-                        batchHasWrites = true;
+                        const deadline = `${monthId}-${event.date.substring(8)}`;
+                        batch.set(doc(monthlyTasksCol), {
+                            name: taskName, deadline, status: translations.ru.statusNotDone,
+                            month: monthId, year: parseInt(year), fromCalendar: eventDoc.id
+                        });
                     }
                 }
             }
-            if (batchHasWrites) await batch.commit();
+            await batch.commit();
         }
-
-        function getCurrentMonthId() { return new Date().toISOString().slice(0, 7); }
-        function formatMonthId(monthId) { const [year, month] = monthId.split('-'); return new Date(year, month - 1).toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US', { month: 'long', year: 'numeric' }); }
         
-        function updateDateTime() { document.getElementById('current-datetime').textContent = new Date().toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+        function updateDateTime() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Baku' };
+            document.getElementById('current-datetime').textContent = new Date().toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US', options);
+        }
 
         function updateMonthDisplay() {
             const formattedDate = formatMonthId(selectedMonthId);
             document.querySelectorAll('.current-month-name').forEach(el => el.textContent = formattedDate);
             document.getElementById('recurring-month-name').textContent = formattedDate;
-            document.getElementById('today-date').textContent = new Date().toLocaleDateString(currentLang === 'ru' ? 'ru-RU' : 'en-US', { day: 'numeric', month: 'long' });
+            document.getElementById('today-date').textContent = formatISODateForDisplay(getTodayISOString(), { year: undefined });
         }
         
         // UI Logic
         const tabs = document.querySelectorAll('.tab-button');
         const taskTabs = document.querySelectorAll('.task-tab-button');
-
         tabs.forEach(tab => tab.addEventListener('click', () => { tabs.forEach(t => t.classList.remove('tab-active')); tab.classList.add('tab-active'); document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden')); document.getElementById(`${tab.dataset.tab}-page`).classList.remove('hidden'); }));
         taskTabs.forEach(tab => tab.addEventListener('click', () => { taskTabs.forEach(t => t.classList.remove('task-tab-active')); tab.classList.add('task-tab-active'); document.querySelectorAll('.task-tab-content').forEach(p => p.classList.add('hidden')); document.getElementById(`task-tab-${tab.dataset.taskTab}`).classList.remove('hidden'); }));
         
@@ -1015,7 +1002,7 @@
             unsubscribes.push(onSnapshot(query(categoriesCol), s => { const categories = s.docs.map(d => ({id: d.id, ...d.data()})); renderCategoryDatalist(s.docs); renderCategories(categories); }));
             unsubscribes.push(onSnapshot(query(dailyTasksCol), s => { dailyTasks = s.docs.map(d => ({id: d.id, ...d.data()})); renderDailyTasks(dailyTasks); }));
             unsubscribes.push(onSnapshot(query(monthlyTasksCol, where("month", "==", selectedMonthId)), s => { monthlyTasks = s.docs.map(d=> ({id: d.id, ...d.data()})); renderMonthlyTasks(monthlyTasks); updateDashboard(); }));
-            unsubscribes.push(onSnapshot(query(yearlyTasksCol, where("year", "==", new Date().getFullYear())), s => { yearlyTasks = s.docs.map(d=> ({id: d.id, ...d.data()})); renderYearlyTasks(yearlyTasks); updateDashboard(); }));
+            unsubscribes.push(onSnapshot(query(yearlyTasksCol, where("year", "==", calendarDate.getFullYear())), s => { yearlyTasks = s.docs.map(d=> ({id: d.id, ...d.data()})); renderYearlyTasks(yearlyTasks); updateDashboard(); }));
             unsubscribes.push(onSnapshot(query(calendarEventsCol), s => { calendarEvents = s.docs.map(d => ({id: d.id, ...d.data()})); renderCalendar(); }));
         }
 
@@ -1057,17 +1044,17 @@
             const emptyState = document.getElementById('recurring-expenses-empty');
             if (allRecurringTemplates.length === 0) { tableBody.innerHTML = ''; emptyState.classList.remove('hidden'); return; }
             emptyState.classList.add('hidden');
-            const today = new Date().getDate();
+            const todayDay = new Date(getTodayISOString() + 'T00:00:00').getDate();
             tableBody.innerHTML = allRecurringTemplates.map(template => {
                 const status = currentMonthStatuses[template.id] || translations.ru.unpaidStatus;
-                const isOverdue = status === translations.ru.unpaidStatus && template.dueDay < today && selectedMonthId === currentMonthId;
+                const isOverdue = status === translations.ru.unpaidStatus && template.dueDay < todayDay && selectedMonthId === currentMonthId;
                 const isPaid = status === translations.ru.paidStatus;
                 return `<tr class="border-b hover:bg-gray-50 ${isOverdue ? 'bg-red-50' : ''}">
                         <td class="px-6 py-4 font-medium">${template.name}</td>
                         <td class="px-6 py-4">${formatCurrency(template.amount)}</td>
                         <td class="px-6 py-4">${template.dueDay || '—'}</td>
                         <td class="px-6 py-4">
-                            <select data-id="${template.id}" class="recurring-status-select p-1 rounded-md border-0 ring-1 ring-inset ring-gray-300 ${isPaid ? 'bg-green-50' : 'bg-red-50'}">
+                            <select data-id="${template.id}" class="recurring-status-select p-1 rounded-md border-0 ring-1 ring-inset ring-gray-300 ${isPaid ? 'bg-green-100' : 'bg-red-100'}">
                                 <option value="${translations.ru.unpaidStatus}" ${!isPaid ? 'selected' : ''}>${translations[currentLang].unpaidStatus}</option>
                                 <option value="${translations.ru.paidStatus}" ${isPaid ? 'selected' : ''}>${translations[currentLang].paidStatus}</option>
                             </select></td>
@@ -1084,10 +1071,9 @@
             const emptyState = document.getElementById('expenses-empty');
             if (docs.length === 0) { tableBody.innerHTML = ''; emptyState.classList.remove('hidden'); return; }
             emptyState.classList.add('hidden');
-            const sortedDocs = docs.sort((a, b) => b.data().date.toMillis() - a.data().date.toMillis());
+            const sortedDocs = docs.sort((a, b) => b.data().date.localeCompare(a.data().date));
             tableBody.innerHTML = sortedDocs.map(doc => {
                 const expense = doc.data(), id = doc.id;
-                const expenseDate = expense.date ? expense.date.toDate().toLocaleDateString(currentLang === 'ru' ? 'ru-RU' : 'en-US') : '—';
                 let actionsHtml = (!expense.recurringExpenseId && !expense.debtPaymentId) ? `
                         <button data-id="${id}" class="edit-expense-btn text-blue-600 hover:text-blue-800" title="${translations[currentLang].editExpense}">✏️</button>
                         <button data-id="${id}" class="delete-expense-btn text-red-600 hover:text-red-800" title="${translations[currentLang].delete}">🗑️</button>` : '';
@@ -1095,7 +1081,7 @@
                         <td class="px-6 py-4 font-medium">${expense.name}</td>
                         <td class="px-6 py-4">${expense.category}</td>
                         <td class="px-6 py-4">${formatCurrency(expense.amount)}</td>
-                        <td class="px-6 py-4">${expenseDate}</td>
+                        <td class="px-6 py-4">${formatISODateForDisplay(expense.date)}</td>
                         <td class="px-6 py-4 flex gap-2">${actionsHtml}</td></tr>`;
             }).join('');
         }
@@ -1112,8 +1098,8 @@
         const renderTaskTable = (tableId, emptyId, docs, rowRenderer) => { const t = document.getElementById(tableId), e = document.getElementById(emptyId); if(docs.length === 0) { t.innerHTML = ''; e.classList.remove('hidden'); return; } e.classList.add('hidden'); t.innerHTML = docs.map(rowRenderer).join(''); };
         
         function renderDailyTasks(docs) { renderTaskTable('daily-tasks-table', 'daily-tasks-empty', docs, d => { const t = d; const s = t.status; return `<tr class="${t.carriedOver ? 'bg-blue-50' : ''}"><td class="px-6 py-4 ${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td class="px-6 py-4">${createTaskStatusDropdown(t.id, s, 'dailyTasks')}</td><td class="px-6 py-4"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${t.id}" data-col="dailyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td class="px-6 py-4 flex gap-2"><button data-id="${t.id}" class="edit-daily-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-daily-task-btn text-red-600">🗑️</button></td></tr>`; }); }
-        function renderMonthlyTasks(docs) { renderTaskTable('monthly-tasks-table', 'monthly-tasks-empty', docs.sort((a,b) => new Date(a.deadline) - new Date(b.deadline)), d => { const t = d; const s = t.status; return `<tr class="${t.carriedOver?'bg-yellow-50':''}"><td class="px-6 py-4 ${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td class="px-6 py-4">${t.deadline?new Date(t.deadline).toLocaleDateString(currentLang==='ru'?'ru-RU':'en-US'):'—'}</td><td class="px-6 py-4">${createTaskStatusDropdown(t.id, s, 'monthlyTasks')}</td><td class="px-6 py-4 flex gap-2">${!t.recurringExpenseId && !t.fromCalendar?`<button data-id="${t.id}" class="edit-monthly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-monthly-task-btn text-red-600">🗑️</button>`:''}</td></tr>`; }); }
-        function renderYearlyTasks(docs) { renderTaskTable('yearly-tasks-table', 'yearly-tasks-empty', docs, d => { const t = d; const s = t.status; return `<tr><td class="px-6 py-4 ${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td class="px-6 py-4">${t.deadline?new Date(t.deadline).toLocaleDateString(currentLang==='ru'?'ru-RU':'en-US'):'—'}</td><td class="px-6 py-4">${createTaskStatusDropdown(t.id, s, 'yearlyTasks')}</td><td class="px-6 py-4"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${t.id}" data-col="yearlyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td class="px-6 py-4 flex gap-2"><button data-id="${t.id}" class="edit-yearly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-yearly-task-btn text-red-600">🗑️</button></td></tr>`; }); }
+        function renderMonthlyTasks(docs) { renderTaskTable('monthly-tasks-table', 'monthly-tasks-empty', docs.sort((a,b) => a.deadline.localeCompare(b.deadline)), d => { const t = d; const s = t.status; return `<tr class="${t.carriedOver?'bg-yellow-50':''}"><td class="px-6 py-4 ${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td class="px-6 py-4">${formatISODateForDisplay(t.deadline)}</td><td class="px-6 py-4">${createTaskStatusDropdown(t.id, s, 'monthlyTasks')}</td><td class="px-6 py-4 flex gap-2">${!t.recurringExpenseId && !t.fromCalendar?`<button data-id="${t.id}" class="edit-monthly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-monthly-task-btn text-red-600">🗑️</button>`:''}</td></tr>`; }); }
+        function renderYearlyTasks(docs) { renderTaskTable('yearly-tasks-table', 'yearly-tasks-empty', docs, d => { const t = d; const s = t.status; return `<tr><td class="px-6 py-4 ${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td class="px-6 py-4">${formatISODateForDisplay(t.deadline, {year: 'numeric'})}</td><td class="px-6 py-4">${createTaskStatusDropdown(t.id, s, 'yearlyTasks')}</td><td class="px-6 py-4"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${t.id}" data-col="yearlyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td class="px-6 py-4 flex gap-2"><button data-id="${t.id}" class="edit-yearly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-yearly-task-btn text-red-600">🗑️</button></td></tr>`; }); }
 
         function renderMonthSelector(months) { const s=document.getElementById('month-selector'); s.innerHTML = months.map(m => `<option value="${m}" ${m===selectedMonthId?'selected':''}>${formatMonthId(m)}</option>`).join(''); }
 
@@ -1124,7 +1110,7 @@
             const weekdaysEl = document.getElementById('calendar-weekdays');
             const month = calendarDate.getMonth(), year = calendarDate.getFullYear();
             
-            monthYearEl.textContent = calendarDate.toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US', { month: 'long', year: 'numeric' });
+            monthYearEl.textContent = calendarDate.toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US', { month: 'long', year: 'numeric', timeZone: 'Asia/Baku' });
             weekdaysEl.innerHTML = translations[currentLang].weekdays.map(day => `<div>${day}</div>`).join('');
 
             const firstDayOfMonth = new Date(year, month, 1).getDay();
@@ -1133,12 +1119,14 @@
 
             grid.innerHTML = '';
             for (let i = 0; i < startingDay; i++) { grid.insertAdjacentHTML('beforeend', '<div></div>'); }
+            
+            const todayISO = getTodayISOString();
 
             for (let day = 1; day <= daysInMonth; day++) {
-                const dayDate = new Date(year, month, day);
-                const dateStr = dayDate.toISOString().split('T')[0];
+                const date = new Date(year, month, day);
+                const dateStr = date.toISOString().split('T')[0];
                 const monthDayStr = dateStr.substring(5);
-                const isToday = dateStr === new Date().toISOString().split('T')[0];
+                const isToday = dateStr === todayISO;
                 
                 const dayEvents = calendarEvents.filter(e => {
                     if (e.category === 'birthday') return e.date.substring(5) === monthDayStr;
@@ -1188,16 +1176,15 @@
                 const newStatus = e.target.value;
                 const targetRecurringStatusesCol = collection(db, `users/${userId}/monthlyData/${selectedMonthId}/recurringExpenseStatuses`);
                 await setDoc(doc(targetRecurringStatusesCol, id), { status: newStatus });
-                const currentMonthExpensesCol = collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`);
                 const taskQuery = query(monthlyTasksCol, where("recurringExpenseId", "==", id), where("month", "==", currentMonthId));
                 
                 if (newStatus === translations.ru.paidStatus) {
                      const template = allRecurringTemplates.find(t => t.id === id);
-                     if(template) await addDoc(currentMonthExpensesCol, { name: template.name, category: translations[currentLang].recurringPayments, amount: template.amount, date: Timestamp.now(), recurringExpenseId: id });
+                     if(template) await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: template.name, category: translations[currentLang].recurringPayments, amount: template.amount, date: getTodayISOString(), recurringExpenseId: id });
                      const tasks = await getDocs(taskQuery);
                      if (!tasks.empty) await updateDoc(tasks.docs[0].ref, {status: translations.ru.statusDone});
                 } else {
-                    const q = query(currentMonthExpensesCol, where("recurringExpenseId", "==", id));
+                    const q = query(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), where("recurringExpenseId", "==", id));
                     const snapshot = await getDocs(q);
                     const batch = writeBatch(db); snapshot.docs.forEach(doc => batch.delete(doc.ref)); await batch.commit();
                     const tasks = await getDocs(taskQuery);
@@ -1239,7 +1226,6 @@
                     const category = event.category || 'event';
                     document.getElementById('event-category').value = category;
                     document.getElementById('event-date').value = event.date;
-
                     switch (category) {
                         case 'birthday': document.getElementById('event-birthday-name').value = event.birthdayName || ''; document.getElementById('event-birthday-year').value = event.birthYear || ''; break;
                         case 'meeting': document.getElementById('event-meeting-with').value = event.meetingWith || ''; document.getElementById('event-meeting-time').value = event.meetingTime || ''; document.getElementById('event-meeting-place').value = event.meetingPlace || ''; break;
@@ -1277,7 +1263,6 @@
             document.getElementById('total-monthly-outflow').textContent = formatCurrency(allMonthlyExpensesTotal);
             const totalDebtRemaining = allDebts.reduce((s, d) => s + ((d.data().totalAmount || 0) - (d.data().paidAmount || 0)), 0);
             document.getElementById('total-debt-remaining').textContent = formatCurrency(totalDebtRemaining);
-
             document.getElementById('tasks-remaining-month').textContent = monthlyTasks.filter(t => t.status === translations.ru.statusNotDone).length;
             document.getElementById('tasks-remaining-year').textContent = yearlyTasks.filter(t => t.status === translations.ru.statusNotDone).length;
             
@@ -1319,14 +1304,14 @@
                 
                 if (id && newPaidAmount > originalPaid) {
                     debtData.lastPaymentDate = Timestamp.now();
-                    await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${name}`, category: translations[currentLang].debtRepayments, amount: newPaidAmount - originalPaid, date: Timestamp.now(), debtPaymentId: id });
+                    await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${name}`, category: translations[currentLang].debtRepayments, amount: newPaidAmount - originalPaid, date: getTodayISOString(), debtPaymentId: id });
                 }
                 if (!id) {
                     debtData.createdAt = Timestamp.now();
                     const newDocRef = await addDoc(debtsCol, debtData);
                      if (debtData.paidAmount > 0) {
                         await updateDoc(newDocRef, { lastPaymentDate: Timestamp.now() });
-                        await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${name}`, category: translations[currentLang].debtRepayments, amount: debtData.paidAmount, date: Timestamp.now(), debtPaymentId: newDocRef.id });
+                        await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${name}`, category: translations[currentLang].debtRepayments, amount: debtData.paidAmount, date: getTodayISOString(), debtPaymentId: newDocRef.id });
                     }
                 } else { await updateDoc(doc(debtsCol, id), debtData); }
                 form.dataset.originalPaid = "0";
@@ -1341,7 +1326,7 @@
                 if (debtDoc.exists()) {
                     const debt = debtDoc.data();
                     await updateDoc(debtRef, { paidAmount: (debt.paidAmount || 0) + amount, lastPaymentDate: Timestamp.now() });
-                    await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${debt.name}`, category: translations[currentLang].debtRepayments, amount: amount, date: Timestamp.now(), debtPaymentId: id });
+                    await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${debt.name}`, category: translations[currentLang].debtRepayments, amount: amount, date: getTodayISOString(), debtPaymentId: id });
                 }
             } catch (error) { console.error("Error adding debt payment:", error); }
         }
@@ -1355,8 +1340,8 @@
                 const taskQuery = query(monthlyTasksCol, where("recurringExpenseId", "==", docRef.id), where("month", "==", selectedMonthId));
                 const existingTasks = await getDocs(taskQuery);
                 const [year, month] = selectedMonthId.split('-').map(Number);
-                const deadlineDate = new Date(year, month - 1, data.dueDay);
-                const taskData = { name: `${data.name}`, deadline: deadlineDate.toISOString().split('T')[0], status: translations.ru.statusNotDone, recurringExpenseId: docRef.id, month: selectedMonthId, year: year, };
+                const deadline = `${selectedMonthId}-${String(data.dueDay).padStart(2, '0')}`;
+                const taskData = { name: `${data.name}`, deadline, status: translations.ru.statusNotDone, recurringExpenseId: docRef.id, month: selectedMonthId, year: year, };
                 if(existingTasks.empty) await addDoc(monthlyTasksCol, taskData);
                 else await updateDoc(existingTasks.docs[0].ref, taskData);
             } catch (error) { console.error("Error saving recurring expense:", error); }
@@ -1364,8 +1349,8 @@
         async function handleExpenseFormSubmit(form) {
             try {
                 const id = form.querySelector('#expense-id').value;
-                const expenseData = { name: form.querySelector('#expense-name').value, category: form.querySelector('#expense-category').value, amount: parseFloat(form.querySelector('#expense-amount').value), date: Timestamp.fromDate(new Date(form.querySelector('#expense-date').value)), };
-                const targetExpensesCol = collection(db, `users/${userId}/monthlyData/${selectedMonthId}/expenses`);
+                const expenseData = { name: form.querySelector('#expense-name').value, category: form.querySelector('#expense-category').value, amount: parseFloat(form.querySelector('#expense-amount').value), date: form.querySelector('#expense-date').value, };
+                const targetExpensesCol = collection(db, `users/${userId}/monthlyData/${expenseData.date.slice(0,7)}/expenses`);
                 if (!id) await addDoc(targetExpensesCol, expenseData);
                 else await updateDoc(doc(expensesCol, id), expenseData);
             } catch (error) { console.error("Error saving expense:", error); }
@@ -1375,18 +1360,15 @@
              catch (error) { console.error("Error saving task:", error); }
         };
         const handleDailyTaskFormSubmit = (form) => handleTaskSubmit(dailyTasksCol, form.querySelector('#daily-task-id').value, { name: form.querySelector('#daily-task-name').value, notes: form.querySelector('#daily-task-notes').value });
-        const handleMonthlyTaskFormSubmit = (form) => handleTaskSubmit(monthlyTasksCol, form.querySelector('#monthly-task-id').value, { name: form.querySelector('#monthly-task-name').value, deadline: form.querySelector('#monthly-task-deadline').value, month: selectedMonthId, year: new Date(selectedMonthId).getFullYear()});
-        const handleYearlyTaskFormSubmit = (form) => handleTaskSubmit(yearlyTasksCol, form.querySelector('#yearly-task-id').value, { name: form.querySelector('#yearly-task-name').value, deadline: form.querySelector('#yearly-task-deadline').value, notes: form.querySelector('#yearly-task-notes').value, year: new Date().getFullYear()});
+        const handleMonthlyTaskFormSubmit = (form) => handleTaskSubmit(monthlyTasksCol, form.querySelector('#monthly-task-id').value, { name: form.querySelector('#monthly-task-name').value, deadline: form.querySelector('#monthly-task-deadline').value, month: form.querySelector('#monthly-task-deadline').value.slice(0,7), year: new Date(form.querySelector('#monthly-task-deadline').value).getFullYear()});
+        const handleYearlyTaskFormSubmit = (form) => handleTaskSubmit(yearlyTasksCol, form.querySelector('#yearly-task-id').value, { name: form.querySelector('#yearly-task-name').value, deadline: form.querySelector('#yearly-task-deadline').value, notes: form.querySelector('#yearly-task-notes').value, year: new Date(form.querySelector('#yearly-task-deadline').value).getFullYear()});
         
         async function handleEventFormSubmit(form) {
             try {
                 const id = form.querySelector('#event-id').value;
                 const category = form.querySelector('#event-category').value;
                 const t = translations[currentLang];
-                const data = {
-                    category,
-                    date: form.querySelector('#event-date').value,
-                };
+                const data = { category, date: form.querySelector('#event-date').value };
                 let taskName = '';
 
                 switch (category) {
@@ -1410,14 +1392,11 @@
                         data.weddingNames = weddingNames; data.name = `${t.categoryWedding}: ${weddingNames}`; taskName = `${t.taskWeddingOf} ${weddingNames}`;
                         break;
                     default:
-                        const eventName = form.querySelector('#event-name-generic').value;
-                        data.name = eventName; taskName = eventName;
+                        data.name = form.querySelector('#event-name-generic').value; taskName = data.name;
                         break;
                 }
 
                 let eventId = id;
-
-                // First, delete any pre-existing tasks associated with this event if it's an edit
                 if (eventId) {
                     const taskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventId));
                     const existingTasksSnapshot = await getDocs(taskQuery);
@@ -1428,25 +1407,11 @@
                     }
                 }
 
-                // Now, save the event data (add or update)
-                if (id) {
-                    await updateDoc(doc(calendarEventsCol, id), data);
-                } else {
-                    const newDoc = await addDoc(calendarEventsCol, data);
-                    eventId = newDoc.id; // Get the new ID for the task link
-                }
+                if (id) await updateDoc(doc(calendarEventsCol, id), data);
+                else { const newDoc = await addDoc(calendarEventsCol, data); eventId = newDoc.id; }
 
-                const createTask = form.querySelector('#event-create-task').checked;
-                // If 'createTask' is checked, create a new task
-                if (createTask && eventId) {
-                    const taskData = {
-                        name: taskName,
-                        deadline: data.date,
-                        status: translations.ru.statusNotDone,
-                        month: data.date.slice(0, 7),
-                        year: parseInt(data.date.slice(0, 4)),
-                        fromCalendar: eventId
-                    };
+                if (form.querySelector('#event-create-task').checked && eventId) {
+                    const taskData = { name: taskName, deadline: data.date, status: translations.ru.statusNotDone, month: data.date.slice(0, 7), year: parseInt(data.date.slice(0, 4)), fromCalendar: eventId };
                     await addDoc(monthlyTasksCol, taskData);
                 }
 
@@ -1461,7 +1426,7 @@
 
         setupModal('debt-modal', 'add-debt-btn', () => { document.getElementById('debt-form').reset(); document.getElementById('debt-id').value = ''; document.getElementById('debt-modal-title').textContent = translations[currentLang].addDebt; });
         setupModal('recurring-expense-modal', 'add-recurring-expense-btn', () => { document.getElementById('recurring-expense-form').reset(); document.getElementById('recurring-expense-id').value = ''; document.getElementById('recurring-expense-modal-title').textContent = translations[currentLang].addTemplate; });
-        setupModal('expense-modal', 'add-expense-btn', () => { document.getElementById('expense-form').reset(); document.getElementById('expense-id').value = ''; document.getElementById('expense-date').valueAsDate = new Date(); document.getElementById('expense-modal-title').textContent = translations[currentLang].addExpense; });
+        setupModal('expense-modal', 'add-expense-btn', () => { document.getElementById('expense-form').reset(); document.getElementById('expense-id').value = ''; document.getElementById('expense-date').value = getTodayISOString(); document.getElementById('expense-modal-title').textContent = translations[currentLang].addExpense; });
         setupModal('daily-task-modal', 'add-daily-task-btn', () => { document.getElementById('daily-task-form').reset(); document.getElementById('daily-task-id').value = ''; document.getElementById('daily-task-modal-title').textContent = translations[currentLang].addTaskForToday; });
         setupModal('monthly-task-modal', 'add-monthly-task-btn', () => { document.getElementById('monthly-task-form').reset(); document.getElementById('monthly-task-id').value = ''; document.getElementById('monthly-task-modal-title').textContent = translations[currentLang].addTaskForMonth; });
         setupModal('yearly-task-modal', 'add-yearly-task-btn', () => { document.getElementById('yearly-task-form').reset(); document.getElementById('yearly-task-id').value = ''; document.getElementById('yearly-task-modal-title').textContent = translations[currentLang].addTaskForYear; });
@@ -1473,6 +1438,7 @@
             currentCurrency = currency; localStorage.setItem('currency', currency);
             document.getElementById('currency-azn').classList.toggle('currency-btn-active', currency === 'AZN');
             document.getElementById('currency-usd').classList.toggle('currency-btn-active', currency === 'USD');
+            document.querySelectorAll('.currency-symbol').forEach(el => el.textContent = currentCurrency);
             if (userId) { renderDebts(allDebts); renderRecurringExpenses(); renderExpenses(allExpenses); updateDashboard(); }
         }
         document.getElementById('currency-azn').addEventListener('click', () => setCurrency('AZN'));
@@ -1482,7 +1448,6 @@
         // --- AUTH LOGIC ---
         const authForm = document.getElementById('auth-form');
         const authError = document.getElementById('auth-error');
-        
         document.getElementById('login-btn')?.addEventListener('click', async (e) => {
             e.preventDefault(); const email = authForm.email.value; const password = authForm.password.value; authError.textContent = '';
             try { await signInWithEmailAndPassword(auth, email, password); } 
@@ -1498,7 +1463,7 @@
         });
         document.getElementById('logout-btn')?.addEventListener('click', async () => await signOut(auth));
         
-         document.getElementById('app').addEventListener('click', async (e) => {
+        document.getElementById('app').addEventListener('click', async (e) => {
             const target = e.target; const id = target.dataset.id || target.closest('[data-id]')?.dataset.id;
             if (!id) return;
             const t = translations[currentLang];
@@ -1520,7 +1485,7 @@
                 const tasksToDelete = await getDocs(q); const batch = writeBatch(db); tasksToDelete.forEach(d => batch.delete(d.ref)); await batch.commit();
             } else if (target.classList.contains('edit-expense-btn')) {
                 const expense = (await getDoc(doc(expensesCol, id))).data(); const form = document.getElementById('expense-form');
-                form.querySelector('#expense-id').value = id; form.querySelector('#expense-name').value = expense.name; form.querySelector('#expense-category').value = expense.category; form.querySelector('#expense-amount').value = expense.amount; form.querySelector('#expense-date').value = expense.date.toDate().toISOString().split('T')[0];
+                form.querySelector('#expense-id').value = id; form.querySelector('#expense-name').value = expense.name; form.querySelector('#expense-category').value = expense.category; form.querySelector('#expense-amount').value = expense.amount; form.querySelector('#expense-date').value = expense.date;
                 document.getElementById('expense-modal-title').textContent = t.editExpense; document.getElementById('expense-modal').showModal();
             } else if (target.classList.contains('delete-expense-btn') && confirmDelete()) { await deleteDoc(doc(expensesCol, id)); }
             else if (target.classList.contains('edit-daily-task-btn')) {
