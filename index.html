@@ -77,7 +77,7 @@
             </div>
             <div class="text-center">
                 <div class="mb-4">
-                    <img src="logo ORDINA.png" alt="ORDINA Logo" class="mx-auto h-48 sm:h-56 w-auto drop-shadow-lg">
+                    <img src="https://raw.githubusercontent.com/Kenny-Corleone/ORDINA.github.io/main/logo%20ORDINA.png" alt="ORDINA Logo" class="mx-auto h-48 sm:h-56 w-auto drop-shadow-lg">
                 </div>
                 <h2 class="text-base sm:text-lg font-bold text-gray-800 mb-1" data-i18n="authTitle">Войдите в свой аккаунт</h2>
                 <p class="text-xs text-gray-600">Добро пожаловать в ORDINA</p>
@@ -138,7 +138,7 @@
 
         <header class="mb-8">
             <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-                <img src="logo ORDINA.png" alt="ORDINA Logo" class="h-32 sm:h-36 md:h-40 w-auto drop-shadow-lg">
+                <img src="https://raw.githubusercontent.com/Kenny-Corleone/ORDINA.github.io/main/logo%20ORDINA.png" alt="ORDINA Logo" class="h-32 sm:h-36 md:h-40 w-auto drop-shadow-lg">
                 <div class="text-center sm:text-left">
                     <p class="text-gray-600 text-base sm:text-lg font-medium" data-i18n="appSubtitle">Управляйте своими финансами с легкостью</p>
                 </div>
@@ -257,7 +257,10 @@
             <div id="expenses-page" class="page-content hidden">
                  <div class="flex justify-between items-center mb-4">
                     <h2 class="text-2xl font-semibold"><span data-i18n="expensesTitle">Все расходы за</span> <span class="current-month-name"></span></h2>
-                    <button id="add-expense-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" data-i18n="addExpense">Добавить расход</button>
+                    <div class="flex space-x-2">
+                        <button id="manage-categories-btn" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition" data-i18n="manageCategories">Управление категориями</button>
+                        <button id="add-expense-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" data-i18n="addExpense">Добавить расход</button>
+                    </div>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm overflow-x-auto">
                     <table class="w-full text-sm text-left">
@@ -571,6 +574,24 @@
         </div>
     </dialog>
 
+    <dialog id="category-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md">
+        <div class="p-6">
+            <h3 class="text-xl font-semibold mb-4" data-i18n="manageCategoriesTitle">Управление категориями</h3>
+            <form id="category-form" class="mb-4">
+                <div class="flex gap-2">
+                    <input type="text" id="category-name" placeholder="Новая категория" class="flex-grow bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
+                    <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="add">Добавить</button>
+                </div>
+            </form>
+            <div id="category-list" class="space-y-2 max-h-60 overflow-y-auto">
+                <!-- Categories will be rendered here -->
+            </div>
+            <div class="flex justify-end mt-6">
+                <button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="close">Закрыть</button>
+            </div>
+        </div>
+    </dialog>
+
 
     <script type="module" defer>
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -618,7 +639,7 @@
         let calendarDate = new Date();
 
         let debtsCol, recurringExpensesCol, expensesCol, monthlyDataCol, recurringExpenseStatusesCol;
-        let dailyTasksCol, monthlyTasksCol, yearlyTasksCol, calendarEventsCol;
+        let dailyTasksCol, monthlyTasksCol, yearlyTasksCol, calendarEventsCol, categoriesCol;
         
         let unsubscribes = [];
         let expensesChart = null;
@@ -634,7 +655,7 @@
                 recurringTitle: "Ежемесячные расходы", addTemplate: "Добавить шаблон", paymentDay: "День оплаты", status: "Статус", details: "Детали", templateActions: "Действия с шаблоном", emptyRecurring: "Список ежемесячных расходов пуст. Создайте шаблон.",
                 expensesTitle: "Все расходы за", addExpense: "Добавить расход", category: "Категория", date: "Дата", emptyExpenses: "Список расходов пуст.",
                 taskToday: "На сегодня", taskMonth: "На месяц", taskYear: "На год", taskTodayTitle: "Задачи на сегодня", taskMonthTitle: "Задачи на месяц", taskYearTitle: "Задачи на год", addTask: "Добавить задачу", name: "Имя", notes: "Заметки", deadline: "Дедлайн", emptyTasks: "Список задач пуст.",
-                cancel: "Отмена", save: "Сохранить", add: "Добавить", delete: "Удалить",
+                cancel: "Отмена", save: "Сохранить", add: "Добавить", delete: "Удалить", close: "Закрыть",
                 debtorName: "Имя должника/Название", totalAmount: "Общая сумма", paidAmount: "Оплаченная сумма", comment: "Комментарий",
                 addDebtPayment: "Добавить платеж по долгу", paymentAmount: "Сумма платежа", paymentDayNum: "День оплаты (1-31)",
                 deleteConfirm: "Вы уверены, что хотите удалить это?",
@@ -657,6 +678,7 @@
                 authWeakPassword: "Пароль слишком слабый. Он должен содержать не менее 6 символов.",
                 authInvalidCredentials: "Неверный email или пароль.",
                 authGenericError: "Произошла ошибка. Попробуйте снова.",
+                manageCategories: "Управление категориями", manageCategoriesTitle: "Управление категориями",
             },
             en: {
                 appTitle: "ORDINA", appSubtitle: "Manage your finances with ease.",
@@ -667,7 +689,7 @@
                 recurringTitle: "Recurring Expenses", addTemplate: "Add Template", paymentDay: "Payment Day", status: "Status", details: "Details", templateActions: "Template Actions", emptyRecurring: "Recurring expense list is empty. Create a template.",
                 expensesTitle: "All Expenses for", addExpense: "Add Expense", category: "Category", date: "Date", emptyExpenses: "Expense list is empty.",
                 taskToday: "Today", taskMonth: "Month", taskYear: "Year", taskTodayTitle: "Today's Tasks", taskMonthTitle: "Monthly Tasks", taskYearTitle: "Yearly Tasks", addTask: "Add Task", name: "Name", notes: "Notes", deadline: "Deadline", emptyTasks: "Task list is empty.",
-                cancel: "Cancel", save: "Save", add: "Add", delete: "Delete",
+                cancel: "Cancel", save: "Save", add: "Add", delete: "Delete", close: "Close",
                 debtorName: "Debtor Name/Title", totalAmount: "Total Amount", paidAmount: "Paid Amount", comment: "Comment",
                 addDebtPayment: "Add Debt Payment", paymentAmount: "Payment Amount", paymentDayNum: "Payment Day (1-31)",
                 deleteConfirm: "Are you sure you want to delete this?",
@@ -690,6 +712,7 @@
                 authWeakPassword: "Password is too weak. It should be at least 6 characters.",
                 authInvalidCredentials: "Invalid email or password.",
                 authGenericError: "An error occurred. Please try again.",
+                manageCategories: "Manage Categories", manageCategoriesTitle: "Manage Categories",
             },
             az: {
                 appTitle: "ORDINA", appSubtitle: "Maliyyələrinizi asanlıqla idarə edin.",
@@ -700,7 +723,7 @@
                 recurringTitle: "Aylıq xərclər", addTemplate: "Şablon əlavə et", paymentDay: "Ödəniş günü", status: "Status", details: "Təfərrüatlar", templateActions: "Şablon əməliyyatları", emptyRecurring: "Aylıq xərclər siyahısı boşdur. Şablon yaradın.",
                 expensesTitle: "Bütün xərclər", addExpense: "Xərc əlavə et", category: "Kateqoriya", date: "Tarix", emptyExpenses: "Xərclər siyahısı boşdur.",
                 taskToday: "Bu gün", taskMonth: "Ay", taskYear: "İl", taskTodayTitle: "Bu günkü tapşırıqlar", taskMonthTitle: "Aylıq tapşırıqlar", taskYearTitle: "İllik tapşırıqlar", addTask: "Tapşırıq əlavə et", name: "Ad", notes: "Qeydlər", deadline: "Müddət", emptyTasks: "Tapşırıqlar siyahısı boşdur.",
-                cancel: "Ləğv et", save: "Saxla", add: "Əlavə et", delete: "Sil",
+                cancel: "Ləğv et", save: "Saxla", add: "Əlavə et", delete: "Sil", close: "Bağla",
                 debtorName: "Borclu adı/Başlıq", totalAmount: "Ümumi məbləğ", paidAmount: "Ödənilmiş məbləğ", comment: "Şərh",
                 addDebtPayment: "Borç ödənişi əlavə et", paymentAmount: "Ödəniş məbləği", paymentDayNum: "Ödəniş günü (1-31)",
                 deleteConfirm: "Bunu silmək istədiyinizə əminsiniz?",
@@ -723,6 +746,7 @@
                 authWeakPassword: "Parol çox zəifdir. Ən azı 6 simvol olmalıdır.",
                 authInvalidCredentials: "Yanlış email və ya parol.",
                 authGenericError: "Xəta baş verdi. Yenidən cəhd edin.",
+                manageCategories: "Kateqoriyaları idarə et", manageCategoriesTitle: "Kateqoriyaları idarə et",
             }
         };
 
@@ -803,7 +827,9 @@
                     userId = user.uid;
                     showApp();
                     setupCollections();
+                    await checkAndCarryOverDailyTasks();
                     await checkAndCarryOverTasks();
+                    await ensureRecurringTasksForMonth(selectedMonthId);
                     attachListeners();
                     setLanguage(currentLang);
                     updateDateTime();
@@ -826,6 +852,50 @@
             monthlyTasksCol = collection(db, `users/${userId}/monthlyTasks`);
             yearlyTasksCol = collection(db, `users/${userId}/yearlyTasks`);
             calendarEventsCol = collection(db, `users/${userId}/calendarEvents`);
+            categoriesCol = collection(db, `users/${userId}/categories`);
+        }
+
+        async function checkAndCarryOverDailyTasks() {
+            const today = new Date();
+            const todayId = today.toISOString().split('T')[0];
+            const lastCheckKey = `lastDailyCheck_${userId}`;
+            const lastCheck = localStorage.getItem(lastCheckKey);
+
+            if (lastCheck === todayId) {
+                return; 
+            }
+
+            const yesterday = new Date(today);
+            yesterday.setDate(today.getDate() - 1);
+            const yesterdayId = yesterday.toISOString().split('T')[0];
+
+            if (lastCheck === yesterdayId || !lastCheck) { // Run on first login or if last login was yesterday
+                try {
+                    const yesterdayTasksCol = collection(db, `users/${userId}/dailyTasks/${yesterdayId}/tasks`);
+                    const q = query(yesterdayTasksCol, where("status", "==", translations.ru.statusNotDone));
+                    const tasksToCarryOverSnapshot = await getDocs(q);
+
+                    if (!tasksToCarryOverSnapshot.empty) {
+                        const batch = writeBatch(db);
+                        const todayTasksColRef = collection(db, `users/${userId}/dailyTasks/${todayId}/tasks`);
+
+                        tasksToCarryOverSnapshot.forEach(docSnap => {
+                            const taskData = docSnap.data();
+                            const newTaskRef = doc(todayTasksColRef);
+                            const yesterdayFormatted = new Date(yesterdayId).toLocaleDateString('ru-RU');
+                            batch.set(newTaskRef, {
+                                ...taskData,
+                                notes: `(Перенесено с ${yesterdayFormatted}) ${taskData.notes || ''}`.trim(),
+                                carriedOver: true
+                            });
+                        });
+                        await batch.commit();
+                    }
+                } catch (error) {
+                    console.error("Error carrying over daily tasks:", error);
+                }
+            }
+            localStorage.setItem(lastCheckKey, todayId);
         }
         
         async function checkAndCarryOverTasks() {
@@ -840,12 +910,57 @@
                 tasksSnapshot.forEach(doc => {
                     const task = doc.data();
                     if (task.fromCalendar !== true) {
-                        batch.set(doc(monthlyTasksCol), { ...task, month: currentMonthId, carriedOver: true });
+                        batch.set(doc.ref, { ...task, month: currentMonthId, carriedOver: true });
                     }
                 });
                 await batch.commit();
                 localStorage.setItem(`taskCarryOverMonth_${userId}`, currentMonthId);
             }
+        }
+
+        async function ensureRecurringTasksForMonth(monthId) {
+            if (!userId) return;
+            const [year, month] = monthId.split('-');
+            const t = translations[currentLang];
+
+            const q = query(calendarEventsCol, where("category", "==", "birthday"));
+            const birthdayEventsSnapshot = await getDocs(q);
+            const batch = writeBatch(db);
+            let batchHasWrites = false;
+
+            for (const eventDoc of birthdayEventsSnapshot.docs) {
+                const event = eventDoc.data();
+                const eventMonth = event.date.substring(5, 7);
+
+                if (eventMonth === month) {
+                    const taskQuery = query(
+                        monthlyTasksCol,
+                        where("fromCalendar", "==", eventDoc.id),
+                        where("month", "==", monthId)
+                    );
+                    const existingTasksSnapshot = await getDocs(taskQuery);
+
+                    if (existingTasksSnapshot.empty) {
+                        let taskName = `${t.taskCongratulate} ${event.birthdayName}`;
+                        if (event.birthYear) {
+                            const age = parseInt(year) - parseInt(event.birthYear);
+                            if (age >= 0) taskName += ` (${t.taskTurning} ${age} ${t.taskYearsOld})`;
+                        }
+                        const taskData = {
+                            name: taskName,
+                            deadline: `${monthId}-${event.date.substring(8)}`,
+                            status: translations.ru.statusNotDone,
+                            month: monthId,
+                            year: parseInt(year),
+                            fromCalendar: eventDoc.id
+                        };
+                        const newTaskRef = doc(monthlyTasksCol);
+                        batch.set(newTaskRef, taskData);
+                        batchHasWrites = true;
+                    }
+                }
+            }
+            if (batchHasWrites) await batch.commit();
         }
 
         function getCurrentMonthId() { return new Date().toISOString().slice(0, 7); }
@@ -876,9 +991,9 @@
             unsubscribes.push(onSnapshot(query(recurringExpensesCol), s => { allRecurringTemplates = s.docs.map(d => ({ id: d.id, ...d.data() })); renderRecurringExpenses(); updateDashboard(); }));
             unsubscribes.push(onSnapshot(query(recurringExpenseStatusesCol), s => { currentMonthStatuses = {}; s.docs.forEach(d => { currentMonthStatuses[d.id] = d.data().status; }); renderRecurringExpenses(); updateDashboard(); }));
             unsubscribes.push(onSnapshot(query(monthlyDataCol), s => { const m = s.docs.map(d => d.id); if(!m.includes(currentMonthId)) m.push(currentMonthId); m.sort().reverse(); renderMonthSelector(m); }));
-            unsubscribes.push(onSnapshot(collection(db, `users/${userId}/categories`), s => renderCategoryDatalist(s.docs)));
+            unsubscribes.push(onSnapshot(query(categoriesCol), s => { const categories = s.docs.map(d => ({id: d.id, ...d.data()})); renderCategoryDatalist(s.docs); renderCategories(categories); }));
             unsubscribes.push(onSnapshot(query(dailyTasksCol), s => { dailyTasks = s.docs.map(d => ({id: d.id, ...d.data()})); renderDailyTasks(dailyTasks); }));
-            unsubscribes.push(onSnapshot(query(monthlyTasksCol, where("month", "==", currentMonthId)), s => { monthlyTasks = s.docs.map(d=> ({id: d.id, ...d.data()})); renderMonthlyTasks(monthlyTasks); updateDashboard(); }));
+            unsubscribes.push(onSnapshot(query(monthlyTasksCol, where("month", "==", selectedMonthId)), s => { monthlyTasks = s.docs.map(d=> ({id: d.id, ...d.data()})); renderMonthlyTasks(monthlyTasks); updateDashboard(); }));
             unsubscribes.push(onSnapshot(query(yearlyTasksCol, where("year", "==", new Date().getFullYear())), s => { yearlyTasks = s.docs.map(d=> ({id: d.id, ...d.data()})); renderYearlyTasks(yearlyTasks); updateDashboard(); }));
             unsubscribes.push(onSnapshot(query(calendarEventsCol), s => { calendarEvents = s.docs.map(d => ({id: d.id, ...d.data()})); renderCalendar(); }));
         }
@@ -886,17 +1001,25 @@
         function detachListeners() { unsubscribes.forEach(unsub => unsub()); unsubscribes = []; }
         
         function formatCurrency(amount) {
-            if (typeof amount !== 'number') {
-                amount = 0;
-            }
-            if (currentCurrency === 'USD') {
-                const usdAmount = amount / exchangeRate;
-                return `$ ${usdAmount.toFixed(2)}`;
-            }
-            return `${amount.toFixed(2)} AZN`;
+            if (typeof amount !== 'number') amount = 0;
+            const value = currentCurrency === 'USD' ? amount / exchangeRate : amount;
+            const symbol = currentCurrency === 'USD' ? '$' : 'AZN';
+            return `${value.toFixed(2)} ${symbol}`;
         }
 
         function renderCategoryDatalist(docs) { const datalist = document.getElementById('expense-categories-list'); datalist.innerHTML = docs.filter(doc => doc.data().lang === currentLang).map(doc => `<option value="${doc.data().name}"></option>`).join(''); }
+
+        function renderCategories(categories) {
+            const list = document.getElementById('category-list');
+            if (!list) return;
+            const langCategories = categories.filter(c => c.lang === currentLang);
+            list.innerHTML = langCategories.map(cat => `
+                <div class="flex justify-between items-center p-2 bg-gray-100 rounded-lg">
+                    <span>${cat.name}</span>
+                    <button data-id="${cat.id}" class="delete-category-btn text-red-500 hover:text-red-700">🗑️</button>
+                </div>
+            `).join('');
+        }
 
         function renderDebts(docs) {
             const tableBody = document.getElementById('debts-table'); const emptyState = document.getElementById('debts-empty'); if (docs.length === 0) { tableBody.innerHTML = ''; emptyState.classList.remove('hidden'); return; } emptyState.classList.add('hidden');
@@ -957,33 +1080,19 @@
         }
 
         function createTaskStatusDropdown(id, status, colName) {
-            const t = translations[currentLang];
-            const ruT = translations.ru;
-
-            const options = {
-                [ruT.statusNotDone]: { text: t.statusNotDone, class: 'bg-yellow-100 text-yellow-800' },
-                [ruT.statusDone]: { text: t.statusDone, class: 'bg-green-100 text-green-800' },
-                [ruT.statusSkipped]: { text: t.statusSkipped, class: 'bg-gray-100 text-gray-800' }
-            };
-
+            const t = translations[currentLang]; const ruT = translations.ru;
+            const options = { [ruT.statusNotDone]: { text: t.statusNotDone, class: 'bg-yellow-100 text-yellow-800' }, [ruT.statusDone]: { text: t.statusDone, class: 'bg-green-100 text-green-800' }, [ruT.statusSkipped]: { text: t.statusSkipped, class: 'bg-gray-100 text-gray-800' } };
             const currentStatus = status || ruT.statusNotDone;
             let selectHTML = `<select data-id="${id}" data-col="${colName}" class="task-status-select p-1 rounded-md border-0 ring-1 ring-inset ring-gray-300 ${options[currentStatus]?.class}">`;
-            for (const [value, { text }] of Object.entries(options)) {
-                selectHTML += `<option value="${value}" ${currentStatus === value ? 'selected' : ''}>${text}</option>`;
-            }
-            selectHTML += `</select>`;
-            return selectHTML;
+            for (const [value, { text }] of Object.entries(options)) { selectHTML += `<option value="${value}" ${currentStatus === value ? 'selected' : ''}>${text}</option>`; }
+            selectHTML += `</select>`; return selectHTML;
         }
 
         const renderTaskTable = (tableId, emptyId, docs, rowRenderer) => { const t = document.getElementById(tableId), e = document.getElementById(emptyId); if(docs.length === 0) { t.innerHTML = ''; e.classList.remove('hidden'); return; } e.classList.add('hidden'); t.innerHTML = docs.map(rowRenderer).join(''); };
         
-        // --- FIX STARTS HERE ---
-        // The error was in the next 3 functions. `d` is already the data object, so `d.data()` was incorrect.
-        // I've changed `const t = d.data()` to `const t = d` to correctly access the task properties.
-        function renderDailyTasks(docs) { renderTaskTable('daily-tasks-table', 'daily-tasks-empty', docs, d => { const t = d; const s = t.status; return `<tr><td class="px-6 py-4 ${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td class="px-6 py-4">${createTaskStatusDropdown(t.id, s, 'dailyTasks')}</td><td class="px-6 py-4"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${t.id}" data-col="dailyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td class="px-6 py-4 flex gap-2"><button data-id="${t.id}" class="edit-daily-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-daily-task-btn text-red-600">🗑️</button></td></tr>`; }); }
-        function renderMonthlyTasks(docs) { renderTaskTable('monthly-tasks-table', 'monthly-tasks-empty', docs, d => { const t = d; const s = t.status; return `<tr class="${t.carriedOver?'bg-yellow-50':''}"><td class="px-6 py-4 ${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td class="px-6 py-4">${t.deadline?new Date(t.deadline).toLocaleDateString(currentLang==='ru'?'ru-RU':'en-US'):'—'}</td><td class="px-6 py-4">${createTaskStatusDropdown(t.id, s, 'monthlyTasks')}</td><td class="px-6 py-4 flex gap-2">${!t.recurringExpenseId && !t.fromCalendar?`<button data-id="${t.id}" class="edit-monthly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-monthly-task-btn text-red-600">🗑️</button>`:''}</td></tr>`; }); }
+        function renderDailyTasks(docs) { renderTaskTable('daily-tasks-table', 'daily-tasks-empty', docs, d => { const t = d; const s = t.status; return `<tr class="${t.carriedOver ? 'bg-blue-50' : ''}"><td class="px-6 py-4 ${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td class="px-6 py-4">${createTaskStatusDropdown(t.id, s, 'dailyTasks')}</td><td class="px-6 py-4"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${t.id}" data-col="dailyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td class="px-6 py-4 flex gap-2"><button data-id="${t.id}" class="edit-daily-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-daily-task-btn text-red-600">🗑️</button></td></tr>`; }); }
+        function renderMonthlyTasks(docs) { renderTaskTable('monthly-tasks-table', 'monthly-tasks-empty', docs.sort((a,b) => new Date(a.deadline) - new Date(b.deadline)), d => { const t = d; const s = t.status; return `<tr class="${t.carriedOver?'bg-yellow-50':''}"><td class="px-6 py-4 ${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td class="px-6 py-4">${t.deadline?new Date(t.deadline).toLocaleDateString(currentLang==='ru'?'ru-RU':'en-US'):'—'}</td><td class="px-6 py-4">${createTaskStatusDropdown(t.id, s, 'monthlyTasks')}</td><td class="px-6 py-4 flex gap-2">${!t.recurringExpenseId && !t.fromCalendar?`<button data-id="${t.id}" class="edit-monthly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-monthly-task-btn text-red-600">🗑️</button>`:''}</td></tr>`; }); }
         function renderYearlyTasks(docs) { renderTaskTable('yearly-tasks-table', 'yearly-tasks-empty', docs, d => { const t = d; const s = t.status; return `<tr><td class="px-6 py-4 ${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td class="px-6 py-4">${t.deadline?new Date(t.deadline).toLocaleDateString(currentLang==='ru'?'ru-RU':'en-US'):'—'}</td><td class="px-6 py-4">${createTaskStatusDropdown(t.id, s, 'yearlyTasks')}</td><td class="px-6 py-4"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${t.id}" data-col="yearlyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td class="px-6 py-4 flex gap-2"><button data-id="${t.id}" class="edit-yearly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-yearly-task-btn text-red-600">🗑️</button></td></tr>`; }); }
-        // --- FIX ENDS HERE ---
 
         function renderMonthSelector(months) { const s=document.getElementById('month-selector'); s.innerHTML = months.map(m => `<option value="${m}" ${m===selectedMonthId?'selected':''}>${formatMonthId(m)}</option>`).join(''); }
 
@@ -992,16 +1101,14 @@
             const grid = document.getElementById('calendar-grid');
             const monthYearEl = document.getElementById('calendar-month-year');
             const weekdaysEl = document.getElementById('calendar-weekdays');
-            
-            const month = calendarDate.getMonth();
-            const year = calendarDate.getFullYear();
+            const month = calendarDate.getMonth(), year = calendarDate.getFullYear();
             
             monthYearEl.textContent = calendarDate.toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US', { month: 'long', year: 'numeric' });
             weekdaysEl.innerHTML = translations[currentLang].weekdays.map(day => `<div>${day}</div>`).join('');
 
             const firstDayOfMonth = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const startingDay = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1; // Mon is 0
+            const startingDay = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
 
             grid.innerHTML = '';
             for (let i = 0; i < startingDay; i++) { grid.insertAdjacentHTML('beforeend', '<div></div>'); }
@@ -1013,9 +1120,7 @@
                 const isToday = dateStr === new Date().toISOString().split('T')[0];
                 
                 const dayEvents = calendarEvents.filter(e => {
-                    if (e.category === 'birthday') {
-                        return e.date.substring(5) === monthDayStr;
-                    }
+                    if (e.category === 'birthday') return e.date.substring(5) === monthDayStr;
                     return e.date === dateStr;
                 });
 
@@ -1033,7 +1138,12 @@
         document.getElementById('next-month-btn').addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() + 1); renderCalendar(); });
 
         // --- Event Handlers ---
-        document.getElementById('month-selector').addEventListener('change', (e) => { selectedMonthId = e.target.value; updateMonthDisplay(); attachListeners(); });
+        document.getElementById('month-selector').addEventListener('change', async (e) => { 
+            selectedMonthId = e.target.value; 
+            await ensureRecurringTasksForMonth(selectedMonthId);
+            updateMonthDisplay(); 
+            attachListeners(); 
+        });
 
         document.getElementById('app').addEventListener('change', async (e) => {
             const id = e.target.dataset.id;
@@ -1053,7 +1163,6 @@
                 const colRef = colName === 'dailyTasks' ? dailyTasksCol : yearlyTasksCol;
                 await updateDoc(doc(colRef, id), { notes: e.target.value });
             }
-
             if (e.target.classList.contains('recurring-status-select')) {
                 const newStatus = e.target.value;
                 const targetRecurringStatusesCol = collection(db, `users/${userId}/monthlyData/${selectedMonthId}/recurringExpenseStatuses`);
@@ -1081,14 +1190,10 @@
             document.querySelectorAll('.event-category-fields').forEach(div => div.classList.add('hidden'));
             document.getElementById(`event-fields-${e.target.value}`).classList.remove('hidden');
             document.querySelectorAll('.event-category-fields input').forEach(input => {
-                input.value = '';
-                input.required = false;
+                input.value = ''; input.required = false;
             });
-            // Make inputs in visible fields required
             document.querySelectorAll(`#event-fields-${e.target.value} input`).forEach(input => {
-                if(input.id !== 'event-birthday-year' && input.id !== 'event-meeting-time' && input.id !== 'event-meeting-place') {
-                     input.required = true;
-                }
+                if(input.id !== 'event-birthday-year' && input.id !== 'event-meeting-time' && input.id !== 'event-meeting-place') { input.required = true; }
             });
         });
 
@@ -1100,12 +1205,11 @@
             const form = document.getElementById('event-form');
 
             const openModal = () => {
-                const category = document.getElementById('event-category').value;
                 eventCategorySelector.dispatchEvent(new Event('change'));
                 eventModal.showModal();
             };
 
-            if (eventEl) { // Clicked on an existing event
+            if (eventEl) { 
                 const eventId = eventEl.dataset.eventId;
                 const event = calendarEvents.find(ev => ev.id === eventId);
                 if (event) {
@@ -1113,32 +1217,19 @@
                     document.getElementById('event-id').value = event.id;
                     const category = event.category || 'event';
                     document.getElementById('event-category').value = category;
-                    document.getElementById('event-date').value = dayEl.dataset.date; // Use clicked date for context
+                    document.getElementById('event-date').value = event.date;
 
                     switch (category) {
-                        case 'birthday':
-                            document.getElementById('event-birthday-name').value = event.birthdayName || '';
-                            document.getElementById('event-birthday-year').value = event.birthYear || '';
-                            break;
-                        case 'meeting':
-                            document.getElementById('event-meeting-with').value = event.meetingWith || '';
-                            document.getElementById('event-meeting-time').value = event.meetingTime || '';
-                            document.getElementById('event-meeting-place').value = event.meetingPlace || '';
-                            break;
-                        case 'wedding':
-                            document.getElementById('event-wedding-names').value = event.weddingNames || '';
-                            break;
-                        case 'event':
-                        default:
-                            document.getElementById('event-name-generic').value = event.name || '';
-                            break;
+                        case 'birthday': document.getElementById('event-birthday-name').value = event.birthdayName || ''; document.getElementById('event-birthday-year').value = event.birthYear || ''; break;
+                        case 'meeting': document.getElementById('event-meeting-with').value = event.meetingWith || ''; document.getElementById('event-meeting-time').value = event.meetingTime || ''; document.getElementById('event-meeting-place').value = event.meetingPlace || ''; break;
+                        case 'wedding': document.getElementById('event-wedding-names').value = event.weddingNames || ''; break;
+                        default: document.getElementById('event-name-generic').value = event.name || ''; break;
                     }
-
                     document.getElementById('event-modal-title').textContent = t.editEvent;
                     document.getElementById('delete-event-btn').classList.remove('hidden');
                     openModal();
                 }
-            } else if (dayEl) { // Clicked on a day to add a new event
+            } else if (dayEl) { 
                 form.reset();
                 document.getElementById('event-id').value = '';
                 document.getElementById('event-category').value = 'event';
@@ -1174,7 +1265,7 @@
             const chartLabels = sortedCategories.map(item => item[0]);
             const chartData = sortedCategories.map(item => item[1]);
             if (expensesChart) expensesChart.destroy();
-            expensesChart = new Chart(document.getElementById('expenses-chart').getContext('2d'), { type: 'bar', data: { labels: chartLabels, datasets: [{ label: `${translations[currentLang].chartLabel} (${currentCurrency})`, data: chartData.map(amount => currentCurrency === 'USD' ? amount / exchangeRate : amount), backgroundColor: ['rgba(59,130,246,0.7)','rgba(239,68,68,0.7)','rgba(245,158,11,0.7)','rgba(16,185,129,0.7)','rgba(139,92,246,0.7)','rgba(236,72,153,0.7)','rgba(107,114,128,0.7)'], borderWidth: 1 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } } });
+            expensesChart = new Chart(document.getElementById('expenses-chart').getContext('2d'), { type: 'bar', data: { labels: chartLabels, datasets: [{ label: `${translations[currentLang].chartLabel}`, data: chartData.map(amount => currentCurrency === 'USD' ? amount / exchangeRate : amount), backgroundColor: ['rgba(59,130,246,0.7)','rgba(239,68,68,0.7)','rgba(245,158,11,0.7)','rgba(16,185,129,0.7)','rgba(139,92,246,0.7)','rgba(236,72,153,0.7)','rgba(107,114,128,0.7)'], borderWidth: 1 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } } });
         }
         
         // --- Modal Helpers ---
@@ -1182,32 +1273,16 @@
             const modal = document.getElementById(modalId);
             if (!modal) return;
             const openBtn = document.getElementById(openBtnId);
-            
-            if (openBtn) {
-                openBtn.addEventListener('click', () => {
-                    if (resetFn) resetFn();
-                    modal.showModal();
-                });
-            }
-            
+            if (openBtn) openBtn.addEventListener('click', () => { if (resetFn) resetFn(); modal.showModal(); });
             modal.querySelector('.cancel-btn')?.addEventListener('click', () => modal.close());
             modal.querySelector('form')?.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const formId = e.target.id;
                 const handler = {
-                    'debt-form': handleDebtFormSubmit,
-                    'debt-payment-form': handleDebtPaymentFormSubmit,
-                    'recurring-expense-form': handleRecurringExpenseFormSubmit,
-                    'expense-form': handleExpenseFormSubmit,
-                    'daily-task-form': handleDailyTaskFormSubmit,
-                    'monthly-task-form': handleMonthlyTaskFormSubmit,
-                    'yearly-task-form': handleYearlyTaskFormSubmit,
-                    'event-form': handleEventFormSubmit
-                }[formId];
-
-                if (handler) {
-                    handler(e.target);
-                }
+                    'debt-form': handleDebtFormSubmit, 'debt-payment-form': handleDebtPaymentFormSubmit, 'recurring-expense-form': handleRecurringExpenseFormSubmit,
+                    'expense-form': handleExpenseFormSubmit, 'daily-task-form': handleDailyTaskFormSubmit, 'monthly-task-form': handleMonthlyTaskFormSubmit,
+                    'yearly-task-form': handleYearlyTaskFormSubmit, 'event-form': handleEventFormSubmit
+                }[e.target.id];
+                if (handler) handler(e.target);
                 modal.close();
             });
         }
@@ -1223,25 +1298,18 @@
                 
                 if (id && newPaidAmount > originalPaid) {
                     debtData.lastPaymentDate = Timestamp.now();
-                    await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), {
-                        name: `${translations[currentLang].addDebtPayment}: ${name}`, category: translations[currentLang].debtRepayments, amount: newPaidAmount - originalPaid, date: Timestamp.now(), debtPaymentId: id
-                    });
+                    await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${name}`, category: translations[currentLang].debtRepayments, amount: newPaidAmount - originalPaid, date: Timestamp.now(), debtPaymentId: id });
                 }
                 if (!id) {
                     debtData.createdAt = Timestamp.now();
                     const newDocRef = await addDoc(debtsCol, debtData);
                      if (debtData.paidAmount > 0) {
                         await updateDoc(newDocRef, { lastPaymentDate: Timestamp.now() });
-                        await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), {
-                            name: `${translations[currentLang].addDebtPayment}: ${name}`, category: translations[currentLang].debtRepayments, amount: debtData.paidAmount, date: Timestamp.now(), debtPaymentId: newDocRef.id
-                        });
+                        await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${name}`, category: translations[currentLang].debtRepayments, amount: debtData.paidAmount, date: Timestamp.now(), debtPaymentId: newDocRef.id });
                     }
                 } else { await updateDoc(doc(debtsCol, id), debtData); }
                 form.dataset.originalPaid = "0";
-            } catch (error) {
-                console.error("Error saving debt:", error);
-                alert("Ошибка сохранения долга: " + error.message);
-            }
+            } catch (error) { console.error("Error saving debt:", error); }
         }
         async function handleDebtPaymentFormSubmit(form) {
             try {
@@ -1252,132 +1320,75 @@
                 if (debtDoc.exists()) {
                     const debt = debtDoc.data();
                     await updateDoc(debtRef, { paidAmount: (debt.paidAmount || 0) + amount, lastPaymentDate: Timestamp.now() });
-                    await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), {
-                        name: `${translations[currentLang].addDebtPayment}: ${debt.name}`, category: translations[currentLang].debtRepayments, amount: amount, date: Timestamp.now(), debtPaymentId: id
-                    });
+                    await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${debt.name}`, category: translations[currentLang].debtRepayments, amount: amount, date: Timestamp.now(), debtPaymentId: id });
                 }
-            } catch (error) {
-                 console.error("Error adding debt payment:", error);
-                alert("Ошибка добавления платежа по долгу: " + error.message);
-            }
+            } catch (error) { console.error("Error adding debt payment:", error); }
         }
         async function handleRecurringExpenseFormSubmit(form) {
             try {
                  const id = form.querySelector('#recurring-expense-id').value;
-                const data = {
-                    name: form.querySelector('#recurring-expense-name').value, amount: parseFloat(form.querySelector('#recurring-expense-amount').value),
-                    dueDay: parseInt(form.querySelector('#recurring-expense-due-day').value), details: form.querySelector('#recurring-expense-details').value,
-                };
+                const data = { name: form.querySelector('#recurring-expense-name').value, amount: parseFloat(form.querySelector('#recurring-expense-amount').value), dueDay: parseInt(form.querySelector('#recurring-expense-due-day').value), details: form.querySelector('#recurring-expense-details').value, };
                 let docRef;
-                if (!id) {
-                    data.createdAt = Timestamp.now();
-                    docRef = await addDoc(recurringExpensesCol, data);
-                } else {
-                    docRef = doc(recurringExpensesCol, id);
-                    await updateDoc(docRef, data);
-                }
-                
+                if (!id) { data.createdAt = Timestamp.now(); docRef = await addDoc(recurringExpensesCol, data); } 
+                else { docRef = doc(recurringExpensesCol, id); await updateDoc(docRef, data); }
                 const taskQuery = query(monthlyTasksCol, where("recurringExpenseId", "==", docRef.id), where("month", "==", selectedMonthId));
                 const existingTasks = await getDocs(taskQuery);
-                
                 const [year, month] = selectedMonthId.split('-').map(Number);
                 const deadlineDate = new Date(year, month - 1, data.dueDay);
-
-                const taskData = {
-                    name: `${data.name}`, 
-                    deadline: deadlineDate.toISOString().split('T')[0],
-                    status: translations.ru.statusNotDone, 
-                    recurringExpenseId: docRef.id, 
-                    month: selectedMonthId, 
-                    year: year,
-                };
-                if(existingTasks.empty) {
-                    await addDoc(monthlyTasksCol, taskData);
-                } else {
-                    await updateDoc(existingTasks.docs[0].ref, taskData);
-                }
-            } catch (error) {
-                 console.error("Error saving recurring expense:", error);
-                alert("Ошибка сохранения ежемесячного расхода: " + error.message);
-            }
+                const taskData = { name: `${data.name}`, deadline: deadlineDate.toISOString().split('T')[0], status: translations.ru.statusNotDone, recurringExpenseId: docRef.id, month: selectedMonthId, year: year, };
+                if(existingTasks.empty) await addDoc(monthlyTasksCol, taskData);
+                else await updateDoc(existingTasks.docs[0].ref, taskData);
+            } catch (error) { console.error("Error saving recurring expense:", error); }
         }
         async function handleExpenseFormSubmit(form) {
             try {
                 const id = form.querySelector('#expense-id').value;
-                const expenseData = {
-                    name: form.querySelector('#expense-name').value, category: form.querySelector('#expense-category').value,
-                    amount: parseFloat(form.querySelector('#expense-amount').value), date: Timestamp.fromDate(new Date(form.querySelector('#expense-date').value)),
-                };
-                const targetExpensesCol = collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`);
-                if (!id) {
-                    await addDoc(targetExpensesCol, expenseData);
-                } else { await updateDoc(doc(expensesCol, id), expenseData); }
-            } catch (error) {
-                 console.error("Error saving expense:", error);
-                alert("Ошибка сохранения расхода: " + error.message);
-            }
+                const expenseData = { name: form.querySelector('#expense-name').value, category: form.querySelector('#expense-category').value, amount: parseFloat(form.querySelector('#expense-amount').value), date: Timestamp.fromDate(new Date(form.querySelector('#expense-date').value)), };
+                const targetExpensesCol = collection(db, `users/${userId}/monthlyData/${selectedMonthId}/expenses`);
+                if (!id) await addDoc(targetExpensesCol, expenseData);
+                else await updateDoc(doc(expensesCol, id), expenseData);
+            } catch (error) { console.error("Error saving expense:", error); }
         }
         const handleTaskSubmit = async (col, id, data) => {
-             try {
-                if (!id) await addDoc(col, {...data, createdAt: Timestamp.now(), status: translations.ru.statusNotDone});
-                else await updateDoc(doc(col, id), data);
-            } catch (error) {
-                console.error("Error saving task:", error);
-                alert("Ошибка сохранения задачи: " + error.message);
-            }
+             try { if (!id) await addDoc(col, {...data, createdAt: Timestamp.now(), status: translations.ru.statusNotDone}); else await updateDoc(doc(col, id), data); } 
+             catch (error) { console.error("Error saving task:", error); }
         };
         const handleDailyTaskFormSubmit = (form) => handleTaskSubmit(dailyTasksCol, form.querySelector('#daily-task-id').value, { name: form.querySelector('#daily-task-name').value, notes: form.querySelector('#daily-task-notes').value });
-        const handleMonthlyTaskFormSubmit = (form) => handleTaskSubmit(monthlyTasksCol, form.querySelector('#monthly-task-id').value, { name: form.querySelector('#monthly-task-name').value, deadline: form.querySelector('#monthly-task-deadline').value, month: currentMonthId, year: new Date().getFullYear()});
+        const handleMonthlyTaskFormSubmit = (form) => handleTaskSubmit(monthlyTasksCol, form.querySelector('#monthly-task-id').value, { name: form.querySelector('#monthly-task-name').value, deadline: form.querySelector('#monthly-task-deadline').value, month: selectedMonthId, year: new Date(selectedMonthId).getFullYear()});
         const handleYearlyTaskFormSubmit = (form) => handleTaskSubmit(yearlyTasksCol, form.querySelector('#yearly-task-id').value, { name: form.querySelector('#yearly-task-name').value, deadline: form.querySelector('#yearly-task-deadline').value, notes: form.querySelector('#yearly-task-notes').value, year: new Date().getFullYear()});
         async function handleEventFormSubmit(form) {
             try {
                 const id = form.querySelector('#event-id').value;
                 const category = form.querySelector('#event-category').value;
                 const t = translations[currentLang];
-                const data = {
-                    category,
-                    date: form.querySelector('#event-date').value,
-                };
+                const data = { category, date: form.querySelector('#event-date').value, };
                 let taskName = '';
 
                 switch (category) {
                     case 'birthday':
                         const birthdayName = form.querySelector('#event-birthday-name').value;
                         const birthYear = form.querySelector('#event-birthday-year').value;
-                        data.birthdayName = birthdayName;
-                        data.birthYear = birthYear;
-                        data.name = `${t.categoryBirthday}: ${birthdayName}`;
+                        data.birthdayName = birthdayName; data.birthYear = birthYear; data.name = `${t.categoryBirthday}: ${birthdayName}`;
                         taskName = `${t.taskCongratulate} ${birthdayName}`;
-                        if (birthYear) {
-                            const age = new Date(data.date).getFullYear() - parseInt(birthYear);
-                            if (age >= 0) taskName += ` (${t.taskTurning} ${age} ${t.taskYearsOld})`;
-                        }
+                        if (birthYear) { const age = new Date(data.date).getFullYear() - parseInt(birthYear); if (age >= 0) taskName += ` (${t.taskTurning} ${age} ${t.taskYearsOld})`; }
                         break;
                     case 'meeting':
                         const meetingWith = form.querySelector('#event-meeting-with').value;
                         const meetingTime = form.querySelector('#event-meeting-time').value;
                         const meetingPlace = form.querySelector('#event-meeting-place').value;
-                        data.meetingWith = meetingWith;
-                        data.meetingTime = meetingTime;
-                        data.meetingPlace = meetingPlace;
-                        data.name = `${t.categoryMeeting}: ${meetingWith}`;
+                        data.meetingWith = meetingWith; data.meetingTime = meetingTime; data.meetingPlace = meetingPlace; data.name = `${t.categoryMeeting}: ${meetingWith}`;
                         taskName = `${t.taskMeetWith} ${meetingWith}`;
-                        if (meetingTime) taskName += ` в ${meetingTime}`;
-                        if (meetingPlace) taskName += ` в ${meetingPlace}`;
+                        if (meetingTime) taskName += ` в ${meetingTime}`; if (meetingPlace) taskName += ` в ${meetingPlace}`;
                         break;
                     case 'wedding':
                         const weddingNames = form.querySelector('#event-wedding-names').value;
-                        data.weddingNames = weddingNames;
-                        data.name = `${t.categoryWedding}: ${weddingNames}`;
-                        taskName = `${t.taskWeddingOf} ${weddingNames}`;
+                        data.weddingNames = weddingNames; data.name = `${t.categoryWedding}: ${weddingNames}`; taskName = `${t.taskWeddingOf} ${weddingNames}`;
                         break;
                     default:
                         const eventName = form.querySelector('#event-name-generic').value;
-                        data.name = eventName;
-                        taskName = eventName;
+                        data.name = eventName; taskName = eventName;
                         break;
                 }
-
                 let eventId = id;
                 if (id) await updateDoc(doc(calendarEventsCol, id), data);
                 else { const newDoc = await addDoc(calendarEventsCol, data); eventId = newDoc.id; }
@@ -1388,16 +1399,19 @@
 
                 if (createTask) {
                     const taskData = { name: taskName, deadline: data.date, status: translations.ru.statusNotDone, month: data.date.slice(0, 7), year: parseInt(data.date.slice(0, 4)), fromCalendar: eventId };
-                    if (existingTasks.empty) await addDoc(monthlyTasksCol, taskData);
-                    else await updateDoc(existingTasks.docs[0].ref, taskData);
+                    const matchingTasks = existingTasks.docs.filter(d => d.data().month === taskData.month);
+                    if (matchingTasks.length === 0) await addDoc(monthlyTasksCol, taskData);
+                    else await updateDoc(matchingTasks[0].ref, taskData);
                 } else if (!existingTasks.empty) {
-                    await deleteDoc(existingTasks.docs[0].ref);
+                    const batch = writeBatch(db); existingTasks.docs.forEach(d => batch.delete(d.ref)); await batch.commit();
                 }
-            } catch (error) {
-                console.error("Error saving event:", error);
-                alert("Ошибка сохранения события: " + error.message);
-            }
+            } catch (error) { console.error("Error saving event:", error); }
         };
+        async function handleCategoryFormSubmit(form) {
+            const nameInput = form.querySelector('#category-name');
+            const name = nameInput.value.trim();
+            if (name) { await addDoc(categoriesCol, { name: name, lang: currentLang }); nameInput.value = ''; }
+        }
 
         setupModal('debt-modal', 'add-debt-btn', () => { document.getElementById('debt-form').reset(); document.getElementById('debt-id').value = ''; document.getElementById('debt-modal-title').textContent = translations[currentLang].addDebt; });
         setupModal('recurring-expense-modal', 'add-recurring-expense-btn', () => { document.getElementById('recurring-expense-form').reset(); document.getElementById('recurring-expense-id').value = ''; document.getElementById('recurring-expense-modal-title').textContent = translations[currentLang].addTemplate; });
@@ -1405,171 +1419,94 @@
         setupModal('daily-task-modal', 'add-daily-task-btn', () => { document.getElementById('daily-task-form').reset(); document.getElementById('daily-task-id').value = ''; document.getElementById('daily-task-modal-title').textContent = translations[currentLang].addTaskForToday; });
         setupModal('monthly-task-modal', 'add-monthly-task-btn', () => { document.getElementById('monthly-task-form').reset(); document.getElementById('monthly-task-id').value = ''; document.getElementById('monthly-task-modal-title').textContent = translations[currentLang].addTaskForMonth; });
         setupModal('yearly-task-modal', 'add-yearly-task-btn', () => { document.getElementById('yearly-task-form').reset(); document.getElementById('yearly-task-id').value = ''; document.getElementById('yearly-task-modal-title').textContent = translations[currentLang].addTaskForYear; });
+        setupModal('category-modal', 'manage-categories-btn');
+        document.getElementById('category-form').addEventListener('submit', (e) => { e.preventDefault(); handleCategoryFormSubmit(e.target); });
 
         // Currency Switcher
-        const currencyAznBtn = document.getElementById('currency-azn');
-        const currencyUsdBtn = document.getElementById('currency-usd');
-
         function setCurrency(currency) {
-            currentCurrency = currency;
-            localStorage.setItem('currency', currency);
-            currencyAznBtn.classList.toggle('currency-btn-active', currency === 'AZN');
-            currencyUsdBtn.classList.toggle('currency-btn-active', currency === 'USD');
-            
-            if (userId) { // Only re-render if data is loaded
-                renderDebts(allDebts);
-                renderRecurringExpenses();
-                renderExpenses(allExpenses);
-                updateDashboard();
-            }
+            currentCurrency = currency; localStorage.setItem('currency', currency);
+            document.getElementById('currency-azn').classList.toggle('currency-btn-active', currency === 'AZN');
+            document.getElementById('currency-usd').classList.toggle('currency-btn-active', currency === 'USD');
+            if (userId) { renderDebts(allDebts); renderRecurringExpenses(); renderExpenses(allExpenses); updateDashboard(); }
         }
-
-        currencyAznBtn.addEventListener('click', () => setCurrency('AZN'));
-        currencyUsdBtn.addEventListener('click', () => setCurrency('USD'));
-        
-        // Set initial currency state
+        document.getElementById('currency-azn').addEventListener('click', () => setCurrency('AZN'));
+        document.getElementById('currency-usd').addEventListener('click', () => setCurrency('USD'));
         setCurrency(currentCurrency);
 
         // --- AUTH LOGIC ---
         const authForm = document.getElementById('auth-form');
-        const loginBtn = document.getElementById('login-btn');
-        const registerBtn = document.getElementById('register-btn');
-        const googleSignInBtn = document.getElementById('google-signin-btn');
-        const logoutBtn = document.getElementById('logout-btn');
         const authError = document.getElementById('auth-error');
         
-        if(loginBtn) {
-            loginBtn.addEventListener('click', async (e) => {
-                e.preventDefault();
-                const email = authForm.email.value;
-                const password = authForm.password.value;
-                authError.textContent = '';
-                try {
-                    await signInWithEmailAndPassword(auth, email, password);
-                } catch (error) {
-                    console.error("Login failed:", error);
-                    const t = translations[currentLang];
-                    let errorMessage = '';
-                    switch (error.code) {
-                        case 'auth/invalid-email':
-                            errorMessage = t.authInvalidEmail;
-                            break;
-                        case 'auth/user-not-found':
-                        case 'auth/wrong-password':
-                        case 'auth/invalid-credential':
-                            errorMessage = t.authInvalidCredentials;
-                            break;
-                        default:
-                            errorMessage = t.authGenericError;
-                    }
-                    authError.textContent = errorMessage;
-                }
-            });
-        }
-        if(registerBtn) {
-            registerBtn.addEventListener('click', async () => {
-                const email = authForm.email.value;
-                const password = authForm.password.value;
-                authError.textContent = '';
-                try {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                } catch (error) {
-                    console.error("Registration failed:", error);
-                     const t = translations[currentLang];
-                    let errorMessage = '';
-                    switch (error.code) {
-                        case 'auth/invalid-email':
-                            errorMessage = t.authInvalidEmail;
-                            break;
-                        case 'auth/email-already-in-use':
-                            errorMessage = t.authEmailInUse;
-                            break;
-                        case 'auth/weak-password':
-                            errorMessage = t.authWeakPassword;
-                            break;
-                        default:
-                            errorMessage = t.authGenericError;
-                    }
-                    authError.textContent = errorMessage;
-                }
-            });
-        }
-        if (googleSignInBtn) {
-            googleSignInBtn.addEventListener('click', async () => {
-                const provider = new GoogleAuthProvider();
-                try {
-                    await signInWithPopup(auth, provider);
-                } catch (error) {
-                    console.error("Google Sign-in failed:", error);
-                    authError.textContent = translations[currentLang].authGenericError;
-                }
-            });
-        }
-        if(logoutBtn) {
-            logoutBtn.addEventListener('click', async () => {
-                await signOut(auth);
-            });
-        }
+        document.getElementById('login-btn')?.addEventListener('click', async (e) => {
+            e.preventDefault(); const email = authForm.email.value; const password = authForm.password.value; authError.textContent = '';
+            try { await signInWithEmailAndPassword(auth, email, password); } 
+            catch (error) { const t=translations[currentLang]; authError.textContent = {'auth/invalid-email':t.authInvalidEmail,'auth/user-not-found':t.authInvalidCredentials,'auth/wrong-password':t.authInvalidCredentials,'auth/invalid-credential':t.authInvalidCredentials}[error.code]||t.authGenericError; }
+        });
+        document.getElementById('register-btn')?.addEventListener('click', async () => {
+            const email = authForm.email.value; const password = authForm.password.value; authError.textContent = '';
+            try { await createUserWithEmailAndPassword(auth, email, password); } 
+            catch (error) { const t=translations[currentLang]; authError.textContent = {'auth/invalid-email':t.authInvalidEmail,'auth/email-already-in-use':t.authEmailInUse,'auth/weak-password':t.authWeakPassword}[error.code]||t.authGenericError; }
+        });
+        document.getElementById('google-signin-btn')?.addEventListener('click', async () => {
+            try { await signInWithPopup(auth, new GoogleAuthProvider()); } catch (error) { authError.textContent = translations[currentLang].authGenericError; }
+        });
+        document.getElementById('logout-btn')?.addEventListener('click', async () => await signOut(auth));
         
          document.getElementById('app').addEventListener('click', async (e) => {
-            const target = e.target;
-            const id = target.dataset.id;
+            const target = e.target; const id = target.dataset.id || target.closest('[data-id]')?.dataset.id;
             if (!id) return;
             const t = translations[currentLang];
             const confirmDelete = () => confirm(t.deleteConfirm);
 
-            if (target.classList.contains('edit-debt-btn')) {
-                const debt = (await getDoc(doc(debtsCol, id))).data();
-                const form = document.getElementById('debt-form'); form.dataset.originalPaid = debt.paidAmount || 0;
-                form.querySelector('#debt-id').value = id; form.querySelector('#debt-name').value = debt.name;
-                form.querySelector('#debt-total').value = debt.totalAmount; form.querySelector('#debt-paid').value = debt.paidAmount;
-                form.querySelector('#debt-comment').value = debt.comment;
+            if (target.closest('.delete-category-btn')) { if (confirmDelete()) await deleteDoc(doc(categoriesCol, id)); }
+            else if (target.classList.contains('edit-debt-btn')) {
+                const debt = (await getDoc(doc(debtsCol, id))).data(); const form = document.getElementById('debt-form'); form.dataset.originalPaid = debt.paidAmount || 0;
+                form.querySelector('#debt-id').value = id; form.querySelector('#debt-name').value = debt.name; form.querySelector('#debt-total').value = debt.totalAmount; form.querySelector('#debt-paid').value = debt.paidAmount; form.querySelector('#debt-comment').value = debt.comment;
                 document.getElementById('debt-modal-title').textContent = t.editDebt; document.getElementById('debt-modal').showModal();
             } else if (target.classList.contains('delete-debt-btn') && confirmDelete()) { await deleteDoc(doc(debtsCol, id)); } 
             else if (target.classList.contains('add-debt-payment-btn')) { document.getElementById('debt-payment-id').value = id; document.getElementById('debt-payment-form').reset(); document.getElementById('debt-payment-modal').showModal(); } 
             else if (target.classList.contains('edit-recurring-expense-btn')) {
-                const expense = (await getDoc(doc(recurringExpensesCol, id))).data();
-                const form = document.getElementById('recurring-expense-form');
-                form.querySelector('#recurring-expense-id').value = id; form.querySelector('#recurring-expense-name').value = expense.name;
-                form.querySelector('#recurring-expense-amount').value = expense.amount; form.querySelector('#recurring-expense-due-day').value = expense.dueDay;
-                form.querySelector('#recurring-expense-details').value = expense.details;
+                const expense = (await getDoc(doc(recurringExpensesCol, id))).data(); const form = document.getElementById('recurring-expense-form');
+                form.querySelector('#recurring-expense-id').value = id; form.querySelector('#recurring-expense-name').value = expense.name; form.querySelector('#recurring-expense-amount').value = expense.amount; form.querySelector('#recurring-expense-due-day').value = expense.dueDay; form.querySelector('#recurring-expense-details').value = expense.details;
                 document.getElementById('recurring-expense-modal-title').textContent = t.editTemplate; document.getElementById('recurring-expense-modal').showModal();
             } else if (target.classList.contains('delete-recurring-expense-btn') && confirmDelete()) {
-                await deleteDoc(doc(recurringExpensesCol, id));
-                const q = query(monthlyTasksCol, where("recurringExpenseId", "==", id));
-                const tasksToDelete = await getDocs(q);
-                const batch = writeBatch(db); tasksToDelete.forEach(d => batch.delete(d.ref)); await batch.commit();
+                await deleteDoc(doc(recurringExpensesCol, id)); const q = query(monthlyTasksCol, where("recurringExpenseId", "==", id));
+                const tasksToDelete = await getDocs(q); const batch = writeBatch(db); tasksToDelete.forEach(d => batch.delete(d.ref)); await batch.commit();
             } else if (target.classList.contains('edit-expense-btn')) {
-                const expense = (await getDoc(doc(expensesCol, id))).data();
-                const form = document.getElementById('expense-form');
-                form.querySelector('#expense-id').value = id; form.querySelector('#expense-name').value = expense.name;
-                form.querySelector('#expense-category').value = expense.category; form.querySelector('#expense-amount').value = expense.amount;
-                form.querySelector('#expense-date').value = expense.date.toDate().toISOString().split('T')[0];
+                const expense = (await getDoc(doc(expensesCol, id))).data(); const form = document.getElementById('expense-form');
+                form.querySelector('#expense-id').value = id; form.querySelector('#expense-name').value = expense.name; form.querySelector('#expense-category').value = expense.category; form.querySelector('#expense-amount').value = expense.amount; form.querySelector('#expense-date').value = expense.date.toDate().toISOString().split('T')[0];
                 document.getElementById('expense-modal-title').textContent = t.editExpense; document.getElementById('expense-modal').showModal();
             } else if (target.classList.contains('delete-expense-btn') && confirmDelete()) { await deleteDoc(doc(expensesCol, id)); }
-
-            // Tasks
-            if (target.classList.contains('edit-daily-task-btn')) {
-                const task = (await getDoc(doc(dailyTasksCol, id))).data();
-                const form = document.getElementById('daily-task-form');
+            else if (target.classList.contains('edit-daily-task-btn')) {
+                const task = (await getDoc(doc(dailyTasksCol, id))).data(); const form = document.getElementById('daily-task-form');
                 form.querySelector('#daily-task-id').value = id; form.querySelector('#daily-task-name').value = task.name; form.querySelector('#daily-task-notes').value = task.notes;
                 document.getElementById('daily-task-modal-title').textContent = t.editTask; document.getElementById('daily-task-modal').showModal();
             } else if (target.classList.contains('delete-daily-task-btn') && confirmDelete()) { await deleteDoc(doc(dailyTasksCol, id)); }
             else if (target.classList.contains('edit-monthly-task-btn')) {
-                const task = (await getDoc(doc(monthlyTasksCol, id))).data();
-                 const form = document.getElementById('monthly-task-form');
+                const task = (await getDoc(doc(monthlyTasksCol, id))).data(); const form = document.getElementById('monthly-task-form');
                 form.querySelector('#monthly-task-id').value = id; form.querySelector('#monthly-task-name').value = task.name; form.querySelector('#monthly-task-deadline').value = task.deadline;
                 document.getElementById('monthly-task-modal-title').textContent = t.editTask; document.getElementById('monthly-task-modal').showModal();
             } else if (target.classList.contains('delete-monthly-task-btn') && confirmDelete()) { await deleteDoc(doc(monthlyTasksCol, id)); }
             else if (target.classList.contains('edit-yearly-task-btn')) {
-                const task = (await getDoc(doc(yearlyTasksCol, id))).data();
-                 const form = document.getElementById('yearly-task-form');
+                const task = (await getDoc(doc(yearlyTasksCol, id))).data(); const form = document.getElementById('yearly-task-form');
                 form.querySelector('#yearly-task-id').value = id; form.querySelector('#yearly-task-name').value = task.name; form.querySelector('#yearly-task-deadline').value = task.deadline; form.querySelector('#yearly-task-notes').value = task.notes;
                 document.getElementById('yearly-task-modal-title').textContent = t.editTask; document.getElementById('yearly-task-modal').showModal();
             } else if (target.classList.contains('delete-yearly-task-btn') && confirmDelete()) { await deleteDoc(doc(yearlyTasksCol, id)); }
+            else if (target.id === 'delete-event-btn') {
+                const eventId = document.getElementById('event-id').value;
+                if(eventId && confirmDelete()) {
+                    await deleteDoc(doc(calendarEventsCol, eventId));
+                    const taskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventId));
+                    const tasksSnapshot = await getDocs(taskQuery);
+                    const batch = writeBatch(db); tasksSnapshot.forEach(d => batch.delete(d.ref)); await batch.commit();
+                    document.getElementById('event-modal').close();
+                }
+            }
         });
 
     </script>
 </body>
 
 </html>
+
+
