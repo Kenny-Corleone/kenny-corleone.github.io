@@ -1019,7 +1019,7 @@
                      if (debtData.paidAmount > 0) { await updateDoc(newDocRef, { lastPaymentDate: Timestamp.now() }); await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${name}`, category: translations[currentLang].debtRepayments, amount: debtData.paidAmount, date: getTodayISOString(), debtPaymentId: newDocRef.id }); }
                 } else { await updateDoc(doc(debtsCol, id), debtData); }
                 form.dataset.originalPaid = "0"; showToast(translations[currentLang].toastSuccess);
-            } catch (error) { showToast(translations[currentLang].toastError, 'error'); }
+            } catch (error) { console.error("Error saving debt:", error); showToast(translations[currentLang].toastError, 'error'); }
         }
         async function handleDebtPaymentFormSubmit(form) {
             try {
@@ -1030,7 +1030,7 @@
                     await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${debt.name}`, category: translations[currentLang].debtRepayments, amount: amount, date: getTodayISOString(), debtPaymentId: id });
                     showToast(translations[currentLang].toastSuccess);
                 }
-            } catch (error) { showToast(translations[currentLang].toastError, 'error'); }
+            } catch (error) { console.error("Error adding debt payment:", error); showToast(translations[currentLang].toastError, 'error'); }
         }
         async function handleRecurringExpenseFormSubmit(form) {
             try {
@@ -1041,19 +1041,48 @@
                 const taskData = { name: `${data.name}`, deadline, status: translations.ru.statusNotDone, recurringExpenseId: docRef.id, month: selectedMonthId, year: year, };
                 if(existingTasks.empty) await addDoc(monthlyTasksCol, taskData); else await updateDoc(existingTasks.docs[0].ref, taskData);
                 showToast(translations[currentLang].toastSuccess);
-            } catch (error) { showToast(translations[currentLang].toastError, 'error'); }
+            } catch (error) { console.error("Error saving recurring expense:", error); showToast(translations[currentLang].toastError, 'error'); }
         }
         async function handleExpenseFormSubmit(form) {
             try {
-                const id = form.querySelector('#expense-id').value; const expenseData = { name: form.querySelector('#expense-name').value, category: form.querySelector('#expense-category').value, amount: parseFloat(form.querySelector('#expense-amount').value), date: form.querySelector('#expense-date').value, };
-                const targetExpensesCol = collection(db, `users/${userId}/monthlyData/${expenseData.date.slice(0,7)}/expenses`);
-                if (!id) await addDoc(targetExpensesCol, expenseData); else await updateDoc(doc(expensesCol, id), expenseData);
+                const id = form.querySelector('#expense-id').value;
+                const expenseData = {
+                    name: form.querySelector('#expense-name').value,
+                    category: form.querySelector('#expense-category').value,
+                    amount: parseFloat(form.querySelector('#expense-amount').value),
+                    date: form.querySelector('#expense-date').value,
+                };
+                const newMonthId = expenseData.date.slice(0, 7);
+
+                if (!id) {
+                    const targetCol = collection(db, `users/${userId}/monthlyData/${newMonthId}/expenses`);
+                    await addDoc(targetCol, expenseData);
+                } else {
+                    const originalDocRef = doc(expensesCol, id);
+                    const originalDocSnap = await getDoc(originalDocRef);
+
+                    if (originalDocSnap.exists()) {
+                        const originalData = originalDocSnap.data();
+                        if (originalData.date.slice(0, 7) !== newMonthId) {
+                            const newTargetCol = collection(db, `users/${userId}/monthlyData/${newMonthId}/expenses`);
+                            const batch = writeBatch(db);
+                            batch.delete(originalDocRef);
+                            batch.set(doc(newTargetCol), expenseData);
+                            await batch.commit();
+                        } else {
+                            await updateDoc(originalDocRef, expenseData);
+                        }
+                    }
+                }
                 showToast(translations[currentLang].toastSuccess);
-            } catch (error) { showToast(translations[currentLang].toastError, 'error'); }
+            } catch (error) {
+                console.error("Error saving expense:", error);
+                showToast(translations[currentLang].toastError, 'error');
+            }
         }
         const handleTaskSubmit = async (col, id, data) => {
              try { if (!id) await addDoc(col, {...data, createdAt: Timestamp.now(), status: translations.ru.statusNotDone}); else await updateDoc(doc(col, id), data); showToast(translations[currentLang].toastSuccess); } 
-             catch (error) { showToast(translations[currentLang].toastError, 'error'); }
+             catch (error) { console.error("Error saving task:", error); showToast(translations[currentLang].toastError, 'error'); }
         };
         const handleDailyTaskFormSubmit = (form) => handleTaskSubmit(dailyTasksCol, form.querySelector('#daily-task-id').value, { name: form.querySelector('#daily-task-name').value, notes: form.querySelector('#daily-task-notes').value });
         const handleMonthlyTaskFormSubmit = (form) => handleTaskSubmit(monthlyTasksCol, form.querySelector('#monthly-task-id').value, { name: form.querySelector('#monthly-task-name').value, deadline: form.querySelector('#monthly-task-deadline').value, month: form.querySelector('#monthly-task-deadline').value.slice(0,7), year: new Date(form.querySelector('#monthly-task-deadline').value).getFullYear()});
@@ -1076,13 +1105,18 @@
                 if (shouldCreateTask) { if (existingTaskDoc) await updateDoc(existingTaskDoc.ref, taskData); else await addDoc(monthlyTasksCol, taskData); } 
                 else { if (existingTaskDoc) await deleteDoc(existingTaskDoc.ref); }
                 showToast(translations[currentLang].toastSuccess);
-            } catch (error) { showToast(translations[currentLang].toastError, 'error'); }
+            } catch (error) { console.error("Error saving event:", error); showToast(translations[currentLang].toastError, 'error'); }
         };
         async function handleCategoryFormSubmit(form) { const nameInput = form.querySelector('#category-name'); const name = nameInput.value.trim(); if (name) { await addDoc(categoriesCol, { name: name, lang: currentLang }); nameInput.value = ''; showToast(translations[currentLang].toastSuccess); } }
 
         setupModal('debt-modal', 'add-debt-btn', () => { document.getElementById('debt-form').reset(); document.getElementById('debt-id').value = ''; document.getElementById('debt-modal-title').textContent = translations[currentLang].addDebt; });
         setupModal('recurring-expense-modal', 'add-recurring-expense-btn', () => { document.getElementById('recurring-expense-form').reset(); document.getElementById('recurring-expense-id').value = ''; document.getElementById('recurring-expense-modal-title').textContent = translations[currentLang].addTemplate; });
-        setupModal('expense-modal', 'add-expense-btn', () => { document.getElementById('expense-form').reset(); document.getElementById('expense-id').value = ''; document.getElementById('expense-date').value = getTodayISOString(); document.getElementById('expense-modal-title').textContent = translations[currentLang].addExpense; });
+        setupModal('expense-modal', 'add-expense-btn', () => { 
+            document.getElementById('expense-form').reset(); 
+            document.getElementById('expense-id').value = ''; 
+            document.getElementById('expense-date').value = `${selectedMonthId}-01`;
+            document.getElementById('expense-modal-title').textContent = translations[currentLang].addExpense; 
+        });
         setupModal('daily-task-modal', 'add-daily-task-btn', () => { document.getElementById('daily-task-form').reset(); document.getElementById('daily-task-id').value = ''; document.getElementById('daily-task-modal-title').textContent = translations[currentLang].addTaskForToday; });
         setupModal('monthly-task-modal', 'add-monthly-task-btn', () => { document.getElementById('monthly-task-form').reset(); document.getElementById('monthly-task-id').value = ''; document.getElementById('monthly-task-modal-title').textContent = translations[currentLang].addTaskForMonth; });
         setupModal('yearly-task-modal', 'add-yearly-task-btn', () => { document.getElementById('yearly-task-form').reset(); document.getElementById('yearly-task-id').value = ''; document.getElementById('yearly-task-modal-title').textContent = translations[currentLang].addTaskForYear; });
@@ -1125,7 +1159,7 @@
             else if (target.classList.contains('add-debt-payment-btn')) { document.getElementById('debt-payment-id').value = id; document.getElementById('debt-payment-form').reset(); document.getElementById('debt-payment-modal').showModal(); } 
             else if (target.classList.contains('edit-recurring-expense-btn')) { const expense = (await getDoc(doc(recurringExpensesCol, id))).data(); const form = document.getElementById('recurring-expense-form'); form.querySelector('#recurring-expense-id').value = id; form.querySelector('#recurring-expense-name').value = expense.name; form.querySelector('#recurring-expense-amount').value = expense.amount; form.querySelector('#recurring-expense-due-day').value = expense.dueDay; form.querySelector('#recurring-expense-details').value = expense.details; document.getElementById('recurring-expense-modal-title').textContent = t.editTemplate; document.getElementById('recurring-expense-modal').showModal(); } 
             else if (target.classList.contains('delete-recurring-expense-btn') && await confirm()) { await deleteDoc(doc(recurringExpensesCol, id)); const q = query(monthlyTasksCol, where("recurringExpenseId", "==", id)); const tasksToDelete = await getDocs(q); const batch = writeBatch(db); tasksToDelete.forEach(d => batch.delete(d.ref)); await batch.commit(); showToast(t.toastDeleted); } 
-            else if (target.classList.contains('edit-expense-btn')) { const expense = (await getDoc(doc(expensesCol, id))).data(); const form = document.getElementById('expense-form'); form.querySelector('#expense-id').value = id; form.querySelector('#expense-name').value = expense.name; form.querySelector('#expense-category').value = expense.category; form.querySelector('#expense-amount').value = expense.amount; form.querySelector('#expense-date').value = expense.date; document.getElementById('expense-modal-title').textContent = t.editExpense; document.getElementById('expense-modal').showModal(); } 
+            else if (target.classList.contains('edit-expense-btn')) { const expenseDoc = await getDoc(doc(expensesCol, id)); if (!expenseDoc.exists()) return; const expense = expenseDoc.data(); const form = document.getElementById('expense-form'); form.querySelector('#expense-id').value = id; form.querySelector('#expense-name').value = expense.name; form.querySelector('#expense-category').value = expense.category; form.querySelector('#expense-amount').value = expense.amount; form.querySelector('#expense-date').value = expense.date; document.getElementById('expense-modal-title').textContent = t.editExpense; document.getElementById('expense-modal').showModal(); } 
             else if (target.classList.contains('delete-expense-btn') && await confirm()) { await deleteDoc(doc(expensesCol, id)); showToast(t.toastDeleted); }
             else if (target.classList.contains('edit-daily-task-btn')) { const task = (await getDoc(doc(dailyTasksCol, id))).data(); const form = document.getElementById('daily-task-form'); form.querySelector('#daily-task-id').value = id; form.querySelector('#daily-task-name').value = task.name; form.querySelector('#daily-task-notes').value = task.notes; document.getElementById('daily-task-modal-title').textContent = t.editTask; document.getElementById('daily-task-modal').showModal(); } 
             else if (target.classList.contains('delete-daily-task-btn') && await confirm()) { await deleteDoc(doc(dailyTasksCol, id)); showToast(t.toastDeleted); }
