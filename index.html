@@ -786,17 +786,23 @@
         
         function renderExpenses(docs) {
             const tableWrapper = document.getElementById('expenses-table-wrapper');
-            const tableBody = document.getElementById('expenses-table'); 
-            const emptyState = document.getElementById('expenses-empty'); 
-            if (docs.length === 0) { 
+            const tableBody = document.getElementById('expenses-table');
+            const emptyState = document.getElementById('expenses-empty');
+            if (docs.length === 0) {
                 tableWrapper.classList.add('hidden');
-                emptyState.innerHTML = createEmptyState('emptyExpenses'); 
+                emptyState.innerHTML = createEmptyState('emptyExpenses');
                 emptyState.classList.remove('hidden');
-                return; 
+                return;
             }
             tableWrapper.classList.remove('hidden');
             emptyState.classList.add('hidden');
-            const sortedDocs = docs.sort((a, b) => b.data().date.localeCompare(a.data().date));
+            
+            const sortedDocs = [...docs].sort((a, b) => {
+                const dateA = a.data()?.date || '';
+                const dateB = b.data()?.date || '';
+                return dateB.localeCompare(dateA);
+            });
+
             tableBody.innerHTML = sortedDocs.map(doc => {
                 const expense = doc.data(), id = doc.id;
                 let actionsHtml = (!expense.recurringExpenseId && !expense.debtPaymentId) ? `<button data-id="${id}" class="edit-expense-btn text-blue-600 hover:text-blue-800" title="${translations[currentLang].editExpense}">✏️</button><button data-id="${id}" class="delete-expense-btn text-red-600 hover:text-red-800" title="${translations[currentLang].delete}">🗑️</button>` : '';
@@ -844,7 +850,14 @@
             } 
             tableWrapper.classList.remove('hidden');
             emptyState.classList.add('hidden');
-            tableBody.innerHTML = docs.sort((a,b) => a.deadline.localeCompare(b.deadline)).map(d => { const t = d; const s = t.status; return `<tr class="md:border-b-0 ${t.carriedOver?'bg-yellow-50':''}"><td data-label="${translations[currentLang].name}" class="${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td data-label="${translations[currentLang].deadline}">${formatISODateForDisplay(t.deadline)}</td><td data-label="${translations[currentLang].status}">${createTaskStatusDropdown(t.id, s, 'monthlyTasks')}</td><td data-label="${translations[currentLang].actions}" class="flex gap-2">${!t.recurringExpenseId && !t.fromCalendar?`<button data-id="${t.id}" class="edit-monthly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-monthly-task-btn text-red-600">🗑️</button>`:''}</td></tr>`; }).join(''); 
+            
+            const sortedDocs = [...docs].sort((a,b) => {
+                const deadlineA = a.data()?.deadline || '';
+                const deadlineB = b.data()?.deadline || '';
+                return deadlineA.localeCompare(deadlineB);
+            });
+
+            tableBody.innerHTML = sortedDocs.map(d => { const t = d.data(), id = d.id; const s = t.status; return `<tr class="md:border-b-0 ${t.carriedOver?'bg-yellow-50':''}"><td data-label="${translations[currentLang].name}" class="${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td data-label="${translations[currentLang].deadline}">${formatISODateForDisplay(t.deadline)}</td><td data-label="${translations[currentLang].status}">${createTaskStatusDropdown(id, s, 'monthlyTasks')}</td><td data-label="${translations[currentLang].actions}" class="flex gap-2">${!t.recurringExpenseId && !t.fromCalendar?`<button data-id="${id}" class="edit-monthly-task-btn text-blue-600">✏️</button><button data-id="${id}" class="delete-monthly-task-btn text-red-600">🗑️</button>`:''}</td></tr>`; }).join(''); 
         }
         function renderYearlyTasks(docs) { 
             const tableWrapper = document.getElementById('yearly-tasks-table-wrapper');
@@ -858,7 +871,7 @@
             } 
             tableWrapper.classList.remove('hidden');
             emptyState.classList.add('hidden');
-            tableBody.innerHTML = docs.map(d => { const t = d; const s = t.status; return `<tr class="md:border-b-0"><td data-label="${translations[currentLang].name}" class="${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td data-label="${translations[currentLang].deadline}">${formatISODateForDisplay(t.deadline, {year: 'numeric'})}</td><td data-label="${translations[currentLang].status}">${createTaskStatusDropdown(t.id, s, 'yearlyTasks')}</td><td data-label="${translations[currentLang].notes}"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${t.id}" data-col="yearlyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td data-label="${translations[currentLang].actions}" class="flex gap-2"><button data-id="${t.id}" class="edit-yearly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-yearly-task-btn text-red-600">🗑️</button></td></tr>`; }).join(''); 
+            tableBody.innerHTML = docs.map(d => { const t = d.data(), id = d.id; const s = t.status; return `<tr class="md:border-b-0"><td data-label="${translations[currentLang].name}" class="${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td data-label="${translations[currentLang].deadline}">${formatISODateForDisplay(t.deadline, {year: 'numeric'})}</td><td data-label="${translations[currentLang].status}">${createTaskStatusDropdown(id, s, 'yearlyTasks')}</td><td data-label="${translations[currentLang].notes}"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${id}" data-col="yearlyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td data-label="${translations[currentLang].actions}" class="flex gap-2"><button data-id="${id}" class="edit-yearly-task-btn text-blue-600">✏️</button><button data-id="${id}" class="delete-yearly-task-btn text-red-600">🗑️</button></td></tr>`; }).join(''); 
         }
 
         function renderMonthSelector(months) { const s=document.getElementById('month-selector'); s.innerHTML = months.map(m => `<option value="${m}" ${m===selectedMonthId?'selected':''}>${formatMonthId(m)}</option>`).join(''); }
