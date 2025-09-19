@@ -25,7 +25,6 @@
             background-color: #3b82f6;
             color: white;
         }
-        /* Styles for Calendar */
         .calendar-day {
             min-height: 120px;
         }
@@ -33,10 +32,10 @@
             background-color: #eff6ff;
         }
         .calendar-day-number {
-             width: 32px;
+            width: 32px;
             height: 32px;
         }
-         .calendar-day-today .calendar-day-number {
+        .calendar-day-today .calendar-day-number {
             background-color: #3b82f6;
             color: white;
         }
@@ -45,11 +44,89 @@
             color: white;
         }
         
-        /* Логотип без заднего фона */
         img[alt="ORDINA Logo"] {
             background: transparent !important;
             background-color: transparent !important;
             mix-blend-mode: multiply;
+        }
+        
+        /* Toast Notifications */
+        #toast-container {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .toast {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease-in-out;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .toast-success {
+            background-color: #ecfdf5;
+            color: #065f46;
+        }
+        .toast-error {
+            background-color: #fef2f2;
+            color: #991b1b;
+        }
+
+        /* Modal Animation */
+        dialog[open] {
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Responsive Tables (Card View on Mobile) */
+        @media screen and (max-width: 768px) {
+            .responsive-table thead {
+                display: none;
+            }
+            .responsive-table tr {
+                display: block;
+                border: 1px solid #e5e7eb;
+                border-radius: 0.75rem;
+                margin-bottom: 1rem;
+                padding: 1rem;
+                background-color: #ffffff;
+                box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            }
+             .responsive-table tr:last-child {
+                margin-bottom: 0;
+            }
+            .responsive-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.5rem 0;
+                border-bottom: 1px solid #f3f4f6;
+            }
+             .responsive-table td:last-child {
+                border-bottom: none;
+                padding-top: 1rem;
+                justify-content: flex-end;
+            }
+            .responsive-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #4b5563;
+                margin-right: 1rem;
+            }
         }
     </style>
 </head>
@@ -69,7 +146,6 @@
     <!-- AUTHENTICATION SCREEN -->
     <div id="auth-container" class="hidden min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 py-4 px-4">
         <div class="max-w-sm w-full space-y-6">
-            <!-- Language Selector -->
             <div class="flex justify-center space-x-2 mb-4">
                 <button id="lang-ru-login" title="Русский" class="px-3 py-1 text-xs font-medium rounded-lg bg-blue-600 text-white">RU</button>
                 <button id="lang-en-login" title="English" class="px-3 py-1 text-xs font-medium rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300">EN</button>
@@ -87,16 +163,10 @@
                     <svg class="h-3 w-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px" height="48px"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.521-3.108-11.28-7.481l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C39.99,36.566,44,30.84,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg>
                     <span data-i18n="loginWithGoogle">Войти через Google</span>
                 </button>
-
                 <div class="relative">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-200"></div>
-                    </div>
-                    <div class="relative flex justify-center text-xs">
-                        <span class="px-2 bg-white text-gray-400 font-medium">или</span>
-                    </div>
+                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
+                    <div class="relative flex justify-center text-xs"><span class="px-2 bg-white text-gray-400 font-medium">или</span></div>
                 </div>
-
                 <form id="auth-form" class="space-y-3">
                     <div class="space-y-2">
                         <div>
@@ -110,12 +180,8 @@
                     </div>
                     <p id="auth-error" class="text-red-500 text-xs text-center"></p>
                     <div class="space-y-2">
-                         <button type="submit" id="login-btn" class="w-full flex justify-center py-2 px-3 border border-transparent text-xs font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 shadow-lg hover:shadow-xl" data-i18n="login">
-                            Войти
-                        </button>
-                        <button type="button" id="register-btn" class="w-full flex justify-center py-2 px-3 border border-gray-300 text-xs font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200" data-i18n="register">
-                            Зарегистрироваться
-                        </button>
+                         <button type="submit" id="login-btn" class="w-full flex justify-center py-2 px-3 border border-transparent text-xs font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 shadow-lg hover:shadow-xl" data-i18n="login">Войти</button>
+                         <button type="button" id="register-btn" class="w-full flex justify-center py-2 px-3 border border-gray-300 text-xs font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200" data-i18n="register">Зарегистрироваться</button>
                     </div>
                 </form>
             </div>
@@ -145,7 +211,6 @@
             </div>
         </header>
 
-        <!-- Навигация -->
         <nav class="bg-white rounded-2xl shadow-lg mb-8 sticky top-4 z-10">
             <div class="flex border-b border-gray-100 overflow-x-auto">
                 <button data-tab="dashboard" class="tab-button px-4 sm:px-6 py-4 border-b-2 border-transparent tab-active whitespace-nowrap text-sm sm:text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200" data-i18n="tabDashboard">Сводка</button>
@@ -158,12 +223,9 @@
         </nav>
 
         <main>
-            <!-- Раздел: Сводка (Dashboard) -->
             <div id="dashboard-page" class="page-content">
                  <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6">
-                    <div>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800" data-i18n="dashboardTitle">Сводка за месяц</h2>
-                    </div>
+                    <div><h2 class="text-2xl sm:text-3xl font-bold text-gray-800" data-i18n="dashboardTitle">Сводка за месяц</h2></div>
                      <div class="w-full lg:w-auto">
                         <p id="current-datetime" class="font-semibold text-lg text-gray-700 mb-2 text-center lg:text-right"></p>
                         <select id="month-selector" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent block w-full lg:w-48 p-3 shadow-sm hover:shadow-md transition-all duration-200"></select>
@@ -172,154 +234,78 @@
                 <div id="dashboard-loading" class="text-center p-8" data-i18n="loading">Загрузка данных...</div>
                 <div id="dashboard-content" class="hidden">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                        <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-green-200">
-                            <h3 class="text-lg font-semibold text-green-700 mb-3" data-i18n="dashRecurringPaid">Ежемесячные (оплачено)</h3>
-                            <p id="total-recurring-paid" class="text-3xl sm:text-4xl font-bold text-green-600">0 AZN</p>
-                        </div>
-                        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-yellow-200">
-                            <h3 class="text-lg font-semibold text-yellow-700 mb-3" data-i18n="dashRecurringRemaining">Ежемесячные (осталось)</h3>
-                            <p id="total-recurring-remaining" class="text-3xl sm:text-4xl font-bold text-yellow-600">0 AZN</p>
-                        </div>
-                        <div class="bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-red-200">
-                            <h3 class="text-lg font-semibold text-red-700 mb-3" data-i18n="dashMonthlyExpenses">Расходы за месяц</h3>
-                            <p id="total-monthly-outflow" class="text-3xl sm:text-4xl font-bold text-red-600">0 AZN</p>
-                        </div>
-                         <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-purple-200">
-                            <h3 class="text-lg font-semibold text-purple-700 mb-3" data-i18n="dashTotalDebt">Остаток общего долга</h3>
-                            <p id="total-debt-remaining" class="text-3xl font-bold mt-2 text-orange-600">0 AZN</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-sm">
-                            <h3 class="text-lg font-medium text-gray-500" data-i18n="dashTasksMonth">Осталось задач (месяц)</h3>
-                            <p id="tasks-remaining-month" class="text-3xl font-bold mt-2 text-indigo-600">0</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-sm">
-                            <h3 class="text-lg font-medium text-gray-500" data-i18n="dashTasksYear">Осталось задач (год)</h3>
-                            <p id="tasks-remaining-year" class="text-3xl font-bold mt-2 text-purple-600">0</p>
-                        </div>
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-green-200"><h3 class="text-lg font-semibold text-green-700 mb-3" data-i18n="dashRecurringPaid">Ежемесячные (оплачено)</h3><p id="total-recurring-paid" class="text-3xl sm:text-4xl font-bold text-green-600">0 AZN</p></div>
+                        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-yellow-200"><h3 class="text-lg font-semibold text-yellow-700 mb-3" data-i18n="dashRecurringRemaining">Ежемесячные (осталось)</h3><p id="total-recurring-remaining" class="text-3xl sm:text-4xl font-bold text-yellow-600">0 AZN</p></div>
+                        <div class="bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-red-200"><h3 class="text-lg font-semibold text-red-700 mb-3" data-i18n="dashMonthlyExpenses">Расходы за месяц</h3><p id="total-monthly-outflow" class="text-3xl sm:text-4xl font-bold text-red-600">0 AZN</p></div>
+                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-purple-200"><h3 class="text-lg font-semibold text-purple-700 mb-3" data-i18n="dashTotalDebt">Остаток общего долга</h3><p id="total-debt-remaining" class="text-3xl font-bold mt-2 text-orange-600">0 AZN</p></div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm"><h3 class="text-lg font-medium text-gray-500" data-i18n="dashTasksMonth">Осталось задач (месяц)</h3><p id="tasks-remaining-month" class="text-3xl font-bold mt-2 text-indigo-600">0</p></div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm"><h3 class="text-lg font-medium text-gray-500" data-i18n="dashTasksYear">Осталось задач (год)</h3><p id="tasks-remaining-year" class="text-3xl font-bold mt-2 text-purple-600">0</p></div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <h3 class="text-xl font-semibold mb-4" data-i18n="dashTopCategories">Топ категорий расходов</h3>
-                        <div class="max-h-96"><canvas id="expenses-chart"></canvas></div>
-                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm"><h3 class="text-xl font-semibold mb-4" data-i18n="dashTopCategories">Топ категорий расходов</h3><div class="max-h-96"><canvas id="expenses-chart"></canvas></div></div>
                 </div>
             </div>
 
-            <!-- Раздел: Долги -->
             <div id="debts-page" class="page-content hidden">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-semibold" data-i18n="debtsTitle">Общие долги</h2>
-                    <button id="add-debt-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" data-i18n="addDebt">Добавить долг</button>
-                </div>
-                <div class="bg-white rounded-lg shadow-sm overflow-x-auto">
-                    <table class="w-full text-sm text-left">
-                        <thead class="bg-gray-50 text-xs text-gray-700 uppercase">
-                            <tr>
-                                <th class="px-6 py-3" data-i18n="debtName">Долг (Имя)</th>
-                                <th class="px-6 py-3" data-i18n="amount">Сумма</th>
-                                <th class="px-6 py-3" data-i18n="paid">Оплачено</th>
-                                <th class="px-6 py-3" data-i18n="remaining">Осталось</th>
-                                <th class="px-6 py-3" data-i18n="lastPaymentDate">Дата последней оплаты</th>
-                                <th class="px-6 py-3" data-i18n="comments">Комментарии</th>
-                                <th class="px-6 py-3" data-i18n="actions">Действия</th>
-                            </tr>
-                        </thead>
+                <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-semibold" data-i18n="debtsTitle">Общие долги</h2><button id="add-debt-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" data-i18n="addDebt">Добавить долг</button></div>
+                <div class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
+                    <table class="w-full text-sm text-left responsive-table">
+                        <thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="px-6 py-3" data-i18n="debtName">Долг (Имя)</th><th class="px-6 py-3" data-i18n="amount">Сумма</th><th class="px-6 py-3" data-i18n="paid">Оплачено</th><th class="px-6 py-3" data-i18n="remaining">Осталось</th><th class="px-6 py-3" data-i18n="lastPaymentDate">Дата последней оплаты</th><th class="px-6 py-3" data-i18n="comments">Комментарии</th><th class="px-6 py-3" data-i18n="actions">Действия</th></tr></thead>
                         <tbody id="debts-table"></tbody>
                     </table>
-                     <div id="debts-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyDebts">Список долгов пуст.</div>
+                     <div id="debts-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyDebts"></div>
                 </div>
             </div>
 
-            <!-- Раздел: Ежемесячные расходы -->
             <div id="recurring-expenses-page" class="page-content hidden">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-semibold"><span data-i18n="recurringTitle">Ежемесячные расходы</span> (<span id="recurring-month-name"></span>)</h2>
-                    <button id="add-recurring-expense-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" data-i18n="addTemplate">Добавить шаблон</button>
-                </div>
-                 <div class="bg-white rounded-lg shadow-sm overflow-x-auto">
-                    <table class="w-full text-sm text-left">
-                        <thead class="bg-gray-50 text-xs text-gray-700 uppercase">
-                            <tr>
-                                <th class="px-6 py-3" data-i18n="name">Наименование</th>
-                                <th class="px-6 py-3" data-i18n="amount">Сумма</th>
-                                <th class="px-6 py-3" data-i18n="paymentDay">День оплаты</th>
-                                <th class="px-6 py-3" data-i18n="status">Статус оплаты</th>
-                                <th class="px-6 py-3" data-i18n="details">Детали</th>
-                                <th class="px-6 py-3" data-i18n="templateActions">Действия с шаблоном</th>
-                            </tr>
-                        </thead>
+                <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-semibold"><span data-i18n="recurringTitle">Ежемесячные расходы</span> (<span id="recurring-month-name"></span>)</h2><button id="add-recurring-expense-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" data-i18n="addTemplate">Добавить шаблон</button></div>
+                 <div class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
+                    <table class="w-full text-sm text-left responsive-table">
+                        <thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="px-6 py-3" data-i18n="name">Наименование</th><th class="px-6 py-3" data-i18n="amount">Сумма</th><th class="px-6 py-3" data-i18n="paymentDay">День оплаты</th><th class="px-6 py-3" data-i18n="status">Статус оплаты</th><th class="px-6 py-3" data-i18n="details">Детали</th><th class="px-6 py-3" data-i18n="templateActions">Действия с шаблоном</th></tr></thead>
                         <tbody id="recurring-expenses-table"></tbody>
                     </table>
-                     <div id="recurring-expenses-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyRecurring">Список ежемесячных расходов пуст. Создайте шаблон.</div>
+                     <div id="recurring-expenses-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyRecurring"></div>
                 </div>
             </div>
 
-            <!-- Раздел: Расходы месяца -->
             <div id="expenses-page" class="page-content hidden">
-                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-semibold"><span data-i18n="expensesTitle">Все расходы за</span> <span class="current-month-name"></span></h2>
-                    <div class="flex space-x-2">
-                        <button id="manage-categories-btn" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition" data-i18n="manageCategories">Управление категориями</button>
-                        <button id="add-expense-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" data-i18n="addExpense">Добавить расход</button>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-sm overflow-x-auto">
-                    <table class="w-full text-sm text-left">
-                        <thead class="bg-gray-50 text-xs text-gray-700 uppercase">
-                            <tr>
-                                <th class="px-6 py-3" data-i18n="name">Наименование</th>
-                                <th class="px-6 py-3" data-i18n="category">Категория</th>
-                                <th class="px-6 py-3" data-i18n="amount">Сумма</th>
-                                <th class="px-6 py-3" data-i18n="date">Дата</th>
-                                <th class="px-6 py-3" data-i18n="actions">Действия</th>
-                            </tr>
-                        </thead>
+                 <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-semibold"><span data-i18n="expensesTitle">Все расходы за</span> <span class="current-month-name"></span></h2><div class="flex space-x-2"><button id="manage-categories-btn" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition" data-i18n="manageCategories">Управление категориями</button><button id="add-expense-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" data-i18n="addExpense">Добавить расход</button></div></div>
+                <div class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
+                    <table class="w-full text-sm text-left responsive-table">
+                        <thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="px-6 py-3" data-i18n="name">Наименование</th><th class="px-6 py-3" data-i18n="category">Категория</th><th class="px-6 py-3" data-i18n="amount">Сумма</th><th class="px-6 py-3" data-i18n="date">Дата</th><th class="px-6 py-3" data-i18n="actions">Действия</th></tr></thead>
                         <tbody id="expenses-table"></tbody>
                     </table>
-                     <div id="expenses-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyExpenses">Список расходов пуст.</div>
+                     <div id="expenses-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyExpenses"></div>
                 </div>
             </div>
             
-            <!-- Раздел: Список задач -->
             <div id="tasks-page" class="page-content hidden">
-                <div class="mb-4 border-b border-gray-200">
-                    <nav class="flex -mb-px" aria-label="Tabs">
-                        <button class="task-tab-button task-tab-active" data-task-tab="today"><span data-i18n="taskToday">На сегодня</span> (<span id="today-date"></span>)</button>
-                        <button class="task-tab-button" data-task-tab="month"><span data-i18n="taskMonth">На месяц</span></button>
-                        <button class="task-tab-button" data-task-tab="year"><span data-i18n="taskYear">На год</span></button>
-                    </nav>
-                </div>
-                
+                <div class="mb-4 border-b border-gray-200"><nav class="flex -mb-px" aria-label="Tabs"><button class="task-tab-button task-tab-active" data-task-tab="today"><span data-i18n="taskToday">На сегодня</span> (<span id="today-date"></span>)</button><button class="task-tab-button" data-task-tab="month"><span data-i18n="taskMonth">На месяц</span></button><button class="task-tab-button" data-task-tab="year"><span data-i18n="taskYear">На год</span></button></nav></div>
                 <div id="task-tab-today" class="task-tab-content">
                     <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-semibold" data-i18n="taskTodayTitle">Задачи на сегодня</h3><button id="add-daily-task-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg" data-i18n="addTask">Добавить задачу</button></div>
-                    <div class="bg-white rounded-lg shadow-sm overflow-x-auto">
-                        <table class="w-full text-sm text-left"><thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="w-1/3 px-6 py-3" data-i18n="name">Имя</th><th class="px-6 py-3" data-i18n="status">Статус</th><th class="w-1/3 px-6 py-3" data-i18n="notes">Заметки</th><th class="px-6 py-3" data-i18n="actions">Действия</th></tr></thead><tbody id="daily-tasks-table"></tbody></table>
-                        <div id="daily-tasks-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyTasks">Список задач пуст.</div>
+                    <div class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
+                        <table class="w-full text-sm text-left responsive-table"><thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="w-1/3 px-6 py-3" data-i18n="name">Имя</th><th class="px-6 py-3" data-i18n="status">Статус</th><th class="w-1/3 px-6 py-3" data-i18n="notes">Заметки</th><th class="px-6 py-3" data-i18n="actions">Действия</th></tr></thead><tbody id="daily-tasks-table"></tbody></table>
+                        <div id="daily-tasks-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyTasks"></div>
                     </div>
                 </div>
                 <div id="task-tab-month" class="task-tab-content hidden">
                     <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-semibold" data-i18n="taskMonthTitle">Задачи на месяц</h3><button id="add-monthly-task-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg" data-i18n="addTask">Добавить задачу</button></div>
-                    <div class="bg-white rounded-lg shadow-sm overflow-x-auto">
-                        <table class="w-full text-sm text-left"><thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="px-6 py-3" data-i18n="name">Имя</th><th class="px-6 py-3" data-i18n="deadline">Дедлайн</th><th class="px-6 py-3" data-i18n="status">Статус</th><th class="px-6 py-3" data-i18n="actions">Действия</th></tr></thead><tbody id="monthly-tasks-table"></tbody></table>
-                        <div id="monthly-tasks-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyTasks">Список задач пуст.</div>
+                    <div class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
+                        <table class="w-full text-sm text-left responsive-table"><thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="px-6 py-3" data-i18n="name">Имя</th><th class="px-6 py-3" data-i18n="deadline">Дедлайн</th><th class="px-6 py-3" data-i18n="status">Статус</th><th class="px-6 py-3" data-i18n="actions">Действия</th></tr></thead><tbody id="monthly-tasks-table"></tbody></table>
+                        <div id="monthly-tasks-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyTasks"></div>
                     </div>
                 </div>
                 <div id="task-tab-year" class="task-tab-content hidden">
                     <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-semibold" data-i18n="taskYearTitle">Задачи на год</h3><button id="add-yearly-task-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg" data-i18n="addTask">Добавить задачу</button></div>
-                    <div class="bg-white rounded-lg shadow-sm overflow-x-auto">
-                        <table class="w-full text-sm text-left"><thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="w-1/3 px-6 py-3" data-i18n="name">Имя</th><th class="px-6 py-3" data-i18n="deadline">Дедлайн</th><th class="px-6 py-3" data-i18n="status">Статус</th><th class="w-1/3 px-6 py-3" data-i18n="notes">Заметки</th><th class="px-6 py-3" data-i18n="actions">Действия</th></tr></thead><tbody id="yearly-tasks-table"></tbody></table>
-                        <div id="yearly-tasks-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyTasks">Список задач пуст.</div>
+                    <div class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
+                        <table class="w-full text-sm text-left responsive-table"><thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="w-1/3 px-6 py-3" data-i18n="name">Имя</th><th class="px-6 py-3" data-i18n="deadline">Дедлайн</th><th class="px-6 py-3" data-i18n="status">Статус</th><th class="w-1/3 px-6 py-3" data-i18n="notes">Заметки</th><th class="px-6 py-3" data-i18n="actions">Действия</th></tr></thead><tbody id="yearly-tasks-table"></tbody></table>
+                        <div id="yearly-tasks-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyTasks"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Раздел: Календарь -->
             <div id="calendar-page" class="page-content hidden">
                 <div class="bg-white rounded-lg shadow-sm p-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <button id="prev-month-btn" class="p-2 rounded-full hover:bg-gray-100">&lt;</button>
-                        <h2 id="calendar-month-year" class="text-xl font-semibold"></h2>
-                        <button id="next-month-btn" class="p-2 rounded-full hover:bg-gray-100">&gt;</button>
-                    </div>
+                    <div class="flex justify-between items-center mb-4"><button id="prev-month-btn" class="p-2 rounded-full hover:bg-gray-100">&lt;</button><h2 id="calendar-month-year" class="text-xl font-semibold"></h2><button id="next-month-btn" class="p-2 rounded-full hover:bg-gray-100">&gt;</button></div>
                     <div id="calendar-weekdays" class="grid grid-cols-7 gap-1 text-center font-semibold text-gray-600 text-sm mb-2"></div>
                     <div id="calendar-grid" class="grid grid-cols-7 gap-1"></div>
                 </div>
@@ -329,268 +315,34 @@
     </div>
 
     <!-- Модальные окна -->
-    <dialog id="debt-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md">
-        <div class="p-6">
-            <h3 id="debt-modal-title" class="text-xl font-semibold mb-4" data-i18n="addDebt"></h3>
-            <form id="debt-form" data-original-paid="0">
-                <input type="hidden" id="debt-id">
-                <div class="mb-4">
-                    <label for="debt-name" class="block mb-2 text-sm font-medium" data-i18n="debtorName">Имя должника/Название</label>
-                    <input type="text" id="debt-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                </div>
-                <div class="mb-4">
-                    <label for="debt-total" class="block mb-2 text-sm font-medium"><span data-i18n="totalAmount"></span> (<span class="currency-symbol">AZN</span>)</label>
-                    <input type="number" id="debt-total" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                </div>
-                <div class="mb-4">
-                    <label for="debt-paid" class="block mb-2 text-sm font-medium"><span data-i18n="paidAmount"></span> (<span class="currency-symbol">AZN</span>)</label>
-                    <input type="number" id="debt-paid" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required value="0">
-                </div>
-                <div class="mb-4">
-                    <label for="debt-comment" class="block mb-2 text-sm font-medium" data-i18n="comment">Комментарий</label>
-                    <textarea id="debt-comment" rows="3" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></textarea>
-                </div>
-                <div class="flex justify-end gap-4 mt-6">
-                    <button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button>
-                    <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button>
-                </div>
-            </form>
-        </div>
-    </dialog>
-    <dialog id="debt-payment-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md">
-        <div class="p-6">
-            <h3 class="text-xl font-semibold mb-4" data-i18n="addDebtPayment">Добавить платеж по долгу</h3>
-            <form id="debt-payment-form">
-                <input type="hidden" id="debt-payment-id">
-                <div class="mb-4">
-                    <label for="debt-payment-amount" class="block mb-2 text-sm font-medium"><span data-i18n="paymentAmount"></span> (<span class="currency-symbol">AZN</span>)</label>
-                    <input type="number" id="debt-payment-amount" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                </div>
-                <div class="flex justify-end gap-4 mt-6">
-                    <button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button>
-                    <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="add">Добавить</button>
-                </div>
-            </form>
-        </div>
-    </dialog>
-    <dialog id="recurring-expense-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md">
-        <div class="p-6">
-            <h3 id="recurring-expense-modal-title" class="text-xl font-semibold mb-4" data-i18n="addTemplate"></h3>
-            <form id="recurring-expense-form">
-                <input type="hidden" id="recurring-expense-id">
-                <div class="mb-4">
-                    <label for="recurring-expense-name" class="block mb-2 text-sm font-medium" data-i18n="name">Наименование</label>
-                    <input type="text" id="recurring-expense-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                </div>
-                <div class="mb-4">
-                    <label for="recurring-expense-amount" class="block mb-2 text-sm font-medium"><span data-i18n="amount"></span> (<span class="currency-symbol">AZN</span>)</label>
-                    <input type="number" id="recurring-expense-amount" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                </div>
-                <div class="mb-4">
-                    <label for="recurring-expense-due-day" class="block mb-2 text-sm font-medium" data-i18n="paymentDayNum">День оплаты (1-31)</label>
-                    <input type="number" id="recurring-expense-due-day" min="1" max="31" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                </div>
-                 <div class="mb-4">
-                    <label for="recurring-expense-details" class="block mb-2 text-sm font-medium" data-i18n="details">Детали</label>
-                    <textarea id="recurring-expense-details" rows="3" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></textarea>
-                </div>
-                <div class="flex justify-end gap-4 mt-6">
-                    <button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button>
-                    <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button>
-                </div>
-            </form>
-        </div>
-    </dialog>
-    <dialog id="expense-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md">
-        <div class="p-6">
-            <h3 id="expense-modal-title" class="text-xl font-semibold mb-4" data-i18n="addExpense"></h3>
-            <form id="expense-form">
-                <input type="hidden" id="expense-id">
-                <div class="mb-4">
-                    <label for="expense-name" class="block mb-2 text-sm font-medium" data-i18n="name">Наименование</label>
-                    <input type="text" id="expense-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                </div>
-                <div class="mb-4">
-                    <label for="expense-category" class="block mb-2 text-sm font-medium" data-i18n="category">Категория</label>
-                    <input type="text" id="expense-category" list="expense-categories-list" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                    <datalist id="expense-categories-list"></datalist>
-                </div>
-                <div class="mb-4">
-                    <label for="expense-amount" class="block mb-2 text-sm font-medium"><span data-i18n="amount"></span> (<span class="currency-symbol">AZN</span>)</label>
-                    <input type="number" id="expense-amount" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                </div>
-                <div class="mb-4">
-                    <label for="expense-date" class="block mb-2 text-sm font-medium" data-i18n="date">Дата</label>
-                    <input type="date" id="expense-date" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                </div>
-                <div class="flex justify-end gap-4 mt-6">
-                    <button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button>
-                    <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button>
-                </div>
-            </form>
-        </div>
-    </dialog>
-    <dialog id="daily-task-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md">
-        <div class="p-6">
-            <h3 id="daily-task-modal-title" class="text-xl font-semibold mb-4"></h3>
-            <form id="daily-task-form">
-                <input type="hidden" id="daily-task-id">
-                <div class="mb-4">
-                    <label for="daily-task-name" class="block mb-2 text-sm font-medium" data-i18n="name">Имя</label>
-                    <input type="text" id="daily-task-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                </div>
-                <div class="mb-4">
-                    <label for="daily-task-notes" class="block mb-2 text-sm font-medium" data-i18n="notes">Заметки</label>
-                    <textarea id="daily-task-notes" rows="3" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></textarea>
-                </div>
-                <div class="flex justify-end gap-4 mt-6">
-                    <button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button>
-                    <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button>
-                </div>
-            </form>
-        </div>
-    </dialog>
-    <dialog id="monthly-task-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md">
-        <div class="p-6">
-            <h3 id="monthly-task-modal-title" class="text-xl font-semibold mb-4"></h3>
-            <form id="monthly-task-form">
-                <input type="hidden" id="monthly-task-id">
-                <div class="mb-4">
-                    <label for="monthly-task-name" class="block mb-2 text-sm font-medium" data-i18n="name">Имя</label>
-                    <input type="text" id="monthly-task-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                </div>
-                <div class="mb-4">
-                    <label for="monthly-task-deadline" class="block mb-2 text-sm font-medium" data-i18n="deadline">Дедлайн</label>
-                    <input type="date" id="monthly-task-deadline" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                </div>
-                <div class="flex justify-end gap-4 mt-6">
-                    <button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button>
-                    <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button>
-                </div>
-            </form>
-        </div>
-    </dialog>
-    <dialog id="yearly-task-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md">
-        <div class="p-6">
-            <h3 id="yearly-task-modal-title" class="text-xl font-semibold mb-4"></h3>
-            <form id="yearly-task-form">
-                <input type="hidden" id="yearly-task-id">
-                <div class="mb-4">
-                    <label for="yearly-task-name" class="block mb-2 text-sm font-medium" data-i18n="name">Имя</label>
-                    <input type="text" id="yearly-task-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                </div>
-                 <div class="mb-4">
-                    <label for="yearly-task-deadline" class="block mb-2 text-sm font-medium" data-i18n="deadline">Дедлайн</label>
-                    <input type="date" id="yearly-task-deadline" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                </div>
-                <div class="mb-4">
-                    <label for="yearly-task-notes" class="block mb-2 text-sm font-medium" data-i18n="notes">Заметки</label>
-                    <textarea id="yearly-task-notes" rows="3" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></textarea>
-                </div>
-                <div class="flex justify-end gap-4 mt-6">
-                    <button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button>
-                    <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button>
-                </div>
-            </form>
-        </div>
-    </dialog>
-    
-    <dialog id="event-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md">
-        <div class="p-6">
-            <h3 id="event-modal-title" class="text-xl font-semibold mb-4"></h3>
-            <form id="event-form">
-                <input type="hidden" id="event-id">
-                
-                <div class="mb-4">
-                    <label for="event-category" class="block mb-2 text-sm font-medium" data-i18n="category">Категория</label>
-                    <select id="event-category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                        <option value="event" data-i18n="categoryEvent">Событие</option>
-                        <option value="birthday" data-i18n="categoryBirthday">День рождения</option>
-                        <option value="meeting" data-i18n="categoryMeeting">Встреча</option>
-                        <option value="wedding" data-i18n="categoryWedding">Свадьба</option>
-                    </select>
-                </div>
+    <dialog id="debt-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md"><div class="p-6"><h3 id="debt-modal-title" class="text-xl font-semibold mb-4" data-i18n="addDebt"></h3><form id="debt-form" data-original-paid="0"><input type="hidden" id="debt-id"><div class="mb-4"><label for="debt-name" class="block mb-2 text-sm font-medium" data-i18n="debtorName">Имя должника/Название</label><input type="text" id="debt-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="debt-total" class="block mb-2 text-sm font-medium"><span data-i18n="totalAmount"></span> (<span class="currency-symbol">AZN</span>)</label><input type="number" id="debt-total" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="debt-paid" class="block mb-2 text-sm font-medium"><span data-i18n="paidAmount"></span> (<span class="currency-symbol">AZN</span>)</label><input type="number" id="debt-paid" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required value="0"></div><div class="mb-4"><label for="debt-comment" class="block mb-2 text-sm font-medium" data-i18n="comment">Комментарий</label><textarea id="debt-comment" rows="3" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></textarea></div><div class="flex justify-end gap-4 mt-6"><button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button><button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button></div></form></div></dialog>
+    <dialog id="debt-payment-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md"><div class="p-6"><h3 class="text-xl font-semibold mb-4" data-i18n="addDebtPayment">Добавить платеж по долгу</h3><form id="debt-payment-form"><input type="hidden" id="debt-payment-id"><div class="mb-4"><label for="debt-payment-amount" class="block mb-2 text-sm font-medium"><span data-i18n="paymentAmount"></span> (<span class="currency-symbol">AZN</span>)</label><input type="number" id="debt-payment-amount" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="flex justify-end gap-4 mt-6"><button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button><button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="add">Добавить</button></div></form></div></dialog>
+    <dialog id="recurring-expense-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md"><div class="p-6"><h3 id="recurring-expense-modal-title" class="text-xl font-semibold mb-4" data-i18n="addTemplate"></h3><form id="recurring-expense-form"><input type="hidden" id="recurring-expense-id"><div class="mb-4"><label for="recurring-expense-name" class="block mb-2 text-sm font-medium" data-i18n="name">Наименование</label><input type="text" id="recurring-expense-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="recurring-expense-amount" class="block mb-2 text-sm font-medium"><span data-i18n="amount"></span> (<span class="currency-symbol">AZN</span>)</label><input type="number" id="recurring-expense-amount" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="recurring-expense-due-day" class="block mb-2 text-sm font-medium" data-i18n="paymentDayNum">День оплаты (1-31)</label><input type="number" id="recurring-expense-due-day" min="1" max="31" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="recurring-expense-details" class="block mb-2 text-sm font-medium" data-i18n="details">Детали</label><textarea id="recurring-expense-details" rows="3" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></textarea></div><div class="flex justify-end gap-4 mt-6"><button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button><button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button></div></form></div></dialog>
+    <dialog id="expense-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md"><div class="p-6"><h3 id="expense-modal-title" class="text-xl font-semibold mb-4" data-i18n="addExpense"></h3><form id="expense-form"><input type="hidden" id="expense-id"><div class="mb-4"><label for="expense-name" class="block mb-2 text-sm font-medium" data-i18n="name">Наименование</label><input type="text" id="expense-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="expense-category" class="block mb-2 text-sm font-medium" data-i18n="category">Категория</label><input type="text" id="expense-category" list="expense-categories-list" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required><datalist id="expense-categories-list"></datalist></div><div class="mb-4"><label for="expense-amount" class="block mb-2 text-sm font-medium"><span data-i18n="amount"></span> (<span class="currency-symbol">AZN</span>)</label><input type="number" id="expense-amount" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="expense-date" class="block mb-2 text-sm font-medium" data-i18n="date">Дата</label><input type="date" id="expense-date" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="flex justify-end gap-4 mt-6"><button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button><button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button></div></form></div></dialog>
+    <dialog id="daily-task-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md"><div class="p-6"><h3 id="daily-task-modal-title" class="text-xl font-semibold mb-4"></h3><form id="daily-task-form"><input type="hidden" id="daily-task-id"><div class="mb-4"><label for="daily-task-name" class="block mb-2 text-sm font-medium" data-i18n="name">Имя</label><input type="text" id="daily-task-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="daily-task-notes" class="block mb-2 text-sm font-medium" data-i18n="notes">Заметки</label><textarea id="daily-task-notes" rows="3" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></textarea></div><div class="flex justify-end gap-4 mt-6"><button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button><button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button></div></form></div></dialog>
+    <dialog id="monthly-task-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md"><div class="p-6"><h3 id="monthly-task-modal-title" class="text-xl font-semibold mb-4"></h3><form id="monthly-task-form"><input type="hidden" id="monthly-task-id"><div class="mb-4"><label for="monthly-task-name" class="block mb-2 text-sm font-medium" data-i18n="name">Имя</label><input type="text" id="monthly-task-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="monthly-task-deadline" class="block mb-2 text-sm font-medium" data-i18n="deadline">Дедлайн</label><input type="date" id="monthly-task-deadline" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="flex justify-end gap-4 mt-6"><button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button><button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button></div></form></div></dialog>
+    <dialog id="yearly-task-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md"><div class="p-6"><h3 id="yearly-task-modal-title" class="text-xl font-semibold mb-4"></h3><form id="yearly-task-form"><input type="hidden" id="yearly-task-id"><div class="mb-4"><label for="yearly-task-name" class="block mb-2 text-sm font-medium" data-i18n="name">Имя</label><input type="text" id="yearly-task-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="yearly-task-deadline" class="block mb-2 text-sm font-medium" data-i18n="deadline">Дедлайн</label><input type="date" id="yearly-task-deadline" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="yearly-task-notes" class="block mb-2 text-sm font-medium" data-i18n="notes">Заметки</label><textarea id="yearly-task-notes" rows="3" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></textarea></div><div class="flex justify-end gap-4 mt-6"><button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button><button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button></div></form></div></dialog>
+    <dialog id="event-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md"><div class="p-6"><h3 id="event-modal-title" class="text-xl font-semibold mb-4"></h3><form id="event-form"><input type="hidden" id="event-id"><div class="mb-4"><label for="event-category" class="block mb-2 text-sm font-medium" data-i18n="category">Категория</label><select id="event-category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"><option value="event" data-i18n="categoryEvent">Событие</option><option value="birthday" data-i18n="categoryBirthday">День рождения</option><option value="meeting" data-i18n="categoryMeeting">Встреча</option><option value="wedding" data-i18n="categoryWedding">Свадьба</option></select></div><div id="event-fields-event" class="event-category-fields"><div class="mb-4"><label for="event-name-generic" class="block mb-2 text-sm font-medium" data-i18n="eventName">Название события</label><input type="text" id="event-name-generic" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></div></div><div id="event-fields-birthday" class="event-category-fields hidden"><div class="mb-4"><label for="event-birthday-name" class="block mb-2 text-sm font-medium" data-i18n="birthdayName">Имя именинника</label><input type="text" id="event-birthday-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></div><div class="mb-4"><label for="event-birthday-year" class="block mb-2 text-sm font-medium" data-i18n="birthYear">Год рождения (опционально)</label><input type="number" id="event-birthday-year" placeholder="1990" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></div></div><div id="event-fields-meeting" class="event-category-fields hidden"><div class="mb-4"><label for="event-meeting-with" class="block mb-2 text-sm font-medium" data-i18n="meetingWith">С кем</label><input type="text" id="event-meeting-with" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></div><div class="grid grid-cols-2 gap-4"><div><label for="event-meeting-time" class="block mb-2 text-sm font-medium" data-i18n="time">Время (опц.)</label><input type="time" id="event-meeting-time" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></div><div><label for="event-meeting-place" class="block mb-2 text-sm font-medium" data-i18n="place">Место (опц.)</label><input type="text" id="event-meeting-place" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></div></div></div><div id="event-fields-wedding" class="event-category-fields hidden"><div class="mb-4"><label for="event-wedding-names" class="block mb-2 text-sm font-medium" data-i18n="weddingNames">Имена пары</label><input type="text" id="event-wedding-names" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></div></div><div class="mb-4"><label for="event-date" class="block mb-2 text-sm font-medium" data-i18n="date">Дата</label><input type="date" id="event-date" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="flex items-center mb-4"><input id="event-create-task" type="checkbox" checked class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"><label for="event-create-task" class="ml-2 text-sm font-medium text-gray-900" data-i18n="createTaskForEvent">Создать задачу для этого события</label></div><div class="flex justify-between items-center mt-6"><button type="button" id="delete-event-btn" class="text-red-600 hover:text-red-800 hidden" data-i18n="delete">Удалить</button><div class="flex justify-end gap-4"><button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button><button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button></div></div></form></div></dialog>
+    <dialog id="category-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md"><div class="p-6"><h3 class="text-xl font-semibold mb-4" data-i18n="manageCategoriesTitle">Управление категориями</h3><form id="category-form" class="mb-4"><div class="flex gap-2"><input type="text" id="category-name" placeholder="Новая категория" class="flex-grow bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required><button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="add">Добавить</button></div></form><div id="category-list" class="space-y-2 max-h-60 overflow-y-auto"></div><div class="flex justify-end mt-6"><button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="close">Закрыть</button></div></div></dialog>
 
-                <!-- Category Specific Fields -->
-                <div id="event-fields-event" class="event-category-fields">
-                    <div class="mb-4">
-                        <label for="event-name-generic" class="block mb-2 text-sm font-medium" data-i18n="eventName">Название события</label>
-                        <input type="text" id="event-name-generic" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5">
-                    </div>
-                </div>
-
-                <div id="event-fields-birthday" class="event-category-fields hidden">
-                    <div class="mb-4">
-                        <label for="event-birthday-name" class="block mb-2 text-sm font-medium" data-i18n="birthdayName">Имя именинника</label>
-                        <input type="text" id="event-birthday-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5">
-                    </div>
-                    <div class="mb-4">
-                        <label for="event-birthday-year" class="block mb-2 text-sm font-medium" data-i18n="birthYear">Год рождения (опционально)</label>
-                        <input type="number" id="event-birthday-year" placeholder="1990" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5">
-                    </div>
-                </div>
-                
-                <div id="event-fields-meeting" class="event-category-fields hidden">
-                     <div class="mb-4">
-                        <label for="event-meeting-with" class="block mb-2 text-sm font-medium" data-i18n="meetingWith">С кем</label>
-                        <input type="text" id="event-meeting-with" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label for="event-meeting-time" class="block mb-2 text-sm font-medium" data-i18n="time">Время (опц.)</label>
-                            <input type="time" id="event-meeting-time" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5">
-                        </div>
-                        <div>
-                            <label for="event-meeting-place" class="block mb-2 text-sm font-medium" data-i18n="place">Место (опц.)</label>
-                            <input type="text" id="event-meeting-place" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5">
-                        </div>
-                    </div>
-                </div>
-
-                <div id="event-fields-wedding" class="event-category-fields hidden">
-                    <div class="mb-4">
-                        <label for="event-wedding-names" class="block mb-2 text-sm font-medium" data-i18n="weddingNames">Имена пары</label>
-                        <input type="text" id="event-wedding-names" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5">
-                    </div>
-                </div>
-                <!-- End Category Specific Fields -->
-
-                <div class="mb-4">
-                    <label for="event-date" class="block mb-2 text-sm font-medium" data-i18n="date">Дата</label>
-                    <input type="date" id="event-date" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                </div>
-                 <div class="flex items-center mb-4">
-                    <input id="event-create-task" type="checkbox" checked class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                    <label for="event-create-task" class="ml-2 text-sm font-medium text-gray-900" data-i18n="createTaskForEvent">Создать задачу для этого события</label>
-                </div>
-                <div class="flex justify-between items-center mt-6">
-                    <button type="button" id="delete-event-btn" class="text-red-600 hover:text-red-800 hidden" data-i18n="delete">Удалить</button>
-                    <div class="flex justify-end gap-4">
-                         <button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button>
-                         <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button>
-                    </div>
-                </div>
-            </form>
+    <!-- Custom Confirm Modal -->
+    <dialog id="confirm-modal" class="p-0 rounded-lg shadow-xl w-full max-w-sm">
+        <div class="p-6 text-center">
+            <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
+            <p id="confirm-modal-text" class="mb-5 text-lg font-normal text-gray-600"></p>
+            <button id="confirm-modal-yes" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">
+                Да, удалить
+            </button>
+            <button id="confirm-modal-no" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">
+                Нет, отмена
+            </button>
         </div>
     </dialog>
 
-    <dialog id="category-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md">
-        <div class="p-6">
-            <h3 class="text-xl font-semibold mb-4" data-i18n="manageCategoriesTitle">Управление категориями</h3>
-            <form id="category-form" class="mb-4">
-                <div class="flex gap-2">
-                    <input type="text" id="category-name" placeholder="Новая категория" class="flex-grow bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required>
-                    <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="add">Добавить</button>
-                </div>
-            </form>
-            <div id="category-list" class="space-y-2 max-h-60 overflow-y-auto">
-                <!-- Categories will be rendered here -->
-            </div>
-            <div class="flex justify-end mt-6">
-                <button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="close">Закрыть</button>
-            </div>
-        </div>
-    </dialog>
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
 
 
     <script type="module" defer>
@@ -636,7 +388,7 @@
         let allDebts = [], allExpenses = [], allRecurringTemplates = [], currentMonthStatuses = {};
         let dailyTasks = [], monthlyTasks = [], yearlyTasks = [];
         let calendarEvents = [];
-        let calendarDate = new Date(); // This will be set to Baku time on load
+        let calendarDate = new Date();
 
         let debtsCol, recurringExpensesCol, expensesCol, monthlyDataCol, recurringExpenseStatusesCol;
         let dailyTasksCol, monthlyTasksCol, yearlyTasksCol, calendarEventsCol, categoriesCol;
@@ -651,9 +403,9 @@
                 tabDashboard: "Сводка", tabDebts: "Долги", tabRecurringExpenses: "Ежемесячные расходы", tabMonthlyExpenses: "Расходы месяца", tabTasks: "Список задач", tabCalendar: "Календарь",
                 dashboardTitle: "Сводка за месяц", loading: "Загрузка данных...",
                 dashRecurringPaid: "Ежемесячные (оплачено)", dashRecurringRemaining: "Ежемесячные (осталось)", dashMonthlyExpenses: "Расходы за месяц", dashTotalDebt: "Остаток общего долга", dashTopCategories: "Топ категорий расходов",
-                debtsTitle: "Общие долги", addDebt: "Добавить долг", debtName: "Долг (Имя)", amount: "Сумма", paid: "Оплачено", remaining: "Осталось", lastPaymentDate: "Дата последней оплаты", comments: "Комментарии", actions: "Действия", emptyDebts: "Список долгов пуст.",
+                debtsTitle: "Общие долги", addDebt: "Добавить долг", debtName: "Долг (Имя)", amount: "Сумма", paid: "Оплачено", remaining: "Осталось", lastPaymentDate: "Дата последней оплаты", comments: "Комментарии", actions: "Действия", emptyDebts: "Список долгов пуст. Нажмите кнопку 'Добавить долг', чтобы начать.",
                 recurringTitle: "Ежемесячные расходы", addTemplate: "Добавить шаблон", paymentDay: "День оплаты", status: "Статус", details: "Детали", templateActions: "Действия с шаблоном", emptyRecurring: "Список ежемесячных расходов пуст. Создайте шаблон.",
-                expensesTitle: "Все расходы за", addExpense: "Добавить расход", category: "Категория", date: "Дата", emptyExpenses: "Список расходов пуст.",
+                expensesTitle: "Все расходы за", addExpense: "Добавить расход", category: "Категория", date: "Дата", emptyExpenses: "Расходов в этом месяце еще нет.",
                 taskToday: "На сегодня", taskMonth: "На месяц", taskYear: "На год", taskTodayTitle: "Задачи на сегодня", taskMonthTitle: "Задачи на месяц", taskYearTitle: "Задачи на год", addTask: "Добавить задачу", name: "Имя", notes: "Заметки", deadline: "Дедлайн", emptyTasks: "Список задач пуст.",
                 cancel: "Отмена", save: "Сохранить", add: "Добавить", delete: "Удалить", close: "Закрыть",
                 debtorName: "Имя должника/Название", totalAmount: "Общая сумма", paidAmount: "Оплаченная сумма", comment: "Комментарий",
@@ -679,15 +431,16 @@
                 authInvalidCredentials: "Неверный email или пароль.",
                 authGenericError: "Произошла ошибка. Попробуйте снова.",
                 manageCategories: "Управление категориями", manageCategoriesTitle: "Управление категориями",
+                toastSuccess: "Успешно сохранено!", toastError: "Ошибка сохранения!", toastDeleted: "Запись удалена.",
             },
             en: {
                 appTitle: "ORDINA", appSubtitle: "Manage your finances with ease.",
                 tabDashboard: "Dashboard", tabDebts: "Debts", tabRecurringExpenses: "Recurring Expenses", tabMonthlyExpenses: "Monthly Expenses", tabTasks: "Task List", tabCalendar: "Calendar",
                 dashboardTitle: "Monthly Dashboard", loading: "Loading data...",
                 dashRecurringPaid: "Recurring (Paid)", dashRecurringRemaining: "Recurring (Remaining)", dashMonthlyExpenses: "Monthly Expenses", dashTotalDebt: "Total Debt Remaining", dashTopCategories: "Top Expense Categories",
-                debtsTitle: "All Debts", addDebt: "Add Debt", debtName: "Debt (Name)", amount: "Amount", paid: "Paid", remaining: "Remaining", lastPaymentDate: "Last Payment Date", comments: "Comments", actions: "Actions", emptyDebts: "Debt list is empty.",
+                debtsTitle: "All Debts", addDebt: "Add Debt", debtName: "Debt (Name)", amount: "Amount", paid: "Paid", remaining: "Remaining", lastPaymentDate: "Last Payment Date", comments: "Comments", actions: "Actions", emptyDebts: "Debt list is empty. Click 'Add Debt' to start.",
                 recurringTitle: "Recurring Expenses", addTemplate: "Add Template", paymentDay: "Payment Day", status: "Status", details: "Details", templateActions: "Template Actions", emptyRecurring: "Recurring expense list is empty. Create a template.",
-                expensesTitle: "All Expenses for", addExpense: "Add Expense", category: "Category", date: "Date", emptyExpenses: "Expense list is empty.",
+                expensesTitle: "All Expenses for", addExpense: "Add Expense", category: "Category", date: "Date", emptyExpenses: "No expenses for this month yet.",
                 taskToday: "Today", taskMonth: "Month", taskYear: "Year", taskTodayTitle: "Today's Tasks", taskMonthTitle: "Monthly Tasks", taskYearTitle: "Yearly Tasks", addTask: "Add Task", name: "Name", notes: "Notes", deadline: "Deadline", emptyTasks: "Task list is empty.",
                 cancel: "Cancel", save: "Save", add: "Add", delete: "Delete", close: "Close",
                 debtorName: "Debtor Name/Title", totalAmount: "Total Amount", paidAmount: "Paid Amount", comment: "Comment",
@@ -713,15 +466,16 @@
                 authInvalidCredentials: "Invalid email or password.",
                 authGenericError: "An error occurred. Please try again.",
                 manageCategories: "Manage Categories", manageCategoriesTitle: "Manage Categories",
+                toastSuccess: "Saved successfully!", toastError: "Error saving!", toastDeleted: "Entry deleted.",
             },
             az: {
                 appTitle: "ORDINA", appSubtitle: "Maliyyələrinizi asanlıqla idarə edin.",
                 tabDashboard: "Ümumi", tabDebts: "Borclar", tabRecurringExpenses: "Aylıq xərclər", tabMonthlyExpenses: "Aylıq xərclər", tabTasks: "Tapşırıqlar", tabCalendar: "Təqvim",
                 dashboardTitle: "Aylıq ümumi", loading: "Məlumatlar yüklənir...",
                 dashRecurringPaid: "Aylıq (ödənilmiş)", dashRecurringRemaining: "Aylıq (qalan)", dashMonthlyExpenses: "Aylıq xərclər", dashTotalDebt: "Ümumi borc qalığı", dashTopCategories: "Əsas xərc kateqoriyaları",
-                debtsTitle: "Bütün borclar", addDebt: "Borç əlavə et", debtName: "Borç (Ad)", amount: "Məbləğ", paid: "Ödənilmiş", remaining: "Qalan", lastPaymentDate: "Son ödəniş tarixi", comments: "Şərhlər", actions: "Əməлијјатлар", emptyDebts: "Borclar siyahısı boşdur.",
+                debtsTitle: "Bütün borclar", addDebt: "Borç əlavə et", debtName: "Borç (Ad)", amount: "Məbləğ", paid: "Ödənilmiş", remaining: "Qalan", lastPaymentDate: "Son ödəniş tarixi", comments: "Şərhlər", actions: "Əməлијјатлар", emptyDebts: "Borclar siyahısı boşdur. Başlamaq üçün 'Borç əlavə et' düyməsini basın.",
                 recurringTitle: "Aylıq xərclər", addTemplate: "Şablon əlavə et", paymentDay: "Ödəniş günü", status: "Status", details: "Təfərrüatlar", templateActions: "Şablon əməliyyatları", emptyRecurring: "Aylıq xərclər siyahısı boşdur. Şablon yaradın.",
-                expensesTitle: "Bütün xərclər", addExpense: "Xərc əlavə et", category: "Kateqoriya", date: "Tarix", emptyExpenses: "Xərclər siyahısı boşdur.",
+                expensesTitle: "Bütün xərclər", addExpense: "Xərc əlavə et", category: "Kateqoriya", date: "Tarix", emptyExpenses: "Bu ay üçün hələ xərc yoxdur.",
                 taskToday: "Bu gün", taskMonth: "Ay", taskYear: "İl", taskTodayTitle: "Bu günkü tapşırıqlar", taskMonthTitle: "Aylıq tapşırıqlar", taskYearTitle: "İllik tapşırıqlar", addTask: "Tapşırıq əlavə et", name: "Ad", notes: "Qeydlər", deadline: "Müddət", emptyTasks: "Tapşırıqlar siyahısı boşdur.",
                 cancel: "Ləğv et", save: "Saxla", add: "Əlavə et", delete: "Sil", close: "Bağla",
                 debtorName: "Borclu adı/Başlıq", totalAmount: "Ümumi məbləğ", paidAmount: "Ödənilmiş məbləğ", comment: "Şərh",
@@ -747,19 +501,16 @@
                 authInvalidCredentials: "Yanlış email və ya parol.",
                 authGenericError: "Xəta baş verdi. Yenidən cəhd edin.",
                 manageCategories: "Kateqoriyaları idarə et", manageCategoriesTitle: "Kateqoriyaları idarə et",
+                toastSuccess: "Uğurla yadda saxlanıldı!", toastError: "Yaddaş xətası!", toastDeleted: "Yazı silindi.",
             }
         };
-
         let currentLang = localStorage.getItem('appLanguage') || 'ru';
         
-        // --- Date Helpers (Baku Timezone) ---
         function getTodayISOString() {
             const today = new Date();
-            // Using en-CA locale gives the YYYY-MM-DD format directly
             const options = { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Asia/Baku' };
             return new Intl.DateTimeFormat('en-CA', options).format(today);
         }
-
         function formatISODateForDisplay(isoString, options = {}) {
             if (!isoString || !isoString.includes('-')) return '—';
             const [year, month, day] = isoString.split('-').map(Number);
@@ -804,17 +555,8 @@
         const loadingOverlay = document.getElementById('loading-overlay');
         const authContainer = document.getElementById('auth-container');
         const appContainer = document.getElementById('app');
-
-        function showLoginScreen() {
-            loadingOverlay.classList.add('hidden');
-            authContainer.classList.remove('hidden');
-            appContainer.classList.add('hidden');
-        }
-        
-        function showApp() {
-            authContainer.classList.add('hidden');
-            appContainer.classList.remove('hidden');
-        }
+        function showLoginScreen() { loadingOverlay.classList.add('hidden'); authContainer.classList.remove('hidden'); appContainer.classList.add('hidden'); }
+        function showApp() { authContainer.classList.add('hidden'); appContainer.classList.remove('hidden'); }
 
         async function setupDefaultData(user) {
             const categoriesRef = collection(db, `users/${user.uid}/categories`);
@@ -851,7 +593,7 @@
                     const todayISO = getTodayISOString();
                     currentMonthId = todayISO.slice(0, 7);
                     selectedMonthId = currentMonthId;
-                    calendarDate = new Date(todayISO + 'T00:00:00'); // Initialize calendar to today in Baku
+                    calendarDate = new Date(todayISO + 'T00:00:00');
 
                     await setupDefaultData(user);
                     showApp();
@@ -864,9 +606,7 @@
                     updateDateTime();
                     if(dateTimeInterval) clearInterval(dateTimeInterval);
                     dateTimeInterval = setInterval(updateDateTime, 60000);
-                } else {
-                    showLoginScreen();
-                }
+                } else { showLoginScreen(); }
             });
         }
         
@@ -888,32 +628,25 @@
             const lastCheckKey = `lastDailyCheck_${userId}`;
             const lastCheck = localStorage.getItem(lastCheckKey);
             if (lastCheck === todayId) return;
-
             const yesterday = new Date(todayId + 'T00:00:00');
             yesterday.setDate(yesterday.getDate() - 1);
             const yesterdayId = yesterday.toISOString().split('T')[0];
-
             if (lastCheck && lastCheck < todayId) {
                 try {
                     const yesterdayTasksCol = collection(db, `users/${userId}/dailyTasks/${yesterdayId}/tasks`);
                     const q = query(yesterdayTasksCol, where("status", "==", translations.ru.statusNotDone));
                     const tasksToCarryOverSnapshot = await getDocs(q);
-
                     if (!tasksToCarryOverSnapshot.empty) {
                         const batch = writeBatch(db);
                         const todayTasksColRef = collection(db, `users/${userId}/dailyTasks/${todayId}/tasks`);
                         tasksToCarryOverSnapshot.forEach(docSnap => {
                             const taskData = docSnap.data();
                             const newTaskRef = doc(todayTasksColRef);
-                            batch.set(newTaskRef, {
-                                ...taskData,
-                                notes: `(Перенесено с ${formatISODateForDisplay(yesterdayId)}) ${taskData.notes || ''}`.trim(),
-                                carriedOver: true
-                            });
+                            batch.set(newTaskRef, { ...taskData, notes: `(Перенесено с ${formatISODateForDisplay(yesterdayId)}) ${taskData.notes || ''}`.trim(), carriedOver: true });
                         });
                         await batch.commit();
                     }
-                } catch (error) { console.error("Error carrying over daily tasks:", error); }
+                } catch (error) { showToast(translations[currentLang].toastError, 'error'); }
             }
             localStorage.setItem(lastCheckKey, todayId);
         }
@@ -925,16 +658,12 @@
                 const prevMonthDate = new Date(currentMonthId + '-01T00:00:00');
                 prevMonthDate.setMonth(prevMonthDate.getMonth() - 1);
                 const prevMonthId = prevMonthDate.toISOString().slice(0, 7);
-
                 const q = query(monthlyTasksCol, where("month", "==", prevMonthId), where("status", "==", translations.ru.statusNotDone));
                 const tasksSnapshot = await getDocs(q);
-                
                 const batch = writeBatch(db);
                 tasksSnapshot.forEach(doc => {
                     const task = doc.data();
-                    if (!task.fromCalendar) {
-                        batch.update(doc.ref, { month: currentMonthId, carriedOver: true });
-                    }
+                    if (!task.fromCalendar) batch.update(doc.ref, { month: currentMonthId, carriedOver: true });
                 });
                 await batch.commit();
                 localStorage.setItem(lastCheckKey, currentMonthId);
@@ -948,43 +677,25 @@
             const q = query(calendarEventsCol, where("category", "==", "birthday"));
             const birthdayEventsSnapshot = await getDocs(q);
             const batch = writeBatch(db);
-
             for (const eventDoc of birthdayEventsSnapshot.docs) {
                 const event = eventDoc.data();
                 if (event.date.substring(5, 7) === month) {
                     const taskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventDoc.id), where("month", "==", monthId));
                     const existingTasksSnapshot = await getDocs(taskQuery);
-
                     if (existingTasksSnapshot.empty) {
                         let taskName = `${t.taskCongratulate} ${event.birthdayName}`;
-                        if (event.birthYear) {
-                            const age = parseInt(year) - parseInt(event.birthYear);
-                            if (age >= 0) taskName += ` (${t.taskTurning} ${age} ${t.taskYearsOld})`;
-                        }
+                        if (event.birthYear) { const age = parseInt(year) - parseInt(event.birthYear); if (age >= 0) taskName += ` (${t.taskTurning} ${age} ${t.taskYearsOld})`; }
                         const deadline = `${monthId}-${event.date.substring(8)}`;
-                        batch.set(doc(monthlyTasksCol), {
-                            name: taskName, deadline, status: translations.ru.statusNotDone,
-                            month: monthId, year: parseInt(year), fromCalendar: eventDoc.id
-                        });
+                        batch.set(doc(monthlyTasksCol), { name: taskName, deadline, status: translations.ru.statusNotDone, month: monthId, year: parseInt(year), fromCalendar: eventDoc.id });
                     }
                 }
             }
             await batch.commit();
         }
         
-        function updateDateTime() {
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Baku' };
-            document.getElementById('current-datetime').textContent = new Date().toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US', options);
-        }
-
-        function updateMonthDisplay() {
-            const formattedDate = formatMonthId(selectedMonthId);
-            document.querySelectorAll('.current-month-name').forEach(el => el.textContent = formattedDate);
-            document.getElementById('recurring-month-name').textContent = formattedDate;
-            document.getElementById('today-date').textContent = formatISODateForDisplay(getTodayISOString(), { year: undefined });
-        }
+        function updateDateTime() { const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Baku' }; document.getElementById('current-datetime').textContent = new Date().toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US', options); }
+        function updateMonthDisplay() { const formattedDate = formatMonthId(selectedMonthId); document.querySelectorAll('.current-month-name').forEach(el => el.textContent = formattedDate); document.getElementById('recurring-month-name').textContent = formattedDate; document.getElementById('today-date').textContent = formatISODateForDisplay(getTodayISOString(), { year: undefined }); }
         
-        // UI Logic
         const tabs = document.querySelectorAll('.tab-button');
         const taskTabs = document.querySelectorAll('.task-tab-button');
         tabs.forEach(tab => tab.addEventListener('click', () => { tabs.forEach(t => t.classList.remove('tab-active')); tab.classList.add('tab-active'); document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden')); document.getElementById(`${tab.dataset.tab}-page`).classList.remove('hidden'); }));
@@ -1007,59 +718,41 @@
         }
 
         function detachListeners() { unsubscribes.forEach(unsub => unsub()); unsubscribes = []; }
-        
-        function formatCurrency(amount) {
-            if (typeof amount !== 'number') amount = 0;
-            const value = currentCurrency === 'USD' ? amount / exchangeRate : amount;
-            const symbol = currentCurrency === 'USD' ? '$' : 'AZN';
-            return `${value.toFixed(2)} ${symbol}`;
-        }
-
+        function formatCurrency(amount) { if (typeof amount !== 'number') amount = 0; const value = currentCurrency === 'USD' ? amount / exchangeRate : amount; const symbol = currentCurrency === 'USD' ? '$' : 'AZN'; return `${value.toFixed(2)} ${symbol}`; }
         function renderCategoryDatalist(docs) { const datalist = document.getElementById('expense-categories-list'); datalist.innerHTML = docs.filter(doc => doc.data().lang === currentLang).map(doc => `<option value="${doc.data().name}"></option>`).join(''); }
+        function renderCategories(categories) { const list = document.getElementById('category-list'); if (!list) return; const langCategories = categories.filter(c => c.lang === currentLang); list.innerHTML = langCategories.map(cat => `<div class="flex justify-between items-center p-2 bg-gray-100 rounded-lg"><span>${cat.name}</span><button data-id="${cat.id}" class="delete-category-btn text-red-500 hover:text-red-700">🗑️</button></div>`).join(''); }
 
-        function renderCategories(categories) {
-            const list = document.getElementById('category-list');
-            if (!list) return;
-            const langCategories = categories.filter(c => c.lang === currentLang);
-            list.innerHTML = langCategories.map(cat => `
-                <div class="flex justify-between items-center p-2 bg-gray-100 rounded-lg">
-                    <span>${cat.name}</span>
-                    <button data-id="${cat.id}" class="delete-category-btn text-red-500 hover:text-red-700">🗑️</button>
-                </div>
-            `).join('');
-        }
+        const createEmptyState = (messageKey) => `<div class="flex flex-col items-center justify-center p-12 bg-gray-50 rounded-lg"><svg class="w-16 h-16 text-gray-300 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><p class="text-gray-500 font-medium">${translations[currentLang][messageKey]}</p></div>`;
 
         function renderDebts(docs) {
-            const tableBody = document.getElementById('debts-table'); const emptyState = document.getElementById('debts-empty'); if (docs.length === 0) { tableBody.innerHTML = ''; emptyState.classList.remove('hidden'); return; } emptyState.classList.add('hidden');
+            const tableBody = document.getElementById('debts-table'); const emptyState = document.getElementById('debts-empty'); if (docs.length === 0) { tableBody.innerHTML = ''; emptyState.innerHTML = createEmptyState('emptyDebts'); emptyState.classList.remove('hidden'); return; } emptyState.classList.add('hidden');
             tableBody.innerHTML = docs.map(doc => {
                 const debt = doc.data(), id = doc.id; const remaining = (debt.totalAmount || 0) - (debt.paidAmount || 0);
                 let colorClass = remaining <= 0 ? 'text-green-600' : (debt.paidAmount > 0 ? 'text-yellow-600' : 'text-red-600');
                 const lastPaymentDate = debt.lastPaymentDate ? debt.lastPaymentDate.toDate().toLocaleDateString(currentLang === 'ru' ? 'ru-RU' : 'en-US') : '—';
-                return `<tr class="border-b hover:bg-gray-50"><td class="px-6 py-4 font-medium">${debt.name}</td><td class="px-6 py-4">${formatCurrency(debt.totalAmount)}</td><td class="px-6 py-4">${formatCurrency(debt.paidAmount)}</td><td class="px-6 py-4 font-bold ${colorClass}">${formatCurrency(remaining)}</td><td class="px-6 py-4">${lastPaymentDate}</td><td class="px-6 py-4"><input type="text" class="editable-debt-comment bg-transparent w-full p-1" data-id="${id}" value="${debt.comment || ''}" placeholder="${translations[currentLang].placeholderComment}"></td><td class="px-6 py-4 flex gap-2"><button data-id="${id}" class="add-debt-payment-btn text-green-600 hover:text-green-800" title="${translations[currentLang].addDebtPayment}">➕</button><button data-id="${id}" class="edit-debt-btn text-blue-600 hover:text-blue-800" title="${translations[currentLang].editDebt}">✏️</button><button data-id="${id}" class="delete-debt-btn text-red-600 hover:text-red-800" title="${translations[currentLang].delete}">🗑️</button></td></tr>`;
+                return `<tr class="border-b hover:bg-gray-50 md:border-b-0"><td data-label="${translations[currentLang].debtName}" class="font-medium">${debt.name}</td><td data-label="${translations[currentLang].amount}">${formatCurrency(debt.totalAmount)}</td><td data-label="${translations[currentLang].paid}">${formatCurrency(debt.paidAmount)}</td><td data-label="${translations[currentLang].remaining}" class="font-bold ${colorClass}">${formatCurrency(remaining)}</td><td data-label="${translations[currentLang].lastPaymentDate}">${lastPaymentDate}</td><td data-label="${translations[currentLang].comments}"><input type="text" class="editable-debt-comment bg-transparent w-full p-1" data-id="${id}" value="${debt.comment || ''}" placeholder="${translations[currentLang].placeholderComment}"></td><td data-label="${translations[currentLang].actions}" class="flex gap-2"><button data-id="${id}" class="add-debt-payment-btn text-green-600 hover:text-green-800" title="${translations[currentLang].addDebtPayment}">➕</button><button data-id="${id}" class="edit-debt-btn text-blue-600 hover:text-blue-800" title="${translations[currentLang].editDebt}">✏️</button><button data-id="${id}" class="delete-debt-btn text-red-600 hover:text-red-800" title="${translations[currentLang].delete}">🗑️</button></td></tr>`;
             }).join('');
         }
 
         function renderRecurringExpenses() {
-            const tableBody = document.getElementById('recurring-expenses-table');
-            const emptyState = document.getElementById('recurring-expenses-empty');
-            if (allRecurringTemplates.length === 0) { tableBody.innerHTML = ''; emptyState.classList.remove('hidden'); return; }
+            const tableBody = document.getElementById('recurring-expenses-table'); const emptyState = document.getElementById('recurring-expenses-empty'); if (allRecurringTemplates.length === 0) { tableBody.innerHTML = ''; emptyState.innerHTML = createEmptyState('emptyRecurring'); emptyState.classList.remove('hidden'); return; }
             emptyState.classList.add('hidden');
             const todayDay = new Date(getTodayISOString() + 'T00:00:00').getDate();
             tableBody.innerHTML = allRecurringTemplates.map(template => {
                 const status = currentMonthStatuses[template.id] || translations.ru.unpaidStatus;
                 const isOverdue = status === translations.ru.unpaidStatus && template.dueDay < todayDay && selectedMonthId === currentMonthId;
                 const isPaid = status === translations.ru.paidStatus;
-                return `<tr class="border-b hover:bg-gray-50 ${isOverdue ? 'bg-red-50' : ''}">
-                        <td class="px-6 py-4 font-medium">${template.name}</td>
-                        <td class="px-6 py-4">${formatCurrency(template.amount)}</td>
-                        <td class="px-6 py-4">${template.dueDay || '—'}</td>
-                        <td class="px-6 py-4">
+                return `<tr class="border-b hover:bg-gray-50 ${isOverdue ? 'bg-red-50' : ''} md:border-b-0">
+                        <td data-label="${translations[currentLang].name}" class="font-medium">${template.name}</td>
+                        <td data-label="${translations[currentLang].amount}">${formatCurrency(template.amount)}</td>
+                        <td data-label="${translations[currentLang].paymentDay}">${template.dueDay || '—'}</td>
+                        <td data-label="${translations[currentLang].status}">
                             <select data-id="${template.id}" class="recurring-status-select p-1 rounded-md border-0 ring-1 ring-inset ring-gray-300 ${isPaid ? 'bg-green-100' : 'bg-red-100'}">
                                 <option value="${translations.ru.unpaidStatus}" ${!isPaid ? 'selected' : ''}>${translations[currentLang].unpaidStatus}</option>
                                 <option value="${translations.ru.paidStatus}" ${isPaid ? 'selected' : ''}>${translations[currentLang].paidStatus}</option>
                             </select></td>
-                        <td class="px-6 py-4">${template.details || '—'}</td>
-                        <td class="px-6 py-4 flex gap-2">
+                        <td data-label="${translations[currentLang].details}">${template.details || '—'}</td>
+                        <td data-label="${translations[currentLang].templateActions}" class="flex gap-2">
                             <button data-id="${template.id}" class="edit-recurring-expense-btn text-blue-600 hover:text-blue-800">✏️</button>
                             <button data-id="${template.id}" class="delete-recurring-expense-btn text-red-600 hover:text-red-800">🗑️</button>
                         </td></tr>`;
@@ -1067,22 +760,18 @@
         }
         
         function renderExpenses(docs) {
-            const tableBody = document.getElementById('expenses-table');
-            const emptyState = document.getElementById('expenses-empty');
-            if (docs.length === 0) { tableBody.innerHTML = ''; emptyState.classList.remove('hidden'); return; }
+            const tableBody = document.getElementById('expenses-table'); const emptyState = document.getElementById('expenses-empty'); if (docs.length === 0) { tableBody.innerHTML = ''; emptyState.innerHTML = createEmptyState('emptyExpenses'); emptyState.classList.remove('hidden'); return; }
             emptyState.classList.add('hidden');
             const sortedDocs = docs.sort((a, b) => b.data().date.localeCompare(a.data().date));
             tableBody.innerHTML = sortedDocs.map(doc => {
                 const expense = doc.data(), id = doc.id;
-                let actionsHtml = (!expense.recurringExpenseId && !expense.debtPaymentId) ? `
-                        <button data-id="${id}" class="edit-expense-btn text-blue-600 hover:text-blue-800" title="${translations[currentLang].editExpense}">✏️</button>
-                        <button data-id="${id}" class="delete-expense-btn text-red-600 hover:text-red-800" title="${translations[currentLang].delete}">🗑️</button>` : '';
-                return `<tr class="border-b hover:bg-gray-50">
-                        <td class="px-6 py-4 font-medium">${expense.name}</td>
-                        <td class="px-6 py-4">${expense.category}</td>
-                        <td class="px-6 py-4">${formatCurrency(expense.amount)}</td>
-                        <td class="px-6 py-4">${formatISODateForDisplay(expense.date)}</td>
-                        <td class="px-6 py-4 flex gap-2">${actionsHtml}</td></tr>`;
+                let actionsHtml = (!expense.recurringExpenseId && !expense.debtPaymentId) ? `<button data-id="${id}" class="edit-expense-btn text-blue-600 hover:text-blue-800" title="${translations[currentLang].editExpense}">✏️</button><button data-id="${id}" class="delete-expense-btn text-red-600 hover:text-red-800" title="${translations[currentLang].delete}">🗑️</button>` : '';
+                return `<tr class="border-b hover:bg-gray-50 md:border-b-0">
+                        <td data-label="${translations[currentLang].name}" class="font-medium">${expense.name}</td>
+                        <td data-label="${translations[currentLang].category}">${expense.category}</td>
+                        <td data-label="${translations[currentLang].amount}">${formatCurrency(expense.amount)}</td>
+                        <td data-label="${translations[currentLang].date}">${formatISODateForDisplay(expense.date)}</td>
+                        <td data-label="${translations[currentLang].actions}" class="flex gap-2">${actionsHtml}</td></tr>`;
             }).join('');
         }
 
@@ -1095,98 +784,62 @@
             selectHTML += `</select>`; return selectHTML;
         }
 
-        const renderTaskTable = (tableId, emptyId, docs, rowRenderer) => { const t = document.getElementById(tableId), e = document.getElementById(emptyId); if(docs.length === 0) { t.innerHTML = ''; e.classList.remove('hidden'); return; } e.classList.add('hidden'); t.innerHTML = docs.map(rowRenderer).join(''); };
+        const renderTaskTable = (tableId, emptyId, docs, rowRenderer) => { const t = document.getElementById(tableId), e = document.getElementById(emptyId); if(docs.length === 0) { t.innerHTML = ''; e.innerHTML = createEmptyState('emptyTasks'); e.classList.remove('hidden'); return; } e.classList.add('hidden'); t.innerHTML = docs.map(rowRenderer).join(''); };
         
-        function renderDailyTasks(docs) { renderTaskTable('daily-tasks-table', 'daily-tasks-empty', docs, d => { const t = d; const s = t.status; return `<tr class="${t.carriedOver ? 'bg-blue-50' : ''}"><td class="px-6 py-4 ${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td class="px-6 py-4">${createTaskStatusDropdown(t.id, s, 'dailyTasks')}</td><td class="px-6 py-4"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${t.id}" data-col="dailyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td class="px-6 py-4 flex gap-2"><button data-id="${t.id}" class="edit-daily-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-daily-task-btn text-red-600">🗑️</button></td></tr>`; }); }
-        function renderMonthlyTasks(docs) { renderTaskTable('monthly-tasks-table', 'monthly-tasks-empty', docs.sort((a,b) => a.deadline.localeCompare(b.deadline)), d => { const t = d; const s = t.status; return `<tr class="${t.carriedOver?'bg-yellow-50':''}"><td class="px-6 py-4 ${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td class="px-6 py-4">${formatISODateForDisplay(t.deadline)}</td><td class="px-6 py-4">${createTaskStatusDropdown(t.id, s, 'monthlyTasks')}</td><td class="px-6 py-4 flex gap-2">${!t.recurringExpenseId && !t.fromCalendar?`<button data-id="${t.id}" class="edit-monthly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-monthly-task-btn text-red-600">🗑️</button>`:''}</td></tr>`; }); }
-        function renderYearlyTasks(docs) { renderTaskTable('yearly-tasks-table', 'yearly-tasks-empty', docs, d => { const t = d; const s = t.status; return `<tr><td class="px-6 py-4 ${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td class="px-6 py-4">${formatISODateForDisplay(t.deadline, {year: 'numeric'})}</td><td class="px-6 py-4">${createTaskStatusDropdown(t.id, s, 'yearlyTasks')}</td><td class="px-6 py-4"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${t.id}" data-col="yearlyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td class="px-6 py-4 flex gap-2"><button data-id="${t.id}" class="edit-yearly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-yearly-task-btn text-red-600">🗑️</button></td></tr>`; }); }
+        function renderDailyTasks(docs) { renderTaskTable('daily-tasks-table', 'daily-tasks-empty', docs, d => { const t = d; const s = t.status; return `<tr class="md:border-b-0 ${t.carriedOver ? 'bg-blue-50' : ''}"><td data-label="${translations[currentLang].name}" class="${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td data-label="${translations[currentLang].status}">${createTaskStatusDropdown(t.id, s, 'dailyTasks')}</td><td data-label="${translations[currentLang].notes}"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${t.id}" data-col="dailyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td data-label="${translations[currentLang].actions}" class="flex gap-2"><button data-id="${t.id}" class="edit-daily-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-daily-task-btn text-red-600">🗑️</button></td></tr>`; }); }
+        function renderMonthlyTasks(docs) { renderTaskTable('monthly-tasks-table', 'monthly-tasks-empty', docs.sort((a,b) => a.deadline.localeCompare(b.deadline)), d => { const t = d; const s = t.status; return `<tr class="md:border-b-0 ${t.carriedOver?'bg-yellow-50':''}"><td data-label="${translations[currentLang].name}" class="${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td data-label="${translations[currentLang].deadline}">${formatISODateForDisplay(t.deadline)}</td><td data-label="${translations[currentLang].status}">${createTaskStatusDropdown(t.id, s, 'monthlyTasks')}</td><td data-label="${translations[currentLang].actions}" class="flex gap-2">${!t.recurringExpenseId && !t.fromCalendar?`<button data-id="${t.id}" class="edit-monthly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-monthly-task-btn text-red-600">🗑️</button>`:''}</td></tr>`; }); }
+        function renderYearlyTasks(docs) { renderTaskTable('yearly-tasks-table', 'yearly-tasks-empty', docs, d => { const t = d; const s = t.status; return `<tr class="md:border-b-0"><td data-label="${translations[currentLang].name}" class="${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td data-label="${translations[currentLang].deadline}">${formatISODateForDisplay(t.deadline, {year: 'numeric'})}</td><td data-label="${translations[currentLang].status}">${createTaskStatusDropdown(t.id, s, 'yearlyTasks')}</td><td data-label="${translations[currentLang].notes}"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${t.id}" data-col="yearlyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td data-label="${translations[currentLang].actions}" class="flex gap-2"><button data-id="${t.id}" class="edit-yearly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-yearly-task-btn text-red-600">🗑️</button></td></tr>`; }); }
 
         function renderMonthSelector(months) { const s=document.getElementById('month-selector'); s.innerHTML = months.map(m => `<option value="${m}" ${m===selectedMonthId?'selected':''}>${formatMonthId(m)}</option>`).join(''); }
 
-        // Calendar Logic
         function renderCalendar() {
-            const grid = document.getElementById('calendar-grid');
-            const monthYearEl = document.getElementById('calendar-month-year');
-            const weekdaysEl = document.getElementById('calendar-weekdays');
-            const month = calendarDate.getMonth(), year = calendarDate.getFullYear();
-            
+            const grid = document.getElementById('calendar-grid'); const monthYearEl = document.getElementById('calendar-month-year'); const weekdaysEl = document.getElementById('calendar-weekdays'); const month = calendarDate.getMonth(), year = calendarDate.getFullYear();
             monthYearEl.textContent = calendarDate.toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US', { month: 'long', year: 'numeric', timeZone: 'Asia/Baku' });
             weekdaysEl.innerHTML = translations[currentLang].weekdays.map(day => `<div>${day}</div>`).join('');
-
-            const firstDayOfMonth = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const startingDay = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
-
-            grid.innerHTML = '';
-            for (let i = 0; i < startingDay; i++) { grid.insertAdjacentHTML('beforeend', '<div></div>'); }
-            
+            const firstDayOfMonth = new Date(year, month, 1).getDay(); const daysInMonth = new Date(year, month + 1, 0).getDate(); const startingDay = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
+            grid.innerHTML = ''; for (let i = 0; i < startingDay; i++) { grid.insertAdjacentHTML('beforeend', '<div></div>'); }
             const todayISO = getTodayISOString();
-
             for (let day = 1; day <= daysInMonth; day++) {
-                const date = new Date(year, month, day);
-                const dateStr = date.toISOString().split('T')[0];
-                const monthDayStr = dateStr.substring(5);
-                const isToday = dateStr === todayISO;
-                
-                const dayEvents = calendarEvents.filter(e => {
-                    if (e.category === 'birthday') return e.date.substring(5) === monthDayStr;
-                    return e.date === dateStr;
-                });
-
+                const date = new Date(year, month, day); const dateStr = date.toISOString().split('T')[0]; const monthDayStr = dateStr.substring(5); const isToday = dateStr === todayISO;
+                const dayEvents = calendarEvents.filter(e => e.category === 'birthday' ? e.date.substring(5) === monthDayStr : e.date === dateStr);
                 const dayEl = document.createElement('div');
                 dayEl.className = `calendar-day border border-gray-200 p-2 flex flex-col cursor-pointer hover:bg-gray-50 ${isToday ? 'calendar-day-today' : ''}`;
                 dayEl.dataset.date = dateStr;
-                dayEl.innerHTML = `<div class="calendar-day-number self-end text-center rounded-full flex items-center justify-center">${day}</div>
-                    <div class="events mt-1 space-y-1 overflow-y-auto text-xs">
-                        ${dayEvents.map(e => `<div data-event-id="${e.id}" class="event-item p-1 bg-blue-100 text-blue-800 rounded truncate">${e.name}</div>`).join('')}
-                    </div>`;
+                dayEl.innerHTML = `<div class="calendar-day-number self-end text-center rounded-full flex items-center justify-center">${day}</div><div class="events mt-1 space-y-1 overflow-y-auto text-xs">${dayEvents.map(e => `<div data-event-id="${e.id}" class="event-item p-1 bg-blue-100 text-blue-800 rounded truncate">${e.name}</div>`).join('')}</div>`;
                 grid.appendChild(dayEl);
             }
         }
         document.getElementById('prev-month-btn').addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() - 1); renderCalendar(); });
         document.getElementById('next-month-btn').addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() + 1); renderCalendar(); });
 
-        // --- Event Handlers ---
-        document.getElementById('month-selector').addEventListener('change', async (e) => { 
-            selectedMonthId = e.target.value; 
-            await ensureRecurringTasksForMonth(selectedMonthId);
-            updateMonthDisplay(); 
-            attachListeners(); 
-        });
-
+        document.getElementById('month-selector').addEventListener('change', async (e) => { selectedMonthId = e.target.value; await ensureRecurringTasksForMonth(selectedMonthId); updateMonthDisplay(); attachListeners(); });
         document.getElementById('app').addEventListener('change', async (e) => {
             const id = e.target.dataset.id;
             if (e.target.classList.contains('task-status-select')) {
-                const newStatus = e.target.value;
-                const colName = e.target.dataset.col;
-                let colRef;
-                if(colName === 'dailyTasks') colRef = dailyTasksCol;
-                else if (colName === 'monthlyTasks') colRef = monthlyTasksCol;
-                else if (colName === 'yearlyTasks') colRef = yearlyTasksCol;
+                const newStatus = e.target.value; const colName = e.target.dataset.col; let colRef;
+                if(colName === 'dailyTasks') colRef = dailyTasksCol; else if (colName === 'monthlyTasks') colRef = monthlyTasksCol; else if (colName === 'yearlyTasks') colRef = yearlyTasksCol;
                 if(colRef && id) await updateDoc(doc(colRef, id), { status: newStatus });
             }
             if (!id) return;
             if (e.target.classList.contains('editable-debt-comment')) await updateDoc(doc(debtsCol, id), { comment: e.target.value });
-            if (e.target.classList.contains('editable-task-notes')) {
-                const colName = e.target.dataset.col;
-                const colRef = colName === 'dailyTasks' ? dailyTasksCol : yearlyTasksCol;
-                await updateDoc(doc(colRef, id), { notes: e.target.value });
-            }
+            if (e.target.classList.contains('editable-task-notes')) { const colName = e.target.dataset.col; const colRef = colName === 'dailyTasks' ? dailyTasksCol : yearlyTasksCol; await updateDoc(doc(colRef, id), { notes: e.target.value }); }
             if (e.target.classList.contains('recurring-status-select')) {
                 const newStatus = e.target.value;
                 const targetRecurringStatusesCol = collection(db, `users/${userId}/monthlyData/${selectedMonthId}/recurringExpenseStatuses`);
                 await setDoc(doc(targetRecurringStatusesCol, id), { status: newStatus });
-                const taskQuery = query(monthlyTasksCol, where("recurringExpenseId", "==", id), where("month", "==", currentMonthId));
                 
+                const taskQuery = query(monthlyTasksCol, where("recurringExpenseId", "==", id), where("month", "==", selectedMonthId));
+                const targetExpensesCol = collection(db, `users/${userId}/monthlyData/${selectedMonthId}/expenses`);
+
                 if (newStatus === translations.ru.paidStatus) {
                      const template = allRecurringTemplates.find(t => t.id === id);
-                     if(template) await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: template.name, category: translations[currentLang].recurringPayments, amount: template.amount, date: getTodayISOString(), recurringExpenseId: id });
+                     if(template) await addDoc(targetExpensesCol, { name: template.name, category: translations[currentLang].recurringPayments, amount: template.amount, date: `${selectedMonthId}-${String(template.dueDay).padStart(2, '0')}`, recurringExpenseId: id });
                      const tasks = await getDocs(taskQuery);
                      if (!tasks.empty) await updateDoc(tasks.docs[0].ref, {status: translations.ru.statusDone});
                 } else {
-                    const q = query(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), where("recurringExpenseId", "==", id));
+                    const q = query(targetExpensesCol, where("recurringExpenseId", "==", id));
                     const snapshot = await getDocs(q);
-                    const batch = writeBatch(db); snapshot.docs.forEach(doc => batch.delete(doc.ref)); await batch.commit();
+                    const batch = writeBatch(db); snapshot.docs.forEach(d => batch.delete(d.ref)); await batch.commit();
                     const tasks = await getDocs(taskQuery);
                     if (!tasks.empty) await updateDoc(tasks.docs[0].ref, {status: translations.ru.statusNotDone});
                 }
@@ -1197,64 +850,32 @@
         eventCategorySelector.addEventListener('change', (e) => {
             document.querySelectorAll('.event-category-fields').forEach(div => div.classList.add('hidden'));
             document.getElementById(`event-fields-${e.target.value}`).classList.remove('hidden');
-            document.querySelectorAll('.event-category-fields input').forEach(input => {
-                input.value = ''; input.required = false;
-            });
-            document.querySelectorAll(`#event-fields-${e.target.value} input`).forEach(input => {
-                if(input.id !== 'event-birthday-year' && input.id !== 'event-meeting-time' && input.id !== 'event-meeting-place') { input.required = true; }
-            });
+            document.querySelectorAll('.event-category-fields input').forEach(input => { input.value = ''; input.required = false; });
+            document.querySelectorAll(`#event-fields-${e.target.value} input`).forEach(input => { if(input.id !== 'event-birthday-year' && input.id !== 'event-meeting-time' && input.id !== 'event-meeting-place') { input.required = true; } });
         });
-
         document.getElementById('calendar-grid').addEventListener('click', (e) => {
-            const dayEl = e.target.closest('.calendar-day');
-            const eventEl = e.target.closest('.event-item');
-            const eventModal = document.getElementById('event-modal');
-            const t = translations[currentLang];
-            const form = document.getElementById('event-form');
-
-            const openModal = () => {
-                eventCategorySelector.dispatchEvent(new Event('change'));
-                eventModal.showModal();
-            };
-
+            const dayEl = e.target.closest('.calendar-day'); const eventEl = e.target.closest('.event-item'); const eventModal = document.getElementById('event-modal'); const t = translations[currentLang]; const form = document.getElementById('event-form');
+            const openModal = () => { eventCategorySelector.dispatchEvent(new Event('change')); eventModal.showModal(); };
             if (eventEl) { 
-                const eventId = eventEl.dataset.eventId;
-                const event = calendarEvents.find(ev => ev.id === eventId);
+                const eventId = eventEl.dataset.eventId; const event = calendarEvents.find(ev => ev.id === eventId);
                 if (event) {
-                    form.reset();
-                    document.getElementById('event-id').value = event.id;
-                    const category = event.category || 'event';
-                    document.getElementById('event-category').value = category;
-                    document.getElementById('event-date').value = event.date;
+                    form.reset(); document.getElementById('event-id').value = event.id; const category = event.category || 'event'; document.getElementById('event-category').value = category; document.getElementById('event-date').value = event.date;
                     switch (category) {
                         case 'birthday': document.getElementById('event-birthday-name').value = event.birthdayName || ''; document.getElementById('event-birthday-year').value = event.birthYear || ''; break;
                         case 'meeting': document.getElementById('event-meeting-with').value = event.meetingWith || ''; document.getElementById('event-meeting-time').value = event.meetingTime || ''; document.getElementById('event-meeting-place').value = event.meetingPlace || ''; break;
                         case 'wedding': document.getElementById('event-wedding-names').value = event.weddingNames || ''; break;
                         default: document.getElementById('event-name-generic').value = event.name || ''; break;
                     }
-                    document.getElementById('event-modal-title').textContent = t.editEvent;
-                    document.getElementById('delete-event-btn').classList.remove('hidden');
-                    openModal();
+                    document.getElementById('event-modal-title').textContent = t.editEvent; document.getElementById('delete-event-btn').classList.remove('hidden'); openModal();
                 }
             } else if (dayEl) { 
-                form.reset();
-                document.getElementById('event-id').value = '';
-                document.getElementById('event-category').value = 'event';
-                document.getElementById('event-date').value = dayEl.dataset.date;
-                document.getElementById('event-modal-title').textContent = t.addEvent;
-                document.getElementById('delete-event-btn').classList.add('hidden');
-                openModal();
+                form.reset(); document.getElementById('event-id').value = ''; document.getElementById('event-category').value = 'event'; document.getElementById('event-date').value = dayEl.dataset.date; document.getElementById('event-modal-title').textContent = t.addEvent; document.getElementById('delete-event-btn').classList.add('hidden'); openModal();
             }
         });
 
-        // --- Dashboard Logic ---
         async function updateDashboard() {
             if (!userId) return;
-            document.getElementById('app').classList.remove('opacity-0');
-            document.getElementById('loading-overlay').classList.add('hidden');
-            document.getElementById('dashboard-loading').classList.add('hidden'); 
-            document.getElementById('dashboard-content').classList.remove('hidden');
-            
+            document.getElementById('app').classList.remove('opacity-0'); document.getElementById('loading-overlay').classList.add('hidden'); document.getElementById('dashboard-loading').classList.add('hidden'); document.getElementById('dashboard-content').classList.remove('hidden');
             const totalRecurringPaid = allRecurringTemplates.filter(t => currentMonthStatuses[t.id] === translations.ru.paidStatus).reduce((s, t) => s + (t.amount || 0), 0);
             document.getElementById('total-recurring-paid').textContent = formatCurrency(totalRecurringPaid);
             const totalRecurringRemaining = allRecurringTemplates.filter(t => (currentMonthStatuses[t.id] || translations.ru.unpaidStatus) === translations.ru.unpaidStatus).reduce((s, t) => s + (t.amount || 0), 0);
@@ -1265,7 +886,6 @@
             document.getElementById('total-debt-remaining').textContent = formatCurrency(totalDebtRemaining);
             document.getElementById('tasks-remaining-month').textContent = monthlyTasks.filter(t => t.status === translations.ru.statusNotDone).length;
             document.getElementById('tasks-remaining-year').textContent = yearlyTasks.filter(t => t.status === translations.ru.statusNotDone).length;
-            
             const expensesByCategory = {}; allExpenses.forEach(doc => { const e = doc.data(); expensesByCategory[e.category] = (expensesByCategory[e.category] || 0) + e.amount; });
             const sortedCategories = Object.entries(expensesByCategory).sort(([, a], [, b]) => b - a).slice(0, 7);
             const chartLabels = sortedCategories.map(item => item[0]);
@@ -1274,20 +894,46 @@
             expensesChart = new Chart(document.getElementById('expenses-chart').getContext('2d'), { type: 'bar', data: { labels: chartLabels, datasets: [{ label: `${translations[currentLang].chartLabel}`, data: chartData.map(amount => currentCurrency === 'USD' ? amount / exchangeRate : amount), backgroundColor: ['rgba(59,130,246,0.7)','rgba(239,68,68,0.7)','rgba(245,158,11,0.7)','rgba(16,185,129,0.7)','rgba(139,92,246,0.7)','rgba(236,72,153,0.7)','rgba(107,114,128,0.7)'], borderWidth: 1 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } } });
         }
         
-        // --- Modal Helpers ---
+        // --- UI Helpers ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container'); const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`; toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+
+        function showConfirmModal(text) {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('confirm-modal');
+                document.getElementById('confirm-modal-text').textContent = text;
+                const yesBtn = document.getElementById('confirm-modal-yes');
+                const noBtn = document.getElementById('confirm-modal-no');
+
+                const close = () => modal.close();
+                const onYes = () => { resolve(true); close(); cleanup(); };
+                const onNo = () => { resolve(false); close(); cleanup(); };
+
+                const cleanup = () => {
+                    yesBtn.removeEventListener('click', onYes);
+                    noBtn.removeEventListener('click', onNo);
+                };
+
+                yesBtn.addEventListener('click', onYes, { once: true });
+                noBtn.addEventListener('click', onNo, { once: true });
+                modal.addEventListener('close', () => { resolve(false); cleanup(); }, { once: true });
+                modal.showModal();
+            });
+        }
+
         function setupModal(modalId, openBtnId, resetFn) {
-            const modal = document.getElementById(modalId);
-            if (!modal) return;
+            const modal = document.getElementById(modalId); if (!modal) return;
             const openBtn = document.getElementById(openBtnId);
             if (openBtn) openBtn.addEventListener('click', () => { if (resetFn) resetFn(); modal.showModal(); });
             modal.querySelector('.cancel-btn')?.addEventListener('click', () => modal.close());
             modal.querySelector('form')?.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const handler = {
-                    'debt-form': handleDebtFormSubmit, 'debt-payment-form': handleDebtPaymentFormSubmit, 'recurring-expense-form': handleRecurringExpenseFormSubmit,
-                    'expense-form': handleExpenseFormSubmit, 'daily-task-form': handleDailyTaskFormSubmit, 'monthly-task-form': handleMonthlyTaskFormSubmit,
-                    'yearly-task-form': handleYearlyTaskFormSubmit, 'event-form': handleEventFormSubmit
-                }[e.target.id];
+                const handler = { 'debt-form': handleDebtFormSubmit, 'debt-payment-form': handleDebtPaymentFormSubmit, 'recurring-expense-form': handleRecurringExpenseFormSubmit, 'expense-form': handleExpenseFormSubmit, 'daily-task-form': handleDailyTaskFormSubmit, 'monthly-task-form': handleMonthlyTaskFormSubmit, 'yearly-task-form': handleYearlyTaskFormSubmit, 'event-form': handleEventFormSubmit }[e.target.id];
                 if (handler) handler(e.target);
                 modal.close();
             });
@@ -1296,68 +942,49 @@
         // --- Submit Handlers ---
         async function handleDebtFormSubmit(form) {
              try {
-                const id = form.querySelector('#debt-id').value;
-                const originalPaid = parseFloat(form.dataset.originalPaid || 0);
-                const newPaidAmount = parseFloat(form.querySelector('#debt-paid').value);
-                const name = form.querySelector('#debt-name').value;
+                const id = form.querySelector('#debt-id').value; const originalPaid = parseFloat(form.dataset.originalPaid || 0); const newPaidAmount = parseFloat(form.querySelector('#debt-paid').value); const name = form.querySelector('#debt-name').value;
                 const debtData = { name, totalAmount: parseFloat(form.querySelector('#debt-total').value), paidAmount: newPaidAmount, comment: form.querySelector('#debt-comment').value };
-                
-                if (id && newPaidAmount > originalPaid) {
-                    debtData.lastPaymentDate = Timestamp.now();
-                    await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${name}`, category: translations[currentLang].debtRepayments, amount: newPaidAmount - originalPaid, date: getTodayISOString(), debtPaymentId: id });
-                }
+                if (id && newPaidAmount > originalPaid) { debtData.lastPaymentDate = Timestamp.now(); await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${name}`, category: translations[currentLang].debtRepayments, amount: newPaidAmount - originalPaid, date: getTodayISOString(), debtPaymentId: id }); }
                 if (!id) {
-                    debtData.createdAt = Timestamp.now();
-                    const newDocRef = await addDoc(debtsCol, debtData);
-                     if (debtData.paidAmount > 0) {
-                        await updateDoc(newDocRef, { lastPaymentDate: Timestamp.now() });
-                        await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${name}`, category: translations[currentLang].debtRepayments, amount: debtData.paidAmount, date: getTodayISOString(), debtPaymentId: newDocRef.id });
-                    }
+                    debtData.createdAt = Timestamp.now(); const newDocRef = await addDoc(debtsCol, debtData);
+                     if (debtData.paidAmount > 0) { await updateDoc(newDocRef, { lastPaymentDate: Timestamp.now() }); await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${name}`, category: translations[currentLang].debtRepayments, amount: debtData.paidAmount, date: getTodayISOString(), debtPaymentId: newDocRef.id }); }
                 } else { await updateDoc(doc(debtsCol, id), debtData); }
-                form.dataset.originalPaid = "0";
-            } catch (error) { console.error("Error saving debt:", error); }
+                form.dataset.originalPaid = "0"; showToast(translations[currentLang].toastSuccess);
+            } catch (error) { showToast(translations[currentLang].toastError, 'error'); }
         }
         async function handleDebtPaymentFormSubmit(form) {
             try {
-                const id = form.querySelector('#debt-payment-id').value;
-                const amount = parseFloat(form.querySelector('#debt-payment-amount').value);
-                const debtRef = doc(debtsCol, id);
-                const debtDoc = await getDoc(debtRef);
+                const id = form.querySelector('#debt-payment-id').value; const amount = parseFloat(form.querySelector('#debt-payment-amount').value); const debtRef = doc(debtsCol, id); const debtDoc = await getDoc(debtRef);
                 if (debtDoc.exists()) {
                     const debt = debtDoc.data();
                     await updateDoc(debtRef, { paidAmount: (debt.paidAmount || 0) + amount, lastPaymentDate: Timestamp.now() });
                     await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${debt.name}`, category: translations[currentLang].debtRepayments, amount: amount, date: getTodayISOString(), debtPaymentId: id });
+                    showToast(translations[currentLang].toastSuccess);
                 }
-            } catch (error) { console.error("Error adding debt payment:", error); }
+            } catch (error) { showToast(translations[currentLang].toastError, 'error'); }
         }
         async function handleRecurringExpenseFormSubmit(form) {
             try {
-                 const id = form.querySelector('#recurring-expense-id').value;
-                const data = { name: form.querySelector('#recurring-expense-name').value, amount: parseFloat(form.querySelector('#recurring-expense-amount').value), dueDay: parseInt(form.querySelector('#recurring-expense-due-day').value), details: form.querySelector('#recurring-expense-details').value, };
-                let docRef;
-                if (!id) { data.createdAt = Timestamp.now(); docRef = await addDoc(recurringExpensesCol, data); } 
-                else { docRef = doc(recurringExpensesCol, id); await updateDoc(docRef, data); }
+                const id = form.querySelector('#recurring-expense-id').value; const data = { name: form.querySelector('#recurring-expense-name').value, amount: parseFloat(form.querySelector('#recurring-expense-amount').value), dueDay: parseInt(form.querySelector('#recurring-expense-due-day').value), details: form.querySelector('#recurring-expense-details').value, }; let docRef;
+                if (!id) { data.createdAt = Timestamp.now(); docRef = await addDoc(recurringExpensesCol, data); } else { docRef = doc(recurringExpensesCol, id); await updateDoc(docRef, data); }
                 const taskQuery = query(monthlyTasksCol, where("recurringExpenseId", "==", docRef.id), where("month", "==", selectedMonthId));
-                const existingTasks = await getDocs(taskQuery);
-                const [year, month] = selectedMonthId.split('-').map(Number);
-                const deadline = `${selectedMonthId}-${String(data.dueDay).padStart(2, '0')}`;
+                const existingTasks = await getDocs(taskQuery); const [year, month] = selectedMonthId.split('-').map(Number); const deadline = `${selectedMonthId}-${String(data.dueDay).padStart(2, '0')}`;
                 const taskData = { name: `${data.name}`, deadline, status: translations.ru.statusNotDone, recurringExpenseId: docRef.id, month: selectedMonthId, year: year, };
-                if(existingTasks.empty) await addDoc(monthlyTasksCol, taskData);
-                else await updateDoc(existingTasks.docs[0].ref, taskData);
-            } catch (error) { console.error("Error saving recurring expense:", error); }
+                if(existingTasks.empty) await addDoc(monthlyTasksCol, taskData); else await updateDoc(existingTasks.docs[0].ref, taskData);
+                showToast(translations[currentLang].toastSuccess);
+            } catch (error) { showToast(translations[currentLang].toastError, 'error'); }
         }
         async function handleExpenseFormSubmit(form) {
             try {
-                const id = form.querySelector('#expense-id').value;
-                const expenseData = { name: form.querySelector('#expense-name').value, category: form.querySelector('#expense-category').value, amount: parseFloat(form.querySelector('#expense-amount').value), date: form.querySelector('#expense-date').value, };
+                const id = form.querySelector('#expense-id').value; const expenseData = { name: form.querySelector('#expense-name').value, category: form.querySelector('#expense-category').value, amount: parseFloat(form.querySelector('#expense-amount').value), date: form.querySelector('#expense-date').value, };
                 const targetExpensesCol = collection(db, `users/${userId}/monthlyData/${expenseData.date.slice(0,7)}/expenses`);
-                if (!id) await addDoc(targetExpensesCol, expenseData);
-                else await updateDoc(doc(expensesCol, id), expenseData);
-            } catch (error) { console.error("Error saving expense:", error); }
+                if (!id) await addDoc(targetExpensesCol, expenseData); else await updateDoc(doc(expensesCol, id), expenseData);
+                showToast(translations[currentLang].toastSuccess);
+            } catch (error) { showToast(translations[currentLang].toastError, 'error'); }
         }
         const handleTaskSubmit = async (col, id, data) => {
-             try { if (!id) await addDoc(col, {...data, createdAt: Timestamp.now(), status: translations.ru.statusNotDone}); else await updateDoc(doc(col, id), data); } 
-             catch (error) { console.error("Error saving task:", error); }
+             try { if (!id) await addDoc(col, {...data, createdAt: Timestamp.now(), status: translations.ru.statusNotDone}); else await updateDoc(doc(col, id), data); showToast(translations[currentLang].toastSuccess); } 
+             catch (error) { showToast(translations[currentLang].toastError, 'error'); }
         };
         const handleDailyTaskFormSubmit = (form) => handleTaskSubmit(dailyTasksCol, form.querySelector('#daily-task-id').value, { name: form.querySelector('#daily-task-name').value, notes: form.querySelector('#daily-task-notes').value });
         const handleMonthlyTaskFormSubmit = (form) => handleTaskSubmit(monthlyTasksCol, form.querySelector('#monthly-task-id').value, { name: form.querySelector('#monthly-task-name').value, deadline: form.querySelector('#monthly-task-deadline').value, month: form.querySelector('#monthly-task-deadline').value.slice(0,7), year: new Date(form.querySelector('#monthly-task-deadline').value).getFullYear()});
@@ -1365,78 +992,24 @@
         
         async function handleEventFormSubmit(form) {
             try {
-                const id = form.querySelector('#event-id').value;
-                const category = form.querySelector('#event-category').value;
-                const t = translations[currentLang];
-                const data = { category, date: form.querySelector('#event-date').value };
-                let taskName = '';
-
+                const id = form.querySelector('#event-id').value; const category = form.querySelector('#event-category').value; const t = translations[currentLang]; const data = { category, date: form.querySelector('#event-date').value }; let taskName = '';
                 switch (category) {
-                    case 'birthday':
-                        const birthdayName = form.querySelector('#event-birthday-name').value;
-                        const birthYear = form.querySelector('#event-birthday-year').value;
-                        data.birthdayName = birthdayName; data.birthYear = birthYear; data.name = `${t.categoryBirthday}: ${birthdayName}`;
-                        taskName = `${t.taskCongratulate} ${birthdayName}`;
-                        if (birthYear) { const age = new Date(data.date).getFullYear() - parseInt(birthYear); if (age >= 0) taskName += ` (${t.taskTurning} ${age} ${t.taskYearsOld})`; }
-                        break;
-                    case 'meeting':
-                        const meetingWith = form.querySelector('#event-meeting-with').value;
-                        const meetingTime = form.querySelector('#event-meeting-time').value;
-                        const meetingPlace = form.querySelector('#event-meeting-place').value;
-                        data.meetingWith = meetingWith; data.meetingTime = meetingTime; data.meetingPlace = meetingPlace; data.name = `${t.categoryMeeting}: ${meetingWith}`;
-                        taskName = `${t.taskMeetWith} ${meetingWith}`;
-                        if (meetingTime) taskName += ` в ${meetingTime}`; if (meetingPlace) taskName += ` в ${meetingPlace}`;
-                        break;
-                    case 'wedding':
-                        const weddingNames = form.querySelector('#event-wedding-names').value;
-                        data.weddingNames = weddingNames; data.name = `${t.categoryWedding}: ${weddingNames}`; taskName = `${t.taskWeddingOf} ${weddingNames}`;
-                        break;
-                    default:
-                        data.name = form.querySelector('#event-name-generic').value; taskName = data.name;
-                        break;
+                    case 'birthday': const birthdayName = form.querySelector('#event-birthday-name').value; const birthYear = form.querySelector('#event-birthday-year').value; data.birthdayName = birthdayName; data.birthYear = birthYear; data.name = `${t.categoryBirthday}: ${birthdayName}`; taskName = `${t.taskCongratulate} ${birthdayName}`; if (birthYear) { const age = new Date(data.date).getFullYear() - parseInt(birthYear); if (age >= 0) taskName += ` (${t.taskTurning} ${age} ${t.taskYearsOld})`; } break;
+                    case 'meeting': const meetingWith = form.querySelector('#event-meeting-with').value; const meetingTime = form.querySelector('#event-meeting-time').value; const meetingPlace = form.querySelector('#event-meeting-place').value; data.meetingWith = meetingWith; data.meetingTime = meetingTime; data.meetingPlace = meetingPlace; data.name = `${t.categoryMeeting}: ${meetingWith}`; taskName = `${t.taskMeetWith} ${meetingWith}`; if (meetingTime) taskName += ` в ${meetingTime}`; if (meetingPlace) taskName += ` в ${meetingPlace}`; break;
+                    case 'wedding': const weddingNames = form.querySelector('#event-wedding-names').value; data.weddingNames = weddingNames; data.name = `${t.categoryWedding}: ${weddingNames}`; taskName = `${t.taskWeddingOf} ${weddingNames}`; break;
+                    default: data.name = form.querySelector('#event-name-generic').value; taskName = data.name; break;
                 }
-                
-                let eventId = id;
-                // Сначала сохраняем событие, чтобы получить ID для новых событий
-                if (id) {
-                    await updateDoc(doc(calendarEventsCol, id), data);
-                } else {
-                    const newDoc = await addDoc(calendarEventsCol, data);
-                    eventId = newDoc.id;
-                }
-                
-                if (!eventId) return; // На всякий случай
-
+                let eventId = id; if (id) { await updateDoc(doc(calendarEventsCol, id), data); } else { const newDoc = await addDoc(calendarEventsCol, data); eventId = newDoc.id; }
+                if (!eventId) return;
                 const shouldCreateTask = form.querySelector('#event-create-task').checked;
-                const taskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventId));
-                const existingTasksSnapshot = await getDocs(taskQuery);
-                const existingTaskDoc = existingTasksSnapshot.docs[0];
-
+                const taskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventId)); const existingTasksSnapshot = await getDocs(taskQuery); const existingTaskDoc = existingTasksSnapshot.docs[0];
                 const taskData = { name: taskName, deadline: data.date, status: translations.ru.statusNotDone, month: data.date.slice(0, 7), year: parseInt(data.date.slice(0, 4)), fromCalendar: eventId };
-
-                if (shouldCreateTask) {
-                    if (existingTaskDoc) {
-                        // Обновляем существующую задачу
-                        await updateDoc(existingTaskDoc.ref, taskData);
-                    } else {
-                        // Создаем новую задачу
-                        await addDoc(monthlyTasksCol, taskData);
-                    }
-                } else {
-                    if (existingTaskDoc) {
-                        // Удаляем задачу, если флажок снят
-                        await deleteDoc(existingTaskDoc.ref);
-                    }
-                }
-
-            } catch (error) { console.error("Error saving event and associated task:", error); }
+                if (shouldCreateTask) { if (existingTaskDoc) await updateDoc(existingTaskDoc.ref, taskData); else await addDoc(monthlyTasksCol, taskData); } 
+                else { if (existingTaskDoc) await deleteDoc(existingTaskDoc.ref); }
+                showToast(translations[currentLang].toastSuccess);
+            } catch (error) { showToast(translations[currentLang].toastError, 'error'); }
         };
-
-        async function handleCategoryFormSubmit(form) {
-            const nameInput = form.querySelector('#category-name');
-            const name = nameInput.value.trim();
-            if (name) { await addDoc(categoriesCol, { name: name, lang: currentLang }); nameInput.value = ''; }
-        }
+        async function handleCategoryFormSubmit(form) { const nameInput = form.querySelector('#category-name'); const name = nameInput.value.trim(); if (name) { await addDoc(categoriesCol, { name: name, lang: currentLang }); nameInput.value = ''; showToast(translations[currentLang].toastSuccess); } }
 
         setupModal('debt-modal', 'add-debt-btn', () => { document.getElementById('debt-form').reset(); document.getElementById('debt-id').value = ''; document.getElementById('debt-modal-title').textContent = translations[currentLang].addDebt; });
         setupModal('recurring-expense-modal', 'add-recurring-expense-btn', () => { document.getElementById('recurring-expense-form').reset(); document.getElementById('recurring-expense-id').value = ''; document.getElementById('recurring-expense-modal-title').textContent = translations[currentLang].addTemplate; });
@@ -1447,7 +1020,6 @@
         setupModal('category-modal', 'manage-categories-btn');
         document.getElementById('category-form').addEventListener('submit', (e) => { e.preventDefault(); handleCategoryFormSubmit(e.target); });
 
-        // Currency Switcher
         function setCurrency(currency) {
             currentCurrency = currency; localStorage.setItem('currency', currency);
             document.getElementById('currency-azn').classList.toggle('currency-btn-active', currency === 'AZN');
@@ -1459,9 +1031,7 @@
         document.getElementById('currency-usd').addEventListener('click', () => setCurrency('USD'));
         setCurrency(currentCurrency);
 
-        // --- AUTH LOGIC ---
-        const authForm = document.getElementById('auth-form');
-        const authError = document.getElementById('auth-error');
+        const authForm = document.getElementById('auth-form'); const authError = document.getElementById('auth-error');
         document.getElementById('login-btn')?.addEventListener('click', async (e) => {
             e.preventDefault(); const email = authForm.email.value; const password = authForm.password.value; authError.textContent = '';
             try { await signInWithEmailAndPassword(auth, email, password); } 
@@ -1472,64 +1042,30 @@
             try { await createUserWithEmailAndPassword(auth, email, password); } 
             catch (error) { const t=translations[currentLang]; authError.textContent = {'auth/invalid-email':t.authInvalidEmail,'auth/email-already-in-use':t.authEmailInUse,'auth/weak-password':t.authWeakPassword}[error.code]||t.authGenericError; }
         });
-        document.getElementById('google-signin-btn')?.addEventListener('click', async () => {
-            try { await signInWithPopup(auth, new GoogleAuthProvider()); } catch (error) { authError.textContent = translations[currentLang].authGenericError; }
-        });
+        document.getElementById('google-signin-btn')?.addEventListener('click', async () => { try { await signInWithPopup(auth, new GoogleAuthProvider()); } catch (error) { authError.textContent = translations[currentLang].authGenericError; } });
         document.getElementById('logout-btn')?.addEventListener('click', async () => await signOut(auth));
         
         document.getElementById('app').addEventListener('click', async (e) => {
-            const target = e.target; const id = target.dataset.id || target.closest('[data-id]')?.dataset.id;
-            if (!id) return;
+            const target = e.target; const id = target.dataset.id || target.closest('[data-id]')?.dataset.id; if (!id) return;
             const t = translations[currentLang];
-            const confirmDelete = () => confirm(t.deleteConfirm);
+            const confirm = () => showConfirmModal(t.deleteConfirm);
 
-            if (target.closest('.delete-category-btn')) { if (confirmDelete()) await deleteDoc(doc(categoriesCol, id)); }
-            else if (target.classList.contains('edit-debt-btn')) {
-                const debt = (await getDoc(doc(debtsCol, id))).data(); const form = document.getElementById('debt-form'); form.dataset.originalPaid = debt.paidAmount || 0;
-                form.querySelector('#debt-id').value = id; form.querySelector('#debt-name').value = debt.name; form.querySelector('#debt-total').value = debt.totalAmount; form.querySelector('#debt-paid').value = debt.paidAmount; form.querySelector('#debt-comment').value = debt.comment;
-                document.getElementById('debt-modal-title').textContent = t.editDebt; document.getElementById('debt-modal').showModal();
-            } else if (target.classList.contains('delete-debt-btn') && confirmDelete()) { await deleteDoc(doc(debtsCol, id)); } 
+            if (target.closest('.delete-category-btn')) { if (await confirm()) { await deleteDoc(doc(categoriesCol, id)); showToast(t.toastDeleted); }}
+            else if (target.classList.contains('edit-debt-btn')) { const debt = (await getDoc(doc(debtsCol, id))).data(); const form = document.getElementById('debt-form'); form.dataset.originalPaid = debt.paidAmount || 0; form.querySelector('#debt-id').value = id; form.querySelector('#debt-name').value = debt.name; form.querySelector('#debt-total').value = debt.totalAmount; form.querySelector('#debt-paid').value = debt.paidAmount; form.querySelector('#debt-comment').value = debt.comment; document.getElementById('debt-modal-title').textContent = t.editDebt; document.getElementById('debt-modal').showModal(); } 
+            else if (target.classList.contains('delete-debt-btn') && await confirm()) { await deleteDoc(doc(debtsCol, id)); showToast(t.toastDeleted); } 
             else if (target.classList.contains('add-debt-payment-btn')) { document.getElementById('debt-payment-id').value = id; document.getElementById('debt-payment-form').reset(); document.getElementById('debt-payment-modal').showModal(); } 
-            else if (target.classList.contains('edit-recurring-expense-btn')) {
-                const expense = (await getDoc(doc(recurringExpensesCol, id))).data(); const form = document.getElementById('recurring-expense-form');
-                form.querySelector('#recurring-expense-id').value = id; form.querySelector('#recurring-expense-name').value = expense.name; form.querySelector('#recurring-expense-amount').value = expense.amount; form.querySelector('#recurring-expense-due-day').value = expense.dueDay; form.querySelector('#recurring-expense-details').value = expense.details;
-                document.getElementById('recurring-expense-modal-title').textContent = t.editTemplate; document.getElementById('recurring-expense-modal').showModal();
-            } else if (target.classList.contains('delete-recurring-expense-btn') && confirmDelete()) {
-                await deleteDoc(doc(recurringExpensesCol, id)); const q = query(monthlyTasksCol, where("recurringExpenseId", "==", id));
-                const tasksToDelete = await getDocs(q); const batch = writeBatch(db); tasksToDelete.forEach(d => batch.delete(d.ref)); await batch.commit();
-            } else if (target.classList.contains('edit-expense-btn')) {
-                const expense = (await getDoc(doc(expensesCol, id))).data(); const form = document.getElementById('expense-form');
-                form.querySelector('#expense-id').value = id; form.querySelector('#expense-name').value = expense.name; form.querySelector('#expense-category').value = expense.category; form.querySelector('#expense-amount').value = expense.amount; form.querySelector('#expense-date').value = expense.date;
-                document.getElementById('expense-modal-title').textContent = t.editExpense; document.getElementById('expense-modal').showModal();
-            } else if (target.classList.contains('delete-expense-btn') && confirmDelete()) { await deleteDoc(doc(expensesCol, id)); }
-            else if (target.classList.contains('edit-daily-task-btn')) {
-                const task = (await getDoc(doc(dailyTasksCol, id))).data(); const form = document.getElementById('daily-task-form');
-                form.querySelector('#daily-task-id').value = id; form.querySelector('#daily-task-name').value = task.name; form.querySelector('#daily-task-notes').value = task.notes;
-                document.getElementById('daily-task-modal-title').textContent = t.editTask; document.getElementById('daily-task-modal').showModal();
-            } else if (target.classList.contains('delete-daily-task-btn') && confirmDelete()) { await deleteDoc(doc(dailyTasksCol, id)); }
-            else if (target.classList.contains('edit-monthly-task-btn')) {
-                const task = (await getDoc(doc(monthlyTasksCol, id))).data(); const form = document.getElementById('monthly-task-form');
-                form.querySelector('#monthly-task-id').value = id; form.querySelector('#monthly-task-name').value = task.name; form.querySelector('#monthly-task-deadline').value = task.deadline;
-                document.getElementById('monthly-task-modal-title').textContent = t.editTask; document.getElementById('monthly-task-modal').showModal();
-            } else if (target.classList.contains('delete-monthly-task-btn') && confirmDelete()) { await deleteDoc(doc(monthlyTasksCol, id)); }
-            else if (target.classList.contains('edit-yearly-task-btn')) {
-                const task = (await getDoc(doc(yearlyTasksCol, id))).data(); const form = document.getElementById('yearly-task-form');
-                form.querySelector('#yearly-task-id').value = id; form.querySelector('#yearly-task-name').value = task.name; form.querySelector('#yearly-task-deadline').value = task.deadline; form.querySelector('#yearly-task-notes').value = task.notes;
-                document.getElementById('yearly-task-modal-title').textContent = t.editTask; document.getElementById('yearly-task-modal').showModal();
-            } else if (target.classList.contains('delete-yearly-task-btn') && confirmDelete()) { await deleteDoc(doc(yearlyTasksCol, id)); }
-            else if (target.id === 'delete-event-btn') {
-                const eventId = document.getElementById('event-id').value;
-                if(eventId && confirmDelete()) {
-                    await deleteDoc(doc(calendarEventsCol, eventId));
-                    const taskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventId));
-                    const tasksSnapshot = await getDocs(taskQuery);
-                    const batch = writeBatch(db); tasksSnapshot.forEach(d => batch.delete(d.ref)); await batch.commit();
-                    document.getElementById('event-modal').close();
-                }
-            }
+            else if (target.classList.contains('edit-recurring-expense-btn')) { const expense = (await getDoc(doc(recurringExpensesCol, id))).data(); const form = document.getElementById('recurring-expense-form'); form.querySelector('#recurring-expense-id').value = id; form.querySelector('#recurring-expense-name').value = expense.name; form.querySelector('#recurring-expense-amount').value = expense.amount; form.querySelector('#recurring-expense-due-day').value = expense.dueDay; form.querySelector('#recurring-expense-details').value = expense.details; document.getElementById('recurring-expense-modal-title').textContent = t.editTemplate; document.getElementById('recurring-expense-modal').showModal(); } 
+            else if (target.classList.contains('delete-recurring-expense-btn') && await confirm()) { await deleteDoc(doc(recurringExpensesCol, id)); const q = query(monthlyTasksCol, where("recurringExpenseId", "==", id)); const tasksToDelete = await getDocs(q); const batch = writeBatch(db); tasksToDelete.forEach(d => batch.delete(d.ref)); await batch.commit(); showToast(t.toastDeleted); } 
+            else if (target.classList.contains('edit-expense-btn')) { const expense = (await getDoc(doc(expensesCol, id))).data(); const form = document.getElementById('expense-form'); form.querySelector('#expense-id').value = id; form.querySelector('#expense-name').value = expense.name; form.querySelector('#expense-category').value = expense.category; form.querySelector('#expense-amount').value = expense.amount; form.querySelector('#expense-date').value = expense.date; document.getElementById('expense-modal-title').textContent = t.editExpense; document.getElementById('expense-modal').showModal(); } 
+            else if (target.classList.contains('delete-expense-btn') && await confirm()) { await deleteDoc(doc(expensesCol, id)); showToast(t.toastDeleted); }
+            else if (target.classList.contains('edit-daily-task-btn')) { const task = (await getDoc(doc(dailyTasksCol, id))).data(); const form = document.getElementById('daily-task-form'); form.querySelector('#daily-task-id').value = id; form.querySelector('#daily-task-name').value = task.name; form.querySelector('#daily-task-notes').value = task.notes; document.getElementById('daily-task-modal-title').textContent = t.editTask; document.getElementById('daily-task-modal').showModal(); } 
+            else if (target.classList.contains('delete-daily-task-btn') && await confirm()) { await deleteDoc(doc(dailyTasksCol, id)); showToast(t.toastDeleted); }
+            else if (target.classList.contains('edit-monthly-task-btn')) { const task = (await getDoc(doc(monthlyTasksCol, id))).data(); const form = document.getElementById('monthly-task-form'); form.querySelector('#monthly-task-id').value = id; form.querySelector('#monthly-task-name').value = task.name; form.querySelector('#monthly-task-deadline').value = task.deadline; document.getElementById('monthly-task-modal-title').textContent = t.editTask; document.getElementById('monthly-task-modal').showModal(); } 
+            else if (target.classList.contains('delete-monthly-task-btn') && await confirm()) { await deleteDoc(doc(monthlyTasksCol, id)); showToast(t.toastDeleted); }
+            else if (target.classList.contains('edit-yearly-task-btn')) { const task = (await getDoc(doc(yearlyTasksCol, id))).data(); const form = document.getElementById('yearly-task-form'); form.querySelector('#yearly-task-id').value = id; form.querySelector('#yearly-task-name').value = task.name; form.querySelector('#yearly-task-deadline').value = task.deadline; form.querySelector('#yearly-task-notes').value = task.notes; document.getElementById('yearly-task-modal-title').textContent = t.editTask; document.getElementById('yearly-task-modal').showModal(); } 
+            else if (target.classList.contains('delete-yearly-task-btn') && await confirm()) { await deleteDoc(doc(yearlyTasksCol, id)); showToast(t.toastDeleted); }
+            else if (target.id === 'delete-event-btn') { const eventId = document.getElementById('event-id').value; if(eventId && await confirm()) { await deleteDoc(doc(calendarEventsCol, eventId)); const taskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventId)); const tasksSnapshot = await getDocs(taskQuery); const batch = writeBatch(db); tasksSnapshot.forEach(d => batch.delete(d.ref)); await batch.commit(); document.getElementById('event-modal').close(); showToast(t.toastDeleted); } }
         });
-
     </script>
 </body>
-
 </html>
