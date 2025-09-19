@@ -247,59 +247,59 @@
 
             <div id="debts-page" class="page-content hidden">
                 <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-semibold" data-i18n="debtsTitle">Общие долги</h2><button id="add-debt-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" data-i18n="addDebt">Добавить долг</button></div>
-                <div class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
+                <div id="debts-table-wrapper" class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
                     <table class="w-full text-sm text-left responsive-table">
                         <thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="px-6 py-3" data-i18n="debtName">Долг (Имя)</th><th class="px-6 py-3" data-i18n="amount">Сумма</th><th class="px-6 py-3" data-i18n="paid">Оплачено</th><th class="px-6 py-3" data-i18n="remaining">Осталось</th><th class="px-6 py-3" data-i18n="lastPaymentDate">Дата последней оплаты</th><th class="px-6 py-3" data-i18n="comments">Комментарии</th><th class="px-6 py-3" data-i18n="actions">Действия</th></tr></thead>
                         <tbody id="debts-table"></tbody>
                     </table>
-                     <div id="debts-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyDebts"></div>
                 </div>
+                <div id="debts-empty" class="hidden"></div>
             </div>
 
             <div id="recurring-expenses-page" class="page-content hidden">
                 <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-semibold"><span data-i18n="recurringTitle">Ежемесячные расходы</span> (<span id="recurring-month-name"></span>)</h2><button id="add-recurring-expense-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" data-i18n="addTemplate">Добавить шаблон</button></div>
-                 <div class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
+                <div id="recurring-expenses-table-wrapper" class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
                     <table class="w-full text-sm text-left responsive-table">
                         <thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="px-6 py-3" data-i18n="name">Наименование</th><th class="px-6 py-3" data-i18n="amount">Сумма</th><th class="px-6 py-3" data-i18n="paymentDay">День оплаты</th><th class="px-6 py-3" data-i18n="status">Статус оплаты</th><th class="px-6 py-3" data-i18n="details">Детали</th><th class="px-6 py-3" data-i18n="templateActions">Действия с шаблоном</th></tr></thead>
                         <tbody id="recurring-expenses-table"></tbody>
                     </table>
-                     <div id="recurring-expenses-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyRecurring"></div>
                 </div>
+                <div id="recurring-expenses-empty" class="hidden"></div>
             </div>
 
             <div id="expenses-page" class="page-content hidden">
                  <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-semibold"><span data-i18n="expensesTitle">Все расходы за</span> <span class="current-month-name"></span></h2><div class="flex space-x-2"><button id="manage-categories-btn" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition" data-i18n="manageCategories">Управление категориями</button><button id="add-expense-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" data-i18n="addExpense">Добавить расход</button></div></div>
-                <div class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
+                <div id="expenses-table-wrapper" class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
                     <table class="w-full text-sm text-left responsive-table">
                         <thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="px-6 py-3" data-i18n="name">Наименование</th><th class="px-6 py-3" data-i18n="category">Категория</th><th class="px-6 py-3" data-i18n="amount">Сумма</th><th class="px-6 py-3" data-i18n="date">Дата</th><th class="px-6 py-3" data-i18n="actions">Действия</th></tr></thead>
                         <tbody id="expenses-table"></tbody>
                     </table>
-                     <div id="expenses-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyExpenses"></div>
                 </div>
+                <div id="expenses-empty" class="hidden"></div>
             </div>
             
             <div id="tasks-page" class="page-content hidden">
                 <div class="mb-4 border-b border-gray-200"><nav class="flex -mb-px" aria-label="Tabs"><button class="task-tab-button task-tab-active" data-task-tab="today"><span data-i18n="taskToday">На сегодня</span> (<span id="today-date"></span>)</button><button class="task-tab-button" data-task-tab="month"><span data-i18n="taskMonth">На месяц</span></button><button class="task-tab-button" data-task-tab="year"><span data-i18n="taskYear">На год</span></button></nav></div>
                 <div id="task-tab-today" class="task-tab-content">
                     <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-semibold" data-i18n="taskTodayTitle">Задачи на сегодня</h3><button id="add-daily-task-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg" data-i18n="addTask">Добавить задачу</button></div>
-                    <div class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
+                    <div id="daily-tasks-table-wrapper" class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
                         <table class="w-full text-sm text-left responsive-table"><thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="w-1/3 px-6 py-3" data-i18n="name">Имя</th><th class="px-6 py-3" data-i18n="status">Статус</th><th class="w-1/3 px-6 py-3" data-i18n="notes">Заметки</th><th class="px-6 py-3" data-i18n="actions">Действия</th></tr></thead><tbody id="daily-tasks-table"></tbody></table>
-                        <div id="daily-tasks-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyTasks"></div>
                     </div>
+                    <div id="daily-tasks-empty" class="hidden"></div>
                 </div>
                 <div id="task-tab-month" class="task-tab-content hidden">
                     <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-semibold" data-i18n="taskMonthTitle">Задачи на месяц</h3><button id="add-monthly-task-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg" data-i18n="addTask">Добавить задачу</button></div>
-                    <div class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
+                    <div id="monthly-tasks-table-wrapper" class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
                         <table class="w-full text-sm text-left responsive-table"><thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="px-6 py-3" data-i18n="name">Имя</th><th class="px-6 py-3" data-i18n="deadline">Дедлайн</th><th class="px-6 py-3" data-i18n="status">Статус</th><th class="px-6 py-3" data-i18n="actions">Действия</th></tr></thead><tbody id="monthly-tasks-table"></tbody></table>
-                        <div id="monthly-tasks-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyTasks"></div>
                     </div>
+                    <div id="monthly-tasks-empty" class="hidden"></div>
                 </div>
                 <div id="task-tab-year" class="task-tab-content hidden">
                     <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-semibold" data-i18n="taskYearTitle">Задачи на год</h3><button id="add-yearly-task-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg" data-i18n="addTask">Добавить задачу</button></div>
-                    <div class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
+                    <div id="yearly-tasks-table-wrapper" class="bg-white rounded-lg shadow-sm overflow-x-auto md:bg-transparent md:shadow-none">
                         <table class="w-full text-sm text-left responsive-table"><thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="w-1/3 px-6 py-3" data-i18n="name">Имя</th><th class="px-6 py-3" data-i18n="deadline">Дедлайн</th><th class="px-6 py-3" data-i18n="status">Статус</th><th class="w-1/3 px-6 py-3" data-i18n="notes">Заметки</th><th class="px-6 py-3" data-i18n="actions">Действия</th></tr></thead><tbody id="yearly-tasks-table"></tbody></table>
-                        <div id="yearly-tasks-empty" class="text-center p-8 text-gray-500 hidden" data-i18n="emptyTasks"></div>
                     </div>
+                    <div id="yearly-tasks-empty" class="hidden"></div>
                 </div>
             </div>
 
@@ -730,7 +730,17 @@
         const createEmptyState = (messageKey) => `<div class="flex flex-col items-center justify-center p-12 bg-gray-50 rounded-lg"><svg class="w-16 h-16 text-gray-300 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><p class="text-gray-500 font-medium">${translations[currentLang][messageKey]}</p></div>`;
 
         function renderDebts(docs) {
-            const tableBody = document.getElementById('debts-table'); const emptyState = document.getElementById('debts-empty'); if (docs.length === 0) { tableBody.innerHTML = ''; emptyState.innerHTML = createEmptyState('emptyDebts'); emptyState.classList.remove('hidden'); return; } emptyState.classList.add('hidden');
+            const tableWrapper = document.getElementById('debts-table-wrapper');
+            const tableBody = document.getElementById('debts-table'); 
+            const emptyState = document.getElementById('debts-empty'); 
+            if (docs.length === 0) { 
+                tableWrapper.classList.add('hidden');
+                emptyState.innerHTML = createEmptyState('emptyDebts'); 
+                emptyState.classList.remove('hidden'); 
+                return; 
+            } 
+            tableWrapper.classList.remove('hidden');
+            emptyState.classList.add('hidden');
             tableBody.innerHTML = docs.map(doc => {
                 const debt = doc.data(), id = doc.id; const remaining = (debt.totalAmount || 0) - (debt.paidAmount || 0);
                 let colorClass = remaining <= 0 ? 'text-green-600' : (debt.paidAmount > 0 ? 'text-yellow-600' : 'text-red-600');
@@ -740,8 +750,18 @@
         }
 
         function renderRecurringExpenses() {
-            const tableBody = document.getElementById('recurring-expenses-table'); const emptyState = document.getElementById('recurring-expenses-empty'); if (allRecurringTemplates.length === 0) { tableBody.innerHTML = ''; emptyState.innerHTML = createEmptyState('emptyRecurring'); emptyState.classList.remove('hidden'); return; }
+            const tableWrapper = document.getElementById('recurring-expenses-table-wrapper');
+            const tableBody = document.getElementById('recurring-expenses-table'); 
+            const emptyState = document.getElementById('recurring-expenses-empty');
+            if (allRecurringTemplates.length === 0) {
+                tableWrapper.classList.add('hidden');
+                emptyState.innerHTML = createEmptyState('emptyRecurring');
+                emptyState.classList.remove('hidden'); 
+                return;
+            }
+            tableWrapper.classList.remove('hidden');
             emptyState.classList.add('hidden');
+
             const todayDay = new Date(getTodayISOString() + 'T00:00:00').getDate();
             tableBody.innerHTML = allRecurringTemplates.map(template => {
                 const status = currentMonthStatuses[template.id] || translations.ru.unpaidStatus;
@@ -765,7 +785,16 @@
         }
         
         function renderExpenses(docs) {
-            const tableBody = document.getElementById('expenses-table'); const emptyState = document.getElementById('expenses-empty'); if (docs.length === 0) { tableBody.innerHTML = ''; emptyState.innerHTML = createEmptyState('emptyExpenses'); emptyState.classList.remove('hidden'); return; }
+            const tableWrapper = document.getElementById('expenses-table-wrapper');
+            const tableBody = document.getElementById('expenses-table'); 
+            const emptyState = document.getElementById('expenses-empty'); 
+            if (docs.length === 0) { 
+                tableWrapper.classList.add('hidden');
+                emptyState.innerHTML = createEmptyState('emptyExpenses'); 
+                emptyState.classList.remove('hidden');
+                return; 
+            }
+            tableWrapper.classList.remove('hidden');
             emptyState.classList.add('hidden');
             const sortedDocs = docs.sort((a, b) => b.data().date.localeCompare(a.data().date));
             tableBody.innerHTML = sortedDocs.map(doc => {
@@ -789,11 +818,48 @@
             selectHTML += `</select>`; return selectHTML;
         }
 
-        const renderTaskTable = (tableId, emptyId, docs, rowRenderer) => { const t = document.getElementById(tableId), e = document.getElementById(emptyId); if(docs.length === 0) { t.innerHTML = ''; e.innerHTML = createEmptyState('emptyTasks'); e.classList.remove('hidden'); return; } e.classList.add('hidden'); t.innerHTML = docs.map(rowRenderer).join(''); };
-        
-        function renderDailyTasks(docs) { renderTaskTable('daily-tasks-table', 'daily-tasks-empty', docs, d => { const t = d; const s = t.status; return `<tr class="md:border-b-0 ${t.carriedOver ? 'bg-blue-50' : ''}"><td data-label="${translations[currentLang].name}" class="${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td data-label="${translations[currentLang].status}">${createTaskStatusDropdown(t.id, s, 'dailyTasks')}</td><td data-label="${translations[currentLang].notes}"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${t.id}" data-col="dailyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td data-label="${translations[currentLang].actions}" class="flex gap-2"><button data-id="${t.id}" class="edit-daily-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-daily-task-btn text-red-600">🗑️</button></td></tr>`; }); }
-        function renderMonthlyTasks(docs) { renderTaskTable('monthly-tasks-table', 'monthly-tasks-empty', docs.sort((a,b) => a.deadline.localeCompare(b.deadline)), d => { const t = d; const s = t.status; return `<tr class="md:border-b-0 ${t.carriedOver?'bg-yellow-50':''}"><td data-label="${translations[currentLang].name}" class="${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td data-label="${translations[currentLang].deadline}">${formatISODateForDisplay(t.deadline)}</td><td data-label="${translations[currentLang].status}">${createTaskStatusDropdown(t.id, s, 'monthlyTasks')}</td><td data-label="${translations[currentLang].actions}" class="flex gap-2">${!t.recurringExpenseId && !t.fromCalendar?`<button data-id="${t.id}" class="edit-monthly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-monthly-task-btn text-red-600">🗑️</button>`:''}</td></tr>`; }); }
-        function renderYearlyTasks(docs) { renderTaskTable('yearly-tasks-table', 'yearly-tasks-empty', docs, d => { const t = d; const s = t.status; return `<tr class="md:border-b-0"><td data-label="${translations[currentLang].name}" class="${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td data-label="${translations[currentLang].deadline}">${formatISODateForDisplay(t.deadline, {year: 'numeric'})}</td><td data-label="${translations[currentLang].status}">${createTaskStatusDropdown(t.id, s, 'yearlyTasks')}</td><td data-label="${translations[currentLang].notes}"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${t.id}" data-col="yearlyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td data-label="${translations[currentLang].actions}" class="flex gap-2"><button data-id="${t.id}" class="edit-yearly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-yearly-task-btn text-red-600">🗑️</button></td></tr>`; }); }
+        function renderDailyTasks(docs) { 
+            const tableWrapper = document.getElementById('daily-tasks-table-wrapper');
+            const tableBody = document.getElementById('daily-tasks-table');
+            const emptyState = document.getElementById('daily-tasks-empty');
+            if(docs.length === 0) { 
+                tableWrapper.classList.add('hidden');
+                emptyState.innerHTML = createEmptyState('emptyTasks');
+                emptyState.classList.remove('hidden');
+                return;
+            } 
+            tableWrapper.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            tableBody.innerHTML = docs.map(d => { const t = d; const s = t.status; return `<tr class="md:border-b-0 ${t.carriedOver ? 'bg-blue-50' : ''}"><td data-label="${translations[currentLang].name}" class="${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td data-label="${translations[currentLang].status}">${createTaskStatusDropdown(t.id, s, 'dailyTasks')}</td><td data-label="${translations[currentLang].notes}"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${t.id}" data-col="dailyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td data-label="${translations[currentLang].actions}" class="flex gap-2"><button data-id="${t.id}" class="edit-daily-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-daily-task-btn text-red-600">🗑️</button></td></tr>`; }).join(''); 
+        }
+        function renderMonthlyTasks(docs) {
+            const tableWrapper = document.getElementById('monthly-tasks-table-wrapper');
+            const tableBody = document.getElementById('monthly-tasks-table');
+            const emptyState = document.getElementById('monthly-tasks-empty');
+            if(docs.length === 0) { 
+                tableWrapper.classList.add('hidden');
+                emptyState.innerHTML = createEmptyState('emptyTasks');
+                emptyState.classList.remove('hidden');
+                return;
+            } 
+            tableWrapper.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            tableBody.innerHTML = docs.sort((a,b) => a.deadline.localeCompare(b.deadline)).map(d => { const t = d; const s = t.status; return `<tr class="md:border-b-0 ${t.carriedOver?'bg-yellow-50':''}"><td data-label="${translations[currentLang].name}" class="${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td data-label="${translations[currentLang].deadline}">${formatISODateForDisplay(t.deadline)}</td><td data-label="${translations[currentLang].status}">${createTaskStatusDropdown(t.id, s, 'monthlyTasks')}</td><td data-label="${translations[currentLang].actions}" class="flex gap-2">${!t.recurringExpenseId && !t.fromCalendar?`<button data-id="${t.id}" class="edit-monthly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-monthly-task-btn text-red-600">🗑️</button>`:''}</td></tr>`; }).join(''); 
+        }
+        function renderYearlyTasks(docs) { 
+            const tableWrapper = document.getElementById('yearly-tasks-table-wrapper');
+            const tableBody = document.getElementById('yearly-tasks-table');
+            const emptyState = document.getElementById('yearly-tasks-empty');
+             if(docs.length === 0) { 
+                tableWrapper.classList.add('hidden');
+                emptyState.innerHTML = createEmptyState('emptyTasks');
+                emptyState.classList.remove('hidden');
+                return;
+            } 
+            tableWrapper.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            tableBody.innerHTML = docs.map(d => { const t = d; const s = t.status; return `<tr class="md:border-b-0"><td data-label="${translations[currentLang].name}" class="${s === translations.ru.statusDone ? 'line-through text-gray-500' : ''}">${t.name}</td><td data-label="${translations[currentLang].deadline}">${formatISODateForDisplay(t.deadline, {year: 'numeric'})}</td><td data-label="${translations[currentLang].status}">${createTaskStatusDropdown(t.id, s, 'yearlyTasks')}</td><td data-label="${translations[currentLang].notes}"><input type="text" class="editable-task-notes bg-transparent w-full p-1" data-id="${t.id}" data-col="yearlyTasks" value="${t.notes||''}" placeholder="${translations[currentLang].placeholderComment}"></td><td data-label="${translations[currentLang].actions}" class="flex gap-2"><button data-id="${t.id}" class="edit-yearly-task-btn text-blue-600">✏️</button><button data-id="${t.id}" class="delete-yearly-task-btn text-red-600">🗑️</button></td></tr>`; }).join(''); 
+        }
 
         function renderMonthSelector(months) { const s=document.getElementById('month-selector'); s.innerHTML = months.map(m => `<option value="${m}" ${m===selectedMonthId?'selected':''}>${formatMonthId(m)}</option>`).join(''); }
 
