@@ -620,6 +620,7 @@
             debtsCol = collection(db, `users/${userId}/debts`);
             recurringExpensesCol = collection(db, `users/${userId}/recurringExpenses`);
             monthlyDataCol = collection(db, `users/${userId}/monthlyData`);
+            // Обновляем expensesCol с актуальным selectedMonthId при каждой смене месяца
             expensesCol = collection(db, `users/${userId}/monthlyData/${selectedMonthId}/expenses`);
             recurringExpenseStatusesCol = collection(db, `users/${userId}/monthlyData/${selectedMonthId}/recurringExpenseStatuses`);
             dailyTasksCol = collection(db, `users/${userId}/dailyTasks/${todayId}/tasks`);
