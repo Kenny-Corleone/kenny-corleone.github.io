@@ -363,7 +363,6 @@
             measurementId: "G-E1MWRNNKDM"
         };
         
-        // --- Инициализация Firebase ---
         let app, db, auth;
         try {
             app = initializeApp(firebaseConfig);
@@ -383,7 +382,7 @@
         let selectedMonthId;
         
         let currentCurrency = localStorage.getItem('currency') || 'AZN';
-        const exchangeRate = 1.70; // AZN per USD
+        const exchangeRate = 1.70;
 
         let allDebts = [], allExpenses = [], allRecurringTemplates = [], currentMonthStatuses = {};
         let dailyTasks = [], monthlyTasks = [], yearlyTasks = [];
@@ -518,6 +517,12 @@
             const defaultOptions = { day: 'numeric', month: 'long' };
             if (options.year) defaultOptions.year = 'numeric';
             return date.toLocaleDateString(currentLang === 'ru' ? 'ru-RU' : 'en-US', { ...defaultOptions, ...options });
+        }
+        function formatMonthId(monthId) {
+            if (!monthId) return '';
+            const [year, month] = monthId.split('-');
+            const date = new Date(year, month - 1);
+             return date.toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US', { month: 'long', year: 'numeric', timeZone: 'Asia/Baku' });
         }
         
         function setLanguage(lang) {
@@ -894,7 +899,6 @@
             expensesChart = new Chart(document.getElementById('expenses-chart').getContext('2d'), { type: 'bar', data: { labels: chartLabels, datasets: [{ label: `${translations[currentLang].chartLabel}`, data: chartData.map(amount => currentCurrency === 'USD' ? amount / exchangeRate : amount), backgroundColor: ['rgba(59,130,246,0.7)','rgba(239,68,68,0.7)','rgba(245,158,11,0.7)','rgba(16,185,129,0.7)','rgba(139,92,246,0.7)','rgba(236,72,153,0.7)','rgba(107,114,128,0.7)'], borderWidth: 1 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } } });
         }
         
-        // --- UI Helpers ---
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container'); const toast = document.createElement('div');
             toast.className = `toast toast-${type}`; toast.textContent = message;
@@ -939,7 +943,6 @@
             });
         }
         
-        // --- Submit Handlers ---
         async function handleDebtFormSubmit(form) {
              try {
                 const id = form.querySelector('#debt-id').value; const originalPaid = parseFloat(form.dataset.originalPaid || 0); const newPaidAmount = parseFloat(form.querySelector('#debt-paid').value); const name = form.querySelector('#debt-name').value;
@@ -1069,3 +1072,4 @@
     </script>
 </body>
 </html>
+
