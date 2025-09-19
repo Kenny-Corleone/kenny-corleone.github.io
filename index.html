@@ -897,7 +897,15 @@
         document.getElementById('prev-month-btn').addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() - 1); renderCalendar(); });
         document.getElementById('next-month-btn').addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() + 1); renderCalendar(); });
 
-        document.getElementById('month-selector').addEventListener('change', async (e) => { selectedMonthId = e.target.value; await ensureRecurringTasksForMonth(selectedMonthId); updateMonthDisplay(); attachListeners(); });
+        document.getElementById('month-selector').addEventListener('change', async (e) => { 
+            selectedMonthId = e.target.value; 
+            // Обновляем calendarDate для корректного отображения годовых задач
+            const [year, month] = selectedMonthId.split('-').map(Number);
+            calendarDate = new Date(year, month - 1, 1);
+            await ensureRecurringTasksForMonth(selectedMonthId); 
+            updateMonthDisplay(); 
+            attachListeners(); 
+        });
         document.getElementById('app').addEventListener('change', async (e) => {
             const id = e.target.dataset.id;
             if (e.target.classList.contains('task-status-select')) {
@@ -1071,6 +1079,15 @@
                 if (!id) {
                     const targetCol = collection(db, `users/${userId}/monthlyData/${newMonthId}/expenses`);
                     await addDoc(targetCol, expenseData);
+                    
+                    // Если расход добавлен в другой месяц, переключаемся на него и обновляем подписки
+                    if (newMonthId !== selectedMonthId) {
+                        selectedMonthId = newMonthId;
+                        const [year, month] = selectedMonthId.split('-').map(Number);
+                        calendarDate = new Date(year, month - 1, 1);
+                        updateMonthDisplay();
+                        attachListeners();
+                    }
                 } else {
                     const originalDocRef = doc(expensesCol, id);
                     const originalDocSnap = await getDoc(originalDocRef);
@@ -1083,6 +1100,13 @@
                             batch.delete(originalDocRef);
                             batch.set(doc(newTargetCol), expenseData);
                             await batch.commit();
+                            
+                            // Переключаемся на месяц расхода
+                            selectedMonthId = newMonthId;
+                            const [year, month] = selectedMonthId.split('-').map(Number);
+                            calendarDate = new Date(year, month - 1, 1);
+                            updateMonthDisplay();
+                            attachListeners();
                         } else {
                             await updateDoc(originalDocRef, expenseData);
                         }
