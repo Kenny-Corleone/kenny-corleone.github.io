@@ -159,7 +159,7 @@
             </div>
             <div class="bg-white rounded-2xl shadow-xl p-3 sm:p-4 space-y-3">
                  <button type="button" id="google-signin-btn" class="group relative w-full flex justify-center items-center py-2 px-3 border border-gray-300 text-xs font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    <svg class="h-3 w-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px" height="48px"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.521-3.108-11.28-7.481l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C39.99,36.566,44,30.084,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg>
+                    <svg class="h-3 w-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px" height="48px"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.521-3.108-11.28-7.481l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C39.99,36.566,44,30.84,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg>
                     <span data-i18n="loginWithGoogle">Войти через Google</span>
                 </button>
                 <div class="relative">
@@ -667,31 +667,33 @@
         async function promoteMonthlyTasksToDaily(todayId) {
             if (!userId) return;
             try {
-                // Ищем задачи на месяц, у которых дедлайн - сегодня
-                const q = query(monthlyTasksCol, where("deadline", "==", todayId));
-                const tasksToPromoteSnapshot = await getDocs(q);
+                // Запрашиваем все задачи на текущий месяц
+                const currentMonth = todayId.slice(0, 7);
+                const q = query(monthlyTasksCol, where("month", "==", currentMonth));
+                const monthlyTasksSnapshot = await getDocs(q);
 
-                if (!tasksToPromoteSnapshot.empty) {
+                // Фильтруем задачи, у которых дедлайн - сегодня, уже на стороне клиента
+                const tasksToPromote = monthlyTasksSnapshot.docs.filter(doc => doc.data().deadline === todayId);
+
+                if (tasksToPromote.length > 0) {
                     const batch = writeBatch(db);
                     const todayTasksColRef = collection(db, `users/${userId}/dailyTasks/${todayId}/tasks`);
                     
-                    // Получаем существующие задачи на день, чтобы избежать дубликатов
                     const existingDailyTasksSnapshot = await getDocs(todayTasksColRef);
                     const existingPromotedIds = new Set(existingDailyTasksSnapshot.docs.map(doc => doc.data().fromMonthlyTaskId));
 
-                    tasksToPromoteSnapshot.forEach(docSnap => {
+                    tasksToPromote.forEach(docSnap => {
                         const monthlyTask = docSnap.data();
                         const monthlyTaskId = docSnap.id;
 
-                        // Проверяем, не была ли эта задача уже добавлена
                         if (!existingPromotedIds.has(monthlyTaskId)) {
                             const newDailyTaskRef = doc(todayTasksColRef);
                             batch.set(newDailyTaskRef, {
                                 name: monthlyTask.name,
                                 status: monthlyTask.status,
                                 notes: monthlyTask.notes || '',
-                                fromCalendar: monthlyTask.fromCalendar || null, // Важно для правила "не переносить"
-                                fromMonthlyTaskId: monthlyTaskId // Связь для предотвращения дубликатов
+                                fromCalendar: monthlyTask.fromCalendar || null,
+                                fromMonthlyTaskId: monthlyTaskId
                             });
                         }
                     });
@@ -933,7 +935,18 @@
                 const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const monthDayStr = dateStr.substring(5);
                 const isToday = dateStr === todayISO;
-                const dayEvents = calendarEvents.filter(e => e.category === 'birthday' ? e.date.substring(5) === monthDayStr : e.date === dateStr);
+                const dayEvents = calendarEvents.filter(e => {
+                    // Убедимся, что у события есть корректная дата
+                    if (!e || typeof e.date !== 'string' || e.date.length < 10) {
+                        return false;
+                    }
+                    // Логика для повторяющихся дней рождения
+                    if (e.category === 'birthday') {
+                        return e.date.substring(5) === monthDayStr;
+                    }
+                    // Логика для всех остальных событий (свадьбы, встречи и т.д.)
+                    return e.date === dateStr;
+                });
                 const dayEl = document.createElement('div');
                 dayEl.className = `calendar-day border border-gray-200 p-2 flex flex-col cursor-pointer hover:bg-gray-50 ${isToday ? 'calendar-day-today' : ''}`;
                 dayEl.dataset.date = dateStr;
