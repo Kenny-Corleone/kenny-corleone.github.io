@@ -143,6 +143,7 @@
         </div>
     </div>
 
+    <!-- AUTHENTICATION SCREEN -->
     <div id="auth-container" class="hidden min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 py-4 px-4">
         <div class="max-w-sm w-full space-y-6">
             <div class="flex justify-center space-x-2 mb-4">
@@ -197,6 +198,21 @@
                 <button id="lang-ru" title="Русский"><img src="https://placehold.co/32x24/d52b1e/ffffff?text=RU" alt="RU" class="rounded-sm cursor-pointer"></button>
                 <button id="lang-en" title="English"><img src="https://placehold.co/32x24/012169/ffffff?text=EN" alt="EN" class="rounded-sm cursor-pointer"></button>
                 <button id="lang-az" title="Azərbaycan"><img src="https://placehold.co/32x24/00a651/ffffff?text=AZ" alt="AZ" class="rounded-sm cursor-pointer"></button>
+            </div>
+            
+            <!-- Radio Stream Controls -->
+            <div id="radio-controls" class="flex items-center space-x-2 bg-gray-100 rounded-lg p-2">
+                <button id="radio-play-pause" class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors">
+                    <span id="radio-play-icon">▶️</span>
+                </button>
+                <div class="flex items-center space-x-1">
+                    <span class="text-xs text-gray-600">🔊</span>
+                    <input type="range" id="radio-volume" min="0" max="100" value="50" class="w-16 h-1 bg-gray-300 rounded-lg appearance-none cursor-pointer">
+                    <span id="radio-volume-value" class="text-xs text-gray-600 w-8">50%</span>
+                </div>
+                <div id="radio-track-info" class="text-xs text-gray-600 max-w-32 truncate">
+                    <span id="radio-track-name">Радио не играет</span>
+                </div>
             </div>
              <button id="logout-btn" class="text-sm font-medium text-gray-600 hover:text-blue-600" data-i18n="logout">Выйти</button>
         </div>
@@ -313,6 +329,7 @@
         </main>
     </div>
 
+    <!-- Модальные окна -->
     <dialog id="debt-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md"><div class="p-6"><h3 id="debt-modal-title" class="text-xl font-semibold mb-4" data-i18n="addDebt"></h3><form id="debt-form" data-original-paid="0"><input type="hidden" id="debt-id"><div class="mb-4"><label for="debt-name" class="block mb-2 text-sm font-medium" data-i18n="debtorName">Имя должника/Название</label><input type="text" id="debt-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="debt-total" class="block mb-2 text-sm font-medium"><span data-i18n="totalAmount"></span> (<span class="currency-symbol">AZN</span>)</label><input type="number" id="debt-total" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="debt-paid" class="block mb-2 text-sm font-medium"><span data-i18n="paidAmount"></span> (<span class="currency-symbol">AZN</span>)</label><input type="number" id="debt-paid" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required value="0"></div><div class="mb-4"><label for="debt-comment" class="block mb-2 text-sm font-medium" data-i18n="comment">Комментарий</label><textarea id="debt-comment" rows="3" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></textarea></div><div class="flex justify-end gap-4 mt-6"><button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button><button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button></div></form></div></dialog>
     <dialog id="debt-payment-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md"><div class="p-6"><h3 class="text-xl font-semibold mb-4" data-i18n="addDebtPayment">Добавить платеж по долгу</h3><form id="debt-payment-form"><input type="hidden" id="debt-payment-id"><div class="mb-4"><label for="debt-payment-amount" class="block mb-2 text-sm font-medium"><span data-i18n="paymentAmount"></span> (<span class="currency-symbol">AZN</span>)</label><input type="number" id="debt-payment-amount" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="flex justify-end gap-4 mt-6"><button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button><button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="add">Добавить</button></div></form></div></dialog>
     <dialog id="recurring-expense-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md"><div class="p-6"><h3 id="recurring-expense-modal-title" class="text-xl font-semibold mb-4" data-i18n="addTemplate"></h3><form id="recurring-expense-form"><input type="hidden" id="recurring-expense-id"><div class="mb-4"><label for="recurring-expense-name" class="block mb-2 text-sm font-medium" data-i18n="name">Наименование</label><input type="text" id="recurring-expense-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="recurring-expense-amount" class="block mb-2 text-sm font-medium"><span data-i18n="amount"></span> (<span class="currency-symbol">AZN</span>)</label><input type="number" id="recurring-expense-amount" step="0.01" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="recurring-expense-due-day" class="block mb-2 text-sm font-medium" data-i18n="paymentDayNum">День оплаты (1-31)</label><input type="number" id="recurring-expense-due-day" min="1" max="31" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="mb-4"><label for="recurring-expense-details" class="block mb-2 text-sm font-medium" data-i18n="details">Детали</label><textarea id="recurring-expense-details" rows="3" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></textarea></div><div class="flex justify-end gap-4 mt-6"><button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button><button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button></div></form></div></dialog>
@@ -323,6 +340,7 @@
     <dialog id="event-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md"><div class="p-6"><h3 id="event-modal-title" class="text-xl font-semibold mb-4"></h3><form id="event-form"><input type="hidden" id="event-id"><div class="mb-4"><label for="event-category" class="block mb-2 text-sm font-medium" data-i18n="category">Категория</label><select id="event-category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"><option value="event" data-i18n="categoryEvent">Событие</option><option value="birthday" data-i18n="categoryBirthday">День рождения</option><option value="meeting" data-i18n="categoryMeeting">Встреча</option><option value="wedding" data-i18n="categoryWedding">Свадьба</option></select></div><div id="event-fields-event" class="event-category-fields"><div class="mb-4"><label for="event-name-generic" class="block mb-2 text-sm font-medium" data-i18n="eventName">Название события</label><input type="text" id="event-name-generic" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></div></div><div id="event-fields-birthday" class="event-category-fields hidden"><div class="mb-4"><label for="event-birthday-name" class="block mb-2 text-sm font-medium" data-i18n="birthdayName">Имя именинника</label><input type="text" id="event-birthday-name" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></div><div class="mb-4"><label for="event-birthday-year" class="block mb-2 text-sm font-medium" data-i18n="birthYear">Год рождения (опционально)</label><input type="number" id="event-birthday-year" placeholder="1990" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></div></div><div id="event-fields-meeting" class="event-category-fields hidden"><div class="mb-4"><label for="event-meeting-with" class="block mb-2 text-sm font-medium" data-i18n="meetingWith">С кем</label><input type="text" id="event-meeting-with" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></div><div class="grid grid-cols-2 gap-4"><div><label for="event-meeting-time" class="block mb-2 text-sm font-medium" data-i18n="time">Время (опц.)</label><input type="time" id="event-meeting-time" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></div><div><label for="event-meeting-place" class="block mb-2 text-sm font-medium" data-i18n="place">Место (опц.)</label><input type="text" id="event-meeting-place" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></div></div></div><div id="event-fields-wedding" class="event-category-fields hidden"><div class="mb-4"><label for="event-wedding-names" class="block mb-2 text-sm font-medium" data-i18n="weddingNames">Имена пары</label><input type="text" id="event-wedding-names" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5"></div></div><div class="mb-4"><label for="event-date" class="block mb-2 text-sm font-medium" data-i18n="date">Дата</label><input type="date" id="event-date" class="bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required></div><div class="flex items-center mb-4"><input id="event-create-task" type="checkbox" checked class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"><label for="event-create-task" class="ml-2 text-sm font-medium text-gray-900" data-i18n="createTaskForEvent">Создать задачу для этого события</label></div><div class="flex justify-between items-center mt-6"><button type="button" id="delete-event-btn" class="text-red-600 hover:text-red-800 hidden" data-i18n="delete">Удалить</button><div class="flex justify-end gap-4"><button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="cancel">Отмена</button><button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="save">Сохранить</button></div></div></form></div></dialog>
     <dialog id="category-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md"><div class="p-6"><h3 class="text-xl font-semibold mb-4" data-i18n="manageCategoriesTitle">Управление категориями</h3><form id="category-form" class="mb-4"><div class="flex gap-2"><input type="text" id="category-name" placeholder="Новая категория" class="flex-grow bg-gray-50 border border-gray-300 rounded-lg w-full p-2.5" required><button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700" data-i18n="add">Добавить</button></div></form><div id="category-list" class="space-y-2 max-h-60 overflow-y-auto"></div><div class="flex justify-end mt-6"><button type="button" class="cancel-btn text-gray-600 hover:text-gray-900" data-i18n="close">Закрыть</button></div></div></dialog>
 
+    <!-- Custom Confirm Modal -->
     <dialog id="confirm-modal" class="p-0 rounded-lg shadow-xl w-full max-w-sm">
         <div class="p-6 text-center">
             <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -338,6 +356,7 @@
         </div>
     </dialog>
 
+    <!-- Toast Container -->
     <div id="toast-container"></div>
 
 
@@ -588,6 +607,79 @@
             document.getElementById('lang-en-login').addEventListener('click', () => setLanguage('en'));
             document.getElementById('lang-az-login').addEventListener('click', () => setLanguage('az'));
             
+            // Radio Stream Controls
+            let radioAudio = null;
+            let isPlaying = false;
+            let currentTrack = "Радио не играет";
+            
+            const radioPlayPauseBtn = document.getElementById('radio-play-pause');
+            const radioPlayIcon = document.getElementById('radio-play-icon');
+            const radioVolumeSlider = document.getElementById('radio-volume');
+            const radioVolumeValue = document.getElementById('radio-volume-value');
+            const radioTrackName = document.getElementById('radio-track-name');
+            
+            // Initialize radio
+            function initRadio() {
+                if (!radioAudio) {
+                    radioAudio = new Audio('https://stream.zeno.fm/tjqlpbsxi4ytv');
+                    radioAudio.crossOrigin = 'anonymous';
+                    radioAudio.preload = 'none';
+                    
+                    radioAudio.addEventListener('loadstart', () => {
+                        radioTrackName.textContent = 'Загрузка...';
+                    });
+                    
+                    radioAudio.addEventListener('canplay', () => {
+                        radioTrackName.textContent = 'Радио загружено';
+                    });
+                    
+                    radioAudio.addEventListener('error', () => {
+                        radioTrackName.textContent = 'Ошибка загрузки';
+                    });
+                    
+                    radioAudio.addEventListener('play', () => {
+                        isPlaying = true;
+                        radioPlayIcon.textContent = '⏸️';
+                        radioTrackName.textContent = 'Радио играет';
+                    });
+                    
+                    radioAudio.addEventListener('pause', () => {
+                        isPlaying = false;
+                        radioPlayIcon.textContent = '▶️';
+                        radioTrackName.textContent = 'Радио приостановлено';
+                    });
+                    
+                    radioAudio.addEventListener('volumechange', () => {
+                        radioVolumeValue.textContent = Math.round(radioAudio.volume * 100) + '%';
+                    });
+                }
+            }
+            
+            // Play/Pause button
+            radioPlayPauseBtn.addEventListener('click', () => {
+                initRadio();
+                if (isPlaying) {
+                    radioAudio.pause();
+                } else {
+                    radioAudio.play().catch(error => {
+                        console.error('Error playing radio:', error);
+                        radioTrackName.textContent = 'Ошибка воспроизведения';
+                    });
+                }
+            });
+            
+            // Volume control
+            radioVolumeSlider.addEventListener('input', (e) => {
+                if (radioAudio) {
+                    radioAudio.volume = e.target.value / 100;
+                }
+            });
+            
+            // Set initial volume
+            if (radioAudio) {
+                radioAudio.volume = 0.5;
+            }
+            
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     userId = user.uid;
@@ -600,7 +692,6 @@
                     showApp();
                     setupCollections(todayISO);
                     await checkAndCarryOverDailyTasks(todayISO);
-                    await promoteMonthlyTasksToDaily(todayISO);
                     await checkAndCarryOverTasks();
                     await ensureRecurringTasksForMonth(selectedMonthId);
                     attachListeners();
@@ -631,77 +722,55 @@
             const lastCheckKey = `lastDailyCheck_${userId}`;
             const lastCheck = localStorage.getItem(lastCheckKey);
             if (lastCheck === todayId) return;
+            
             const yesterday = new Date(todayId + 'T00:00:00');
             yesterday.setDate(yesterday.getDate() - 1);
             const yesterdayId = yesterday.toISOString().split('T')[0];
+            
             if (lastCheck && lastCheck < todayId) {
                 try {
                     const yesterdayTasksCol = collection(db, `users/${userId}/dailyTasks/${yesterdayId}/tasks`);
                     const q = query(yesterdayTasksCol, where("status", "==", translations.ru.statusNotDone));
                     const tasksToCarryOverSnapshot = await getDocs(q);
+                    
                     if (!tasksToCarryOverSnapshot.empty) {
                         const batch = writeBatch(db);
                         const todayTasksColRef = collection(db, `users/${userId}/dailyTasks/${todayId}/tasks`);
-
+                        
+                        // Проверяем, есть ли уже перенесенные задачи на сегодня
+                        const todayTasksQuery = query(todayTasksColRef, where("carriedOver", "==", true));
+                        const existingCarriedOverTasks = await getDocs(todayTasksQuery);
+                        const existingCarriedOverIds = new Set(existingCarriedOverTasks.docs.map(doc => doc.data().originalTaskId));
+                        
                         tasksToCarryOverSnapshot.forEach(docSnap => {
                             const taskData = docSnap.data();
-                            if (taskData.fromCalendar) {
-                                // Это задача из календаря. Обновляем статус и не переносим.
-                                batch.update(docSnap.ref, { status: translations.ru.statusSkipped });
-                            } else {
-                                // Это обычная задача. Создаем новую на сегодня.
-                                const newTaskRef = doc(todayTasksColRef);
-                                batch.set(newTaskRef, { ...taskData, notes: `(Перенесено с ${formatISODateForDisplay(yesterdayId)}) ${taskData.notes || ''}`.trim(), carriedOver: true });
+                            // Проверяем, не была ли уже перенесена эта задача
+                            if (!existingCarriedOverIds.has(docSnap.id)) {
+                            const newTaskRef = doc(todayTasksColRef);
                                 
-                                // И удаляем старую, чтобы "переместить" ее.
-                                batch.delete(docSnap.ref);
+                                // Для задач на день рождения не добавляем примечание о переносе
+                                let notes = taskData.notes || '';
+                                if (!taskData.fromCalendar) {
+                                    notes = `(Перенесено с ${formatISODateForDisplay(yesterdayId)}) ${notes}`.trim();
+                                }
+                                
+                                batch.set(newTaskRef, { 
+                                    ...taskData, 
+                                    notes: notes, 
+                                    carriedOver: true,
+                                    originalTaskId: docSnap.id,
+                                    carriedOverFrom: yesterdayId
+                                });
                             }
                         });
                         await batch.commit();
                     }
-                } catch (error) { showToast(translations[currentLang].toastError, 'error'); }
+                } catch (error) { 
+                    console.error("Error carrying over daily tasks:", error);
+                    showToast(translations[currentLang].toastError, 'error'); 
+                }
             }
             localStorage.setItem(lastCheckKey, todayId);
-        }
-
-        async function promoteMonthlyTasksToDaily(todayId) {
-            if (!userId) return;
-            try {
-                // Запрашиваем все задачи на текущий месяц
-                const currentMonth = todayId.slice(0, 7);
-                const q = query(monthlyTasksCol, where("month", "==", currentMonth));
-                const monthlyTasksSnapshot = await getDocs(q);
-
-                // Фильтруем задачи, у которых дедлайн - сегодня, уже на стороне клиента
-                const tasksToPromote = monthlyTasksSnapshot.docs.filter(doc => doc.data().deadline === todayId);
-
-                if (tasksToPromote.length > 0) {
-                    const batch = writeBatch(db);
-                    const todayTasksColRef = collection(db, `users/${userId}/dailyTasks/${todayId}/tasks`);
-                    
-                    const existingDailyTasksSnapshot = await getDocs(todayTasksColRef);
-                    const existingPromotedIds = new Set(existingDailyTasksSnapshot.docs.map(doc => doc.data().fromMonthlyTaskId));
-
-                    tasksToPromote.forEach(docSnap => {
-                        const monthlyTask = docSnap.data();
-                        const monthlyTaskId = docSnap.id;
-
-                        if (!existingPromotedIds.has(monthlyTaskId)) {
-                            const newDailyTaskRef = doc(todayTasksColRef);
-                            batch.set(newDailyTaskRef, {
-                                name: monthlyTask.name,
-                                status: monthlyTask.status,
-                                notes: monthlyTask.notes || '',
-                                fromCalendar: monthlyTask.fromCalendar || null,
-                                fromMonthlyTaskId: monthlyTaskId
-                            });
-                        }
-                    });
-                    await batch.commit();
-                }
-            } catch (error) {
-                console.error("Ошибка при переносе задач из месяца в день:", error);
-            }
         }
         
         async function checkAndCarryOverTasks() {
@@ -711,14 +780,37 @@
                 const prevMonthDate = new Date(currentMonthId + '-01T00:00:00');
                 prevMonthDate.setMonth(prevMonthDate.getMonth() - 1);
                 const prevMonthId = prevMonthDate.toISOString().slice(0, 7);
+                
+                try {
                 const q = query(monthlyTasksCol, where("month", "==", prevMonthId), where("status", "==", translations.ru.statusNotDone));
                 const tasksSnapshot = await getDocs(q);
+                    
+                    if (!tasksSnapshot.empty) {
                 const batch = writeBatch(db);
+                        
+                        // Проверяем, есть ли уже перенесенные задачи в текущем месяце
+                        const currentMonthQuery = query(monthlyTasksCol, where("month", "==", currentMonthId), where("carriedOver", "==", true));
+                        const existingCarriedOverTasks = await getDocs(currentMonthQuery);
+                        const existingCarriedOverIds = new Set(existingCarriedOverTasks.docs.map(doc => doc.data().originalTaskId));
+                        
                 tasksSnapshot.forEach(doc => {
                     const task = doc.data();
-                    if (!task.fromCalendar) batch.update(doc.ref, { month: currentMonthId, carriedOver: true });
+                            // Переносим только задачи, которые не из календаря и не были уже перенесены
+                            if (!task.fromCalendar && !existingCarriedOverIds.has(doc.id)) {
+                                batch.update(doc.ref, { 
+                                    month: currentMonthId, 
+                                    carriedOver: true,
+                                    originalTaskId: doc.id,
+                                    carriedOverFrom: prevMonthId
+                                });
+                            }
                 });
                 await batch.commit();
+                    }
+                } catch (error) {
+                    console.error("Error carrying over monthly tasks:", error);
+                    showToast(translations[currentLang].toastError, 'error');
+                }
                 localStorage.setItem(lastCheckKey, currentMonthId);
             }
         }
@@ -729,21 +821,60 @@
             const t = translations[currentLang];
             const q = query(calendarEventsCol, where("category", "==", "birthday"));
             const birthdayEventsSnapshot = await getDocs(q);
-            const batch = writeBatch(db);
+            
             for (const eventDoc of birthdayEventsSnapshot.docs) {
                 const event = eventDoc.data();
                 if (event.date.substring(5, 7) === month) {
-                    const taskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventDoc.id), where("month", "==", monthId));
-                    const existingTasksSnapshot = await getDocs(taskQuery);
-                    if (existingTasksSnapshot.empty) {
+                    try {
+                        // Создаем задачу в месячных задачах
+                        const monthlyTaskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventDoc.id), where("month", "==", monthId));
+                        const existingMonthlyTasksSnapshot = await getDocs(monthlyTaskQuery);
+                        
+                        if (existingMonthlyTasksSnapshot.empty) {
                         let taskName = `${t.taskCongratulate} ${event.birthdayName}`;
-                        if (event.birthYear) { const age = parseInt(year) - parseInt(event.birthYear); if (age >= 0) taskName += ` (${t.taskTurning} ${age} ${t.taskYearsOld})`; }
+                            if (event.birthYear) { 
+                                const age = parseInt(year) - parseInt(event.birthYear); 
+                                if (age >= 0) taskName += ` (${t.taskTurning} ${age} ${t.taskYearsOld})`; 
+                            }
                         const deadline = `${monthId}-${event.date.substring(8)}`;
-                        batch.set(doc(monthlyTasksCol), { name: taskName, deadline, status: translations.ru.statusNotDone, month: monthId, year: parseInt(year), fromCalendar: eventDoc.id });
+                            
+                            await addDoc(monthlyTasksCol, { 
+                                name: taskName, 
+                                deadline, 
+                                status: translations.ru.statusNotDone, 
+                                month: monthId, 
+                                year: parseInt(year), 
+                                fromCalendar: eventDoc.id 
+                            });
+                        }
+                        
+                        // Создаем задачу в ежедневных задачах для конкретного дня
+                        const eventDate = event.date;
+                        const dailyTasksColForEvent = collection(db, `users/${userId}/dailyTasks/${eventDate}/tasks`);
+                        const dailyTaskQuery = query(dailyTasksColForEvent, where("fromCalendar", "==", eventDoc.id));
+                        const existingDailyTasksSnapshot = await getDocs(dailyTaskQuery);
+                        
+                        if (existingDailyTasksSnapshot.empty) {
+                            let dailyTaskName = `${t.taskCongratulate} ${event.birthdayName}`;
+                            if (event.birthYear) { 
+                                const age = parseInt(year) - parseInt(event.birthYear); 
+                                if (age >= 0) dailyTaskName += ` (${t.taskTurning} ${age} ${t.taskYearsOld})`; 
+                            }
+                            
+                            await addDoc(dailyTasksColForEvent, {
+                                name: dailyTaskName,
+                                status: translations.ru.statusNotDone,
+                                fromCalendar: eventDoc.id,
+                                eventDate: eventDate,
+                                birthdayName: event.birthdayName,
+                                birthYear: event.birthYear
+                            });
+                        }
+                    } catch (error) {
+                        console.error("Error creating birthday task:", error);
                     }
                 }
             }
-            await batch.commit();
         }
         
         function updateDateTime() { const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Baku' }; document.getElementById('current-datetime').textContent = new Date().toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US', options); }
@@ -925,28 +1056,37 @@
         function renderMonthSelector(months) { const s=document.getElementById('month-selector'); s.innerHTML = months.map(m => `<option value="${m}" ${m===selectedMonthId?'selected':''}>${formatMonthId(m)}</option>`).join(''); }
 
         function renderCalendar() {
-            const grid = document.getElementById('calendar-grid'); const monthYearEl = document.getElementById('calendar-month-year'); const weekdaysEl = document.getElementById('calendar-weekdays'); const month = calendarDate.getMonth(), year = calendarDate.getFullYear();
+            const grid = document.getElementById('calendar-grid'); 
+            const monthYearEl = document.getElementById('calendar-month-year'); 
+            const weekdaysEl = document.getElementById('calendar-weekdays'); 
+            const month = calendarDate.getMonth(), year = calendarDate.getFullYear();
+            
             monthYearEl.textContent = calendarDate.toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US', { month: 'long', year: 'numeric', timeZone: 'Asia/Baku' });
             weekdaysEl.innerHTML = translations[currentLang].weekdays.map(day => `<div>${day}</div>`).join('');
-            const firstDayOfMonth = new Date(year, month, 1).getDay(); const daysInMonth = new Date(year, month + 1, 0).getDate(); const startingDay = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
-            grid.innerHTML = ''; for (let i = 0; i < startingDay; i++) { grid.insertAdjacentHTML('beforeend', '<div></div>'); }
+            
+            const firstDayOfMonth = new Date(year, month, 1).getDay(); 
+            const daysInMonth = new Date(year, month + 1, 0).getDate(); 
+            const startingDay = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
+            
+            grid.innerHTML = ''; 
+            for (let i = 0; i < startingDay; i++) { 
+                grid.insertAdjacentHTML('beforeend', '<div></div>'); 
+            }
+            
             const todayISO = getTodayISOString();
             for (let day = 1; day <= daysInMonth; day++) {
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const monthDayStr = dateStr.substring(5);
-                const isToday = dateStr === todayISO;
-                const dayEvents = calendarEvents.filter(e => {
-                    // Убедимся, что у события есть корректная дата
-                    if (!e || typeof e.date !== 'string' || e.date.length < 10) {
-                        return false;
-                    }
-                    // Логика для повторяющихся дней рождения
-                    if (e.category === 'birthday') {
-                        return e.date.substring(5) === monthDayStr;
-                    }
-                    // Логика для всех остальных событий (свадьбы, встречи и т.д.)
-                    return e.date === dateStr;
-                });
+                // Создаем дату в том же часовом поясе, что и getTodayISOString
+                const date = new Date(year, month, day);
+                const dateStr = date.toISOString().split('T')[0]; 
+                const monthDayStr = dateStr.substring(5); 
+                
+                // Используем ту же логику определения "сегодня", что и в getTodayISOString
+                const today = new Date();
+                const todayOptions = { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Asia/Baku' };
+                const todayFormatted = new Intl.DateTimeFormat('en-CA', todayOptions).format(today);
+                const isToday = dateStr === todayFormatted;
+                
+                const dayEvents = calendarEvents.filter(e => e.category === 'birthday' ? e.date.substring(5) === monthDayStr : e.date === dateStr);
                 const dayEl = document.createElement('div');
                 dayEl.className = `calendar-day border border-gray-200 p-2 flex flex-col cursor-pointer hover:bg-gray-50 ${isToday ? 'calendar-day-today' : ''}`;
                 dayEl.dataset.date = dateStr;
@@ -986,13 +1126,25 @@
 
                 if (newStatus === translations.ru.paidStatus) {
                      const template = allRecurringTemplates.find(t => t.id === id);
-                     if(template) await addDoc(targetExpensesCol, { name: template.name, category: translations[currentLang].recurringPayments, amount: template.amount, date: `${selectedMonthId}-${String(template.dueDay).padStart(2, '0')}`, recurringExpenseId: id });
+                     if(template) {
+                         await addDoc(targetExpensesCol, { 
+                             name: template.name, 
+                             category: translations[currentLang].recurringPayments, 
+                             amount: template.amount, 
+                             date: getTodayISOString(), // Используем текущую дату вместо дня платежа
+                             recurringExpenseId: id,
+                             paymentDate: Timestamp.now(),
+                             dueDay: template.dueDay
+                         });
+                     }
                      const tasks = await getDocs(taskQuery);
                      if (!tasks.empty) await updateDoc(tasks.docs[0].ref, {status: translations.ru.statusDone});
                 } else {
                     const q = query(targetExpensesCol, where("recurringExpenseId", "==", id));
                     const snapshot = await getDocs(q);
-                    const batch = writeBatch(db); snapshot.docs.forEach(d => batch.delete(d.ref)); await batch.commit();
+                    const batch = writeBatch(db); 
+                    snapshot.docs.forEach(d => batch.delete(d.ref)); 
+                    await batch.commit();
                     const tasks = await getDocs(taskQuery);
                     if (!tasks.empty) await updateDoc(tasks.docs[0].ref, {status: translations.ru.statusNotDone});
                 }
@@ -1105,14 +1257,42 @@
         }
         async function handleDebtPaymentFormSubmit(form) {
             try {
-                const id = form.querySelector('#debt-payment-id').value; const amount = parseFloat(form.querySelector('#debt-payment-amount').value); const debtRef = doc(debtsCol, id); const debtDoc = await getDoc(debtRef);
+                const id = form.querySelector('#debt-payment-id').value; 
+                const amount = parseFloat(form.querySelector('#debt-payment-amount').value); 
+                const debtRef = doc(debtsCol, id); 
+                const debtDoc = await getDoc(debtRef);
+                
                 if (debtDoc.exists()) {
                     const debt = debtDoc.data();
-                    await updateDoc(debtRef, { paidAmount: (debt.paidAmount || 0) + amount, lastPaymentDate: Timestamp.now() });
-                    await addDoc(collection(db, `users/${userId}/monthlyData/${currentMonthId}/expenses`), { name: `${translations[currentLang].addDebtPayment}: ${debt.name}`, category: translations[currentLang].debtRepayments, amount: amount, date: getTodayISOString(), debtPaymentId: id });
+                    const newPaidAmount = (debt.paidAmount || 0) + amount;
+                    
+                    // Обновляем долг
+                    await updateDoc(debtRef, { 
+                        paidAmount: newPaidAmount, 
+                        lastPaymentDate: Timestamp.now() 
+                    });
+                    
+                    // Добавляем расход
+                    await addDoc(collection(db, `users/${userId}/monthlyData/${selectedMonthId}/expenses`), { 
+                        name: `${translations[currentLang].addDebtPayment}: ${debt.name}`, 
+                        category: translations[currentLang].debtRepayments, 
+                        amount: amount, 
+                        date: getTodayISOString(), 
+                        debtPaymentId: id,
+                        paymentDate: Timestamp.now()
+                    });
+                    
+                    // Очищаем форму
+                    form.reset();
+                    
                     showToast(translations[currentLang].toastSuccess);
+                } else {
+                    showToast("Долг не найден", 'error');
                 }
-            } catch (error) { console.error("Error adding debt payment:", error); showToast(translations[currentLang].toastError, 'error'); }
+            } catch (error) { 
+                console.error("Error adding debt payment:", error); 
+                showToast(translations[currentLang].toastError, 'error'); 
+            }
         }
         async function handleRecurringExpenseFormSubmit(form) {
             try {
@@ -1188,22 +1368,122 @@
         
         async function handleEventFormSubmit(form) {
             try {
-                const id = form.querySelector('#event-id').value; const category = form.querySelector('#event-category').value; const t = translations[currentLang]; const data = { category, date: form.querySelector('#event-date').value }; let taskName = '';
+                const id = form.querySelector('#event-id').value; 
+                const category = form.querySelector('#event-category').value; 
+                const t = translations[currentLang]; 
+                const data = { category, date: form.querySelector('#event-date').value }; 
+                let taskName = '';
+                
                 switch (category) {
-                    case 'birthday': const birthdayName = form.querySelector('#event-birthday-name').value; const birthYear = form.querySelector('#event-birthday-year').value; data.birthdayName = birthdayName; data.birthYear = birthYear; data.name = `${t.categoryBirthday}: ${birthdayName}`; taskName = `${t.taskCongratulate} ${birthdayName}`; if (birthYear) { const age = new Date(data.date).getFullYear() - parseInt(birthYear); if (age >= 0) taskName += ` (${t.taskTurning} ${age} ${t.taskYearsOld})`; } break;
-                    case 'meeting': const meetingWith = form.querySelector('#event-meeting-with').value; const meetingTime = form.querySelector('#event-meeting-time').value; const meetingPlace = form.querySelector('#event-meeting-place').value; data.meetingWith = meetingWith; data.meetingTime = meetingTime; data.meetingPlace = meetingPlace; data.name = `${t.categoryMeeting}: ${meetingWith}`; taskName = `${t.taskMeetWith} ${meetingWith}`; if (meetingTime) taskName += ` в ${meetingTime}`; if (meetingPlace) taskName += ` в ${meetingPlace}`; break;
-                    case 'wedding': const weddingNames = form.querySelector('#event-wedding-names').value; data.weddingNames = weddingNames; data.name = `${t.categoryWedding}: ${weddingNames}`; taskName = `${t.taskWeddingOf} ${weddingNames}`; break;
-                    default: data.name = form.querySelector('#event-name-generic').value; taskName = data.name; break;
+                    case 'birthday': 
+                        const birthdayName = form.querySelector('#event-birthday-name').value; 
+                        const birthYear = form.querySelector('#event-birthday-year').value; 
+                        data.birthdayName = birthdayName; 
+                        data.birthYear = birthYear; 
+                        data.name = `${t.categoryBirthday}: ${birthdayName}`; 
+                        taskName = `${t.taskCongratulate} ${birthdayName}`; 
+                        if (birthYear) { 
+                            const age = new Date(data.date).getFullYear() - parseInt(birthYear); 
+                            if (age >= 0) taskName += ` (${t.taskTurning} ${age} ${t.taskYearsOld})`; 
+                        } 
+                        break;
+                    case 'meeting': 
+                        const meetingWith = form.querySelector('#event-meeting-with').value; 
+                        const meetingTime = form.querySelector('#event-meeting-time').value; 
+                        const meetingPlace = form.querySelector('#event-meeting-place').value; 
+                        data.meetingWith = meetingWith; 
+                        data.meetingTime = meetingTime; 
+                        data.meetingPlace = meetingPlace; 
+                        data.name = `${t.categoryMeeting}: ${meetingWith}`; 
+                        taskName = `${t.taskMeetWith} ${meetingWith}`; 
+                        if (meetingTime) taskName += ` в ${meetingTime}`; 
+                        if (meetingPlace) taskName += ` в ${meetingPlace}`; 
+                        break;
+                    case 'wedding': 
+                        const weddingNames = form.querySelector('#event-wedding-names').value; 
+                        data.weddingNames = weddingNames; 
+                        data.name = `${t.categoryWedding}: ${weddingNames}`; 
+                        taskName = `${t.taskWeddingOf} ${weddingNames}`; 
+                        break;
+                    default: 
+                        data.name = form.querySelector('#event-name-generic').value; 
+                        taskName = data.name; 
+                        break;
                 }
-                let eventId = id; if (id) { await updateDoc(doc(calendarEventsCol, id), data); } else { const newDoc = await addDoc(calendarEventsCol, data); eventId = newDoc.id; }
+                
+                let eventId = id; 
+                if (id) { 
+                    await updateDoc(doc(calendarEventsCol, id), data); 
+                } else { 
+                    const newDoc = await addDoc(calendarEventsCol, data); 
+                    eventId = newDoc.id; 
+                }
+                
                 if (!eventId) return;
+                
                 const shouldCreateTask = form.querySelector('#event-create-task').checked;
-                const taskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventId)); const existingTasksSnapshot = await getDocs(taskQuery); const existingTaskDoc = existingTasksSnapshot.docs[0];
-                const taskData = { name: taskName, deadline: data.date, status: translations.ru.statusNotDone, month: data.date.slice(0, 7), year: parseInt(data.date.slice(0, 4)), fromCalendar: eventId };
-                if (shouldCreateTask) { if (existingTaskDoc) await updateDoc(existingTaskDoc.ref, taskData); else await addDoc(monthlyTasksCol, taskData); } 
-                else { if (existingTaskDoc) await deleteDoc(existingTaskDoc.ref); }
+                
+                if (shouldCreateTask) {
+                    // Создаем задачу в месячных задачах
+                    const monthlyTaskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventId), where("month", "==", data.date.slice(0, 7)));
+                    const existingMonthlyTasksSnapshot = await getDocs(monthlyTaskQuery);
+                    const existingMonthlyTaskDoc = existingMonthlyTasksSnapshot.docs[0];
+                    
+                    const monthlyTaskData = { 
+                        name: taskName, 
+                        deadline: data.date, 
+                        status: translations.ru.statusNotDone, 
+                        month: data.date.slice(0, 7), 
+                        year: parseInt(data.date.slice(0, 4)), 
+                        fromCalendar: eventId 
+                    };
+                    
+                    if (existingMonthlyTaskDoc) {
+                        await updateDoc(existingMonthlyTaskDoc.ref, monthlyTaskData);
+                    } else {
+                        await addDoc(monthlyTasksCol, monthlyTaskData);
+                    }
+                    
+                    // Создаем задачу в ежедневных задачах для конкретного дня
+                    const eventDate = data.date;
+                    const dailyTasksColForEvent = collection(db, `users/${userId}/dailyTasks/${eventDate}/tasks`);
+                    const dailyTaskQuery = query(dailyTasksColForEvent, where("fromCalendar", "==", eventId));
+                    const existingDailyTasksSnapshot = await getDocs(dailyTaskQuery);
+                    const existingDailyTaskDoc = existingDailyTasksSnapshot.docs[0];
+                    
+                    const dailyTaskData = {
+                        name: taskName,
+                        status: translations.ru.statusNotDone,
+                        fromCalendar: eventId,
+                        eventDate: eventDate
+                    };
+                    
+                    if (existingDailyTaskDoc) {
+                        await updateDoc(existingDailyTaskDoc.ref, dailyTaskData);
+                    } else {
+                        await addDoc(dailyTasksColForEvent, dailyTaskData);
+                    }
+                } else {
+                    // Удаляем задачи, если флаг снят
+                    const monthlyTaskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventId));
+                    const existingMonthlyTasksSnapshot = await getDocs(monthlyTaskQuery);
+                    for (const taskDoc of existingMonthlyTasksSnapshot.docs) {
+                        await deleteDoc(taskDoc.ref);
+                    }
+                    
+                    // Удаляем ежедневные задачи для всех дат этого события
+                    const dailyTaskQuery = query(monthlyTasksCol, where("fromCalendar", "==", eventId));
+                    const existingDailyTasksSnapshot = await getDocs(dailyTaskQuery);
+                    for (const taskDoc of existingDailyTasksSnapshot.docs) {
+                        await deleteDoc(taskDoc.ref);
+                    }
+                }
+                
                 showToast(translations[currentLang].toastSuccess);
-            } catch (error) { console.error("Error saving event:", error); showToast(translations[currentLang].toastError, 'error'); }
+            } catch (error) { 
+                console.error("Error saving event:", error); 
+                showToast(translations[currentLang].toastError, 'error'); 
+            }
         };
         async function handleCategoryFormSubmit(form) { const nameInput = form.querySelector('#category-name'); const name = nameInput.value.trim(); if (name) { await addDoc(categoriesCol, { name: name, lang: currentLang }); nameInput.value = ''; showToast(translations[currentLang].toastSuccess); } }
 
@@ -1270,3 +1550,4 @@
     </script>
 </body>
 </html>
+
