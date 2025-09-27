@@ -200,15 +200,20 @@
                 <button id="lang-az" title="Azərbaycan"><img src="https://placehold.co/32x24/00a651/ffffff?text=AZ" alt="AZ" class="rounded-sm cursor-pointer"></button>
             </div>
             <!-- Radio Player -->
-            <div class="flex items-center space-x-2 bg-white p-2 rounded-lg shadow-md">
-                <audio id="radio-player" src="https://stream.zeno.fm/tjqlpbsxi4ytv"></audio>
-                <button id="radio-play-pause-btn" class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 transition">
-                    <svg id="play-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
-                    <svg id="pause-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                </button>
-                <div class="flex items-center space-x-1">
-                     <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5.073 3.322a1 1 0 011.354-.23l7.994 5.66a1 1 0 010 1.503l-7.994 5.66a1 1 0 01-1.423-1.404L11.6 10 5.004 4.726a1 1 0 01.07-1.404z"></path><path d="M13 3a1 1 0 10-2 0v14a1 1 0 102 0V3z"></path></svg>
-                    <input type="range" id="radio-volume-slider" min="0" max="1" step="0.01" value="1" class="w-20 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+            <div class="bg-white p-3 rounded-lg shadow-md w-auto">
+                <div class="flex items-center justify-between">
+                    <p class="text-sm font-medium text-gray-800" data-i18n="radioTitle">Радио AzerbaiJazz</p>
+                    <div class="flex items-center space-x-2">
+                        <audio id="radio-player" src="https://stream.zeno.fm/tjqlpbsxi4ytv"></audio>
+                        <button id="radio-play-pause-btn" class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            <svg id="play-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"></path></svg>
+                            <svg id="pause-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"></path></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex items-center mt-2 space-x-2">
+                    <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.953 9.953 0 0117 10a9.953 9.953 0 01-1.072 4.929 1 1 0 11-1.5-1.329A7.957 7.957 0 0015 10a7.957 7.957 0 00-.843-3.742 1 1 0 010-1.329z" clip-rule="evenodd"></path><path d="M12.293 5.293a1 1 0 011.414 0A5.963 5.963 0 0114 10a5.963 5.963 0 01-.707 2.707 1 1 0 11-1.5-1.329A3.964 3.964 0 0012 10a3.964 3.964 0 00-.586-2.032 1 1 0 010-1.386z"></path></svg>
+                    <input type="range" id="radio-volume-slider" min="0" max="1" step="0.01" value="1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer styled-slider">
                 </div>
             </div>
              <button id="logout-btn" class="text-sm font-medium text-gray-600 hover:text-blue-600" data-i18n="logout">Выйти</button>
@@ -231,6 +236,7 @@
                 <button data-tab="expenses" class="tab-button px-4 sm:px-6 py-4 border-b-2 border-transparent whitespace-nowrap text-sm sm:text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200" data-i18n="tabMonthlyExpenses">Расходы месяца</button>
                 <button data-tab="tasks" class="tab-button px-4 sm:px-6 py-4 border-b-2 border-transparent whitespace-nowrap text-sm sm:text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200" data-i18n="tabTasks">Список задач</button>
                 <button data-tab="calendar" class="tab-button px-4 sm:px-6 py-4 border-b-2 border-transparent whitespace-nowrap text-sm sm:text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200" data-i18n="tabCalendar">Календарь</button>
+                <button data-tab="payments" class="tab-button px-4 sm:px-6 py-4 border-b-2 border-transparent whitespace-nowrap text-sm sm:text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200" data-i18n="tabPayments">Оплата</button>
             </div>
         </nav>
 
@@ -321,6 +327,10 @@
                     <div id="calendar-weekdays" class="grid grid-cols-7 gap-1 text-center font-semibold text-gray-600 text-sm mb-2"></div>
                     <div id="calendar-grid" class="grid grid-cols-7 gap-1"></div>
                 </div>
+            </div>
+
+            <div id="payments-page" class="page-content hidden">
+                <iframe src="https://hesab.az/" class="w-full h-screen border-0"></iframe>
             </div>
 
         </main>
@@ -443,6 +453,8 @@
                 authGenericError: "Произошла ошибка. Попробуйте снова.",
                 manageCategories: "Управление категориями", manageCategoriesTitle: "Управление категориями",
                 toastSuccess: "Успешно сохранено!", toastError: "Ошибка сохранения!", toastDeleted: "Запись удалена.",
+                radioTitle: "AzerbaiJazz Radio",
+                tabPayments: "Ödənişlər",
             },
             en: {
                 appTitle: "ORDINA", appSubtitle: "Manage your finances with ease.",
@@ -897,7 +909,7 @@
             grid.innerHTML = ''; for (let i = 0; i < startingDay; i++) { grid.insertAdjacentHTML('beforeend', '<div></div>'); }
             const todayISO = getTodayISOString();
             for (let day = 1; day <= daysInMonth; day++) {
-                const date = new Date(year, month, day); const dateStr = date.toISOString().split('T')[0]; const monthDayStr = dateStr.substring(5); const isToday = dateStr === todayISO;
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`; const monthDayStr = dateStr.substring(5); const isToday = dateStr === todayISO;
                 const dayEvents = calendarEvents.filter(e => e.category === 'birthday' ? e.date.substring(5) === monthDayStr : e.date === dateStr);
                 const dayEl = document.createElement('div');
                 dayEl.className = `calendar-day border border-gray-200 p-2 flex flex-col cursor-pointer hover:bg-gray-50 ${isToday ? 'calendar-day-today' : ''}`;
